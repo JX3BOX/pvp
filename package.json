@@ -1,0 +1,52 @@
+{
+    "name": "project",
+    "version": "0.0.1",
+    "private": true,
+    "scripts": {
+        "serve": "vue-cli-service serve",
+        "dev": "cross-env DEV_SERVER=true vue-cli-service serve",
+        "build": "vue-cli-service build",
+        "lint": "vue-cli-service lint",
+        "prepare": "husky install",
+        "update": "npm --registry https://registry.npmjs.org install @jx3box/jx3box-common@latest"
+    },
+    "dependencies": {
+        "@element-plus/icons-vue": "^2.1.0",
+        "@jx3box/jx3box-common": "^7.7.7",
+        "@vueuse/head": "^0.7.6",
+        "axios": "^1.3.4",
+        "core-js": "^3.8.3",
+        "element-plus": "^2.2.5",
+        "pinia": "^2.0.33",
+        "vue": "^3.2.13",
+        "vue-router": "^4.0.16"
+    },
+    "devDependencies": {
+        "@babel/core": "^7.12.16",
+        "@babel/eslint-parser": "^7.12.16",
+        "@babel/plugin-proposal-optional-chaining": "^7.17.12",
+        "@vue/cli-plugin-babel": "~5.0.0",
+        "@vue/cli-plugin-eslint": "~5.0.0",
+        "@vue/cli-service": "~5.0.0",
+        "cross-env": "^7.0.3",
+        "csslab": "^4.0.3",
+        "eslint": "^7.32.0",
+        "eslint-plugin-vue": "^8.0.3",
+        "husky": "^8.0.0",
+        "less": "^4.1.3",
+        "less-loader": "^11.0.0",
+        "lint-staged": "^13.0.2",
+        "prettier": "2.7.1",
+        "style-resources-loader": "^1.5.0",
+        "vue-svg-inline-loader": "^2.1.3"
+    },
+    "browserslist": [
+        "> 1%",
+        "last 2 versions",
+        "not dead",
+        "not ie 11"
+    ],
+    "lint-staged": {
+        "**/*": "prettier --write --ignore-unknown"
+    }
+}
