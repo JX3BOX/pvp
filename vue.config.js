@@ -20,9 +20,57 @@ module.exports = {
     //⚛️ Proxy ~
     devServer: {
         proxy: {
-            // "/api/cms": {
-            //     target: process.env["DEV_SERVER"] == "true" ? "localhost" : "remote",
-            // },
+            "/api/vip": {
+                target: "https://pay.jx3box.com",
+                onProxyReq: function (request) {
+                    request.setHeader("origin", "");
+                },
+            },
+            "/api/inspire": {
+                target: "https://pay.jx3box.com",
+                onProxyReq: function (request) {
+                    request.setHeader("origin", "");
+                },
+            },
+            "/api/team": {
+                target: "https://team.api.jx3box.com",
+                onProxyReq: function (request) {
+                    request.setHeader("origin", "");
+                },
+            },
+            "/api/cms": {
+                target: process.env["DEV_SERVER"] == "true" ? "http://localhost:5120" : "https://cms.jx3box.com",
+            },
+            "/api/article": {
+                target: "https://next2.jx3box.com",
+            },
+            "/api/messages": {
+                target: "https://helper.jx3box.com",
+            },
+            "/api/post/favorite": {
+                target: "https://helper.jx3box.com",
+            },
+            "/api/wiki": {
+                target: "https://helper.jx3box.com",
+            },
+            "/api/personal": {
+                target: "https://pay.jx3box.com",
+                onProxyReq: function (request) {
+                    request.setHeader("origin", "");
+                },
+            },
+            "/api/cny": {
+                target: "https://pay.jx3box.com",
+                onProxyReq: function (request) {
+                    request.setHeader("origin", "");
+                },
+            },
+            "/api": {
+                target: "https://next2.jx3box.com",
+                onProxyReq: function (request) {
+                    request.setHeader("origin", "");
+                },
+            },
         },
     },
 

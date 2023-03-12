@@ -1,0 +1,75 @@
+<template>
+    <el-tabs class="m-tabs" v-model="view" @tab-click="changeView">
+        <el-tab-pane label="武学研习" name="index">
+            <template #label>
+                <el-icon><Collection /></el-icon>
+                <b>武学研习</b>
+                <em class="u-secret">权威白皮书</em>
+            </template>
+        </el-tab-pane>
+        <el-tab-pane label="招募大厅" name="index" disabled>
+            <template #label>
+                <el-icon><Collection /></el-icon>
+                <b>招募大厅</b>
+            </template>
+        </el-tab-pane>
+        <el-tab-pane label="阵营攻防" name="index" disabled>
+            <template #label>
+                <el-icon><Collection /></el-icon>
+                <b>阵营攻防</b>
+            </template>
+        </el-tab-pane>
+        <el-tab-pane label="绝境战场" name="index" disabled>
+            <template #label>
+                <el-icon><Collection /></el-icon>
+                <b>绝境战场</b>
+            </template>
+        </el-tab-pane>
+        <el-tab-pane label="竞技场" name="index" disabled>
+            <template #label>
+                <el-icon><Collection /></el-icon>
+                <b>竞技场</b>
+            </template>
+        </el-tab-pane>
+        <el-tab-pane label="斗鱼直播" name="index" disabled>
+            <template #label>
+                <el-icon><Collection /></el-icon>
+                <b>斗鱼直播</b>
+            </template>
+        </el-tab-pane>
+    </el-tabs>
+</template>
+
+<script>
+export default {
+    name: "PvpTabs",
+    data() {
+        return {
+            view: "index",
+        };
+    },
+    watch: {
+        $route: {
+            handler(_route) {
+                this.view = _route.name;
+            },
+            immediate: true,
+            deep: true,
+        },
+    },
+    methods: {
+        changeView: function () {
+            this.$router.push({
+                name: this.view,
+                query: {
+                    subtype: this.$route.query.subtype,
+                },
+            });
+        },
+    },
+};
+</script>
+
+<style lang="less">
+@import "@/assets/css/tabs.less";
+</style>

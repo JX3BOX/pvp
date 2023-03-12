@@ -1,28 +1,28 @@
 <template>
-    <div class="p-index">
-        Index
-
-        <img src="@/assets/img/test.png" style="width: 32px" />
-        <img src="@/assets/img/test.svg" svg-inline style="width: 32px" />
-    </div>
+    <ListLayout>
+        <MartialArts />
+    </ListLayout>
 </template>
 
 <script>
-import { getApi } from "@/service/index";
+import { useStore } from "@/store";
+import ListLayout from "@/layouts/ListLayout.vue";
+import MartialArts from "@/components/MartialArts.vue";
 export default {
     name: "IndexPage",
+    components: {
+        ListLayout,
+        MartialArts,
+    },
     props: [],
     data: function () {
         return {};
     },
-    computed: {},
-    methods: {},
-    created: function () {
-        getApi("params").then((res) => {
-            console.log(res);
-        });
+    computed: {
+        client() {
+            return useStore().client;
+        },
     },
-    components: {},
 };
 </script>
 

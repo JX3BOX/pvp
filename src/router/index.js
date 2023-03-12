@@ -5,7 +5,7 @@ import { createRouter, createWebHistory } from "vue-router";
 const Index = () => import("../views/Index.vue");
 
 // 3.Routes
-const routes = [{ path: "/", component: Index }];
+const routes = [{ path: "/", name: "index", component: Index }];
 
 // 4.Build An Instance
 const router = createRouter({
