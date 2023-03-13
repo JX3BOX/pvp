@@ -1,22 +1,69 @@
 <template>
     <div class="p-martial-arts">
-        <div v-for="kungfu in kungfus" :key="kungfu">{{ showKungfuName(kungfu) }}</div>
+        <div class="m-martial-skills">
+            <div v-for="kungfu in kungfus" :key="kungfu" class="m-martial-skill">
+                <div class="u-title">{{ showKungfuName(kungfu) }}</div>
+                <div class="m-skills" v-if="kungfusSkills[kungfu]">
+                    <div
+                        class="m-skill"
+                        v-for="skill in kungfusSkills[kungfu]"
+                        :key="skill?.SkillID"
+                        :title="skill?.Name"
+                    >
+                        <img v-if="skill?.IconID" :src="iconLink(skill.IconID)" :alt="skill.IconID" />
+                        <div class="m-recipe">{{ getSkillRecipe(skill?.SkillID) }}</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="m-talent-box qx-container"></div>
+        </div>
+        <div class="m-martial-extend">
+            <div class="m-mount-info">
+                <div class="m-zhenfa">
+                    <div class="u-title">阵法</div>
+                    <img
+                        :src="iconLink(zhenfa_info?.IconID)"
+                        :alt="zhenfa_info?.IconID"
+                        :title="zhenfa_info?.Name"
+                        class="u-pic"
+                    />
+                </div>
+                <div class="m-pasv">
+                    <div class="u-title">门派内功</div>
+                    <img
+                        :src="showMountIcon(pasv_info?.BelongKungfu)"
+                        :alt="pasv_info?.BelongKungfu"
+                        :title="pasv_info?.Name"
+                        class="u-pic"
+                    />
+                </div>
+            </div>
+        </div>
     </div>
 </template>
 
 <script>
 import { useStore } from "@/store";
 import xfmap from "@jx3box/jx3box-data/data/xf/xf.json";
-import { getSkills, getTalents } from "../service/raw";
-// import { __iconPath, __ossRoot } from "@jx3box/jx3box-common/data/jx3box.json";
+import { getSkills, getTalents, getTalentVersions } from "../service/raw";
+import { iconLink, showMountIcon } from "@jx3box/jx3box-common/js/utils";
+import { getRecipe } from "@/service/node";
+import relation from "@jx3box/jx3box-data/data/xf/relation.json";
+
 import kungfumap_std from "@/assets/data/kungfu_std.json";
 import kungfumap_origin from "@/assets/data/kungfu_origin.json";
 import pasvmap from "@/assets/data/pasv.json";
 import zhenfamap from "@/assets/data/zhenfa.json";
 import kungfus from "@/assets/data/kungfuid.json";
+
 import { cloneDeep, flattenDeep } from "lodash";
+// 奇穴
+import JX3_QIXUE from "@jx3box/jx3box-talent";
+import "@jx3box/jx3box-talent/talent.css";
+
 export default {
-    name: "MartialArtsStd",
+    name: "MartialArts",
     props: [],
     data() {
         return {
@@ -24,36 +71,73 @@ export default {
             data: [],
             talents: [],
             kungfuid: "pasv",
+
+            talentDriver: null,
+            recipe: [],
         };
     },
     computed: {
+        // 心法中文名
         subtype() {
             return this.$route.query.subtype || "通用";
         },
+        school() {
+            return relation.mount_belong_school[this.subtype];
+        },
+        // 心法id
         mountid: function () {
             return xfmap[this.subtype]?.["id"] || "0";
         },
         client() {
             return useStore().client;
         },
+        // 门派技能套路id
         kungfus: function () {
             return this.kungfumap[this.mountid]["kungfus"];
         },
+        // 门派技能数据
+        kungfusSkills: function () {
+            const obj = {};
+            Object.entries(this.kungfumap[this.mountid]["skills"]).forEach(([key, value]) => {
+                obj[key] = value.map((SkillID) => {
+                    const currentSkill = this.data.find((d) => d.SkillID == SkillID);
+                    return currentSkill;
+                });
+            });
+            return obj;
+        },
+        // 门派技能id数组
         skill_ids: function () {
             return flattenDeep(Object.values(this.kungfumap[this.mountid]["skills"]));
         },
+        // 心法被动id
         pasv_skills: function () {
             return pasvmap[this.subtype][this.client];
         },
+        pasv_info: function () {
+            return (
+                this.data.filter((d) => d.SkillID === this.pasv_skills[0])?.sort((a, b) => b.Level - a.Level)?.[0] || {}
+            );
+        },
+        // 阵法id
         zhenfa_skills: function () {
             return (this.mountid && zhenfamap[this.mountid]) || [];
         },
+        zhenfa_info: function () {
+            return (
+                this.data.filter((d) => d.SkillID === this.zhenfa_skills[0])?.sort((a, b) => b.Level - a.Level)?.[0] ||
+                {}
+            );
+        },
+        // 奇穴id std
         talent_skills: function () {
             return (this.mountid && this.talents?.[this.mountid]) || [];
         },
+        // 镇派id origin
         talent2_skills: function () {
             return (this.mountid && this.talents2?.[this.mountid]) || [];
         },
+        // 所有技能id, 用于请求
         ids: function () {
             return [...this.skill_ids, ...this.pasv_skills, ...this.zhenfa_skills].join(",");
         },
@@ -83,20 +167,17 @@ export default {
     },
     mounted: async function () {
         this.talents = await getTalents();
+        this.installTalent();
+        this.getRecipe();
     },
     methods: {
+        iconLink,
+        showMountIcon,
         loadSkills: function () {
             this.loading = true;
             getSkills(this.params)
                 .then((res) => {
-                    let data = res.data || [];
-                    if (this.kungfuid == "zhenfa") {
-                        this.data = data;
-                    } else if (this.kungfuid === "talent") {
-                        this.data = this.handleTalentData(data);
-                    } else {
-                        this.data = this.removeLowLevelSkills(data);
-                    }
+                    this.data = res.data;
 
                     /**
                      * TODO:
@@ -145,6 +226,37 @@ export default {
         showKungfuName: function (val) {
             return kungfus[val];
         },
+        // 初始化奇穴模拟器（此时渲染使用空奇穴模板）
+        installTalent: function () {
+            getTalentVersions().then((res) => {
+                const version = res.data?.[0]?.version;
+                this.talentDriver = new JX3_QIXUE();
+
+                this.$nextTick(() => {
+                    this.talentDriver.then((talent) => {
+                        talent.load({
+                            version,
+                            xf: this.subtype,
+                            editable: true,
+                        });
+                    });
+                });
+            });
+        },
+
+        // 秘籍
+        getRecipe() {
+            getRecipe({ school: this.school, client: this.client }).then((res) => {
+                this.recipe = res.data;
+            });
+        },
+        getSkillRecipe(id) {
+            return this.recipe.filter((r) => r.SkillID == id);
+        },
     },
 };
 </script>
+
+<style lang="less">
+@import "@/assets/css/martial.less";
+</style>
