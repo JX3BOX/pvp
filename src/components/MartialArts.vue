@@ -11,7 +11,8 @@
                         :title="skill?.Name"
                     >
                         <img v-if="skill?.IconID" :src="iconLink(skill.IconID)" :alt="skill.IconID" />
-                        <div class="m-recipe">{{ getSkillRecipe(skill?.SkillID) }}</div>
+                        <el-icon v-if="skill" class="" :ref="setRef"><CaretRight /></el-icon>
+                        <!-- <div class="m-recipe">{{ getSkillRecipe(skill?.SkillID) }}</div> -->
                     </div>
                 </div>
             </div>
@@ -40,8 +41,30 @@
                 </div>
             </div>
         </div>
+
+        <!-- <el-popover v-model:visible="visiblePopover" :virtual-ref="iconRef" trigger="click" title="With title" virtual-triggering>
+            <span> Some content </span>
+        </el-popover> -->
     </div>
 </template>
+
+<script setup>
+// import { ref } from "vue";
+// const iconRef = ref();
+const refMap = [];
+// const visiblePopover = ref(false);
+
+// const handleRef = (ref) => {
+//   iconRef.value = ref
+//   visiblePopover.value = true
+// }
+const setRef = (ref) => {
+    console.log(ref);
+    if (ref) {
+        refMap.push(ref);
+    }
+};
+</script>
 
 <script>
 import { useStore } from "@/store";
