@@ -1,5 +1,5 @@
 .p-martial-arts {
-    .flex;
+    display: flex;
     .m-martial-skills {
         flex: 1;
     }
@@ -12,29 +12,44 @@
             letter-spacing: 2px;
             margin-right: 10px;
         }
-        .mb(20px);
-        .flex;
+        margin-bottom: 20px;
+        display: flex;
         align-items: center;
     }
     .m-skills {
-        .flex;
+        display: flex;
         gap: 20px;
         flex-wrap: wrap;
         align-items: center;
+    }
+
+    .m-skill {
+        position: relative;
+
+        .u-icon {
+            position: absolute;
+            left: -8px;
+            bottom: -4px;
+            // 翻转90度
+            transform: rotate(-90deg);
+            width: 20px;
+            height: 20px;
+            cursor: pointer;
+        }
     }
 
     .m-martial-extend {
         width: 320px;
 
         .m-mount-info {
-            .flex;
+            display: flex;
             align-items: center;
             justify-content: space-around;
         }
 
         .m-zhenfa,
         .m-pasv {
-            .flex;
+            display: flex;
             align-items: center;
         }
 

@@ -11,7 +11,11 @@
                         :title="skill?.Name"
                     >
                         <img v-if="skill?.IconID" :src="iconLink(skill.IconID)" :alt="skill.IconID" />
-                        <el-icon v-if="skill" class="" :ref="setRef"><CaretRight /></el-icon>
+                        <img
+                            v-if="getSkillRecipe(skill?.SkillID).length"
+                            class="u-icon"
+                            src="@/assets/img/challenge.png"
+                        />
                         <!-- <div class="m-recipe">{{ getSkillRecipe(skill?.SkillID) }}</div> -->
                     </div>
                 </div>
@@ -47,24 +51,6 @@
         </el-popover> -->
     </div>
 </template>
-
-<script setup>
-// import { ref } from "vue";
-// const iconRef = ref();
-const refMap = [];
-// const visiblePopover = ref(false);
-
-// const handleRef = (ref) => {
-//   iconRef.value = ref
-//   visiblePopover.value = true
-// }
-const setRef = (ref) => {
-    console.log(ref);
-    if (ref) {
-        refMap.push(ref);
-    }
-};
-</script>
 
 <script>
 import { useStore } from "@/store";
