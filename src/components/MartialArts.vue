@@ -317,6 +317,7 @@ export default {
             return desc;
         },
         formatPasv(info) {
+            if (!info.Desc) return;
             return info.Desc.replace(/\\n/g, "</br>");
         },
     },
