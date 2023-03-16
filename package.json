@@ -12,7 +12,7 @@
     },
     "dependencies": {
         "@element-plus/icons-vue": "^2.1.0",
-        "@jx3box/jx3box-common": "^7.8.1",
+        "@jx3box/jx3box-common": "^7.8.2",
         "@jx3box/jx3box-data": "^3.0.8",
         "@jx3box/jx3box-talent": "^1.1.9",
         "@jx3box/jx3box-vue3-ui": "^0.0.4",
@@ -40,6 +40,9 @@
         "less-loader": "^11.0.0",
         "lint-staged": "^13.0.2",
         "prettier": "2.7.1",
+        "sass": "^1.59.3",
+        "sass-loader": "^13.2.0",
+        "sass-resources-loader": "^2.2.5",
         "style-resources-loader": "^1.5.0",
         "vue-svg-inline-loader": "^2.1.3"
     },
