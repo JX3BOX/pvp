@@ -1,50 +1,52 @@
 <template>
     <div>
         <Header></Header>
-        <Breadcrumb
-            name="竞技专栏"
-            slug="pvp"
-            root="/pvp"
-            :publishEnable="true"
-            :adminEnable="false"
-            :feedbackEnable="true"
-            :crumbEnable="true"
-        >
-            <Info />
+        <Breadcrumb :name="title" :slug="slug" :root="root" :feedbackEnable="true" :crumbEnable="false">
+            <template #logo>
+                <img svg-inline :src="logo" />
+            </template>
         </Breadcrumb>
-        <LeftSidebar>
-            <!-- <Nav class="m-nav" /> -->
-        </LeftSidebar>
-        <Main :withoutRight="true">
-            <div class="m-main">
-                <tabs />
-                <slot></slot>
-            </div>
+        <Main :class="className" :withoutRight="true" :withoutLeft="true">
+            <slot></slot>
             <Footer></Footer>
         </Main>
     </div>
 </template>
 
 <script>
-// import Info from "@/components/list/Info.vue";
-// import Nav from "@/components/list/list_nav.vue";
-// import Header from '@jx3box/jx3box-vue3-ui/src/Header.vue';
-import Tabs from "@/components/Tabs.vue";
+import JX3BOX from "@jx3box/jx3box-common/data/jx3box.json";
+import app from "../assets/data/app.json";
 export default {
-    name: "App",
-    components: {
-        // Info,
-        // Nav,
-        Tabs,
+    name: "AppLayout",
+    props: {
+        slug: {
+            type: String,
+            default: "",
+        },
+        icon: {
+            type: String,
+            default: "",
+        },
+        className: {
+            type: String,
+            default: "",
+        },
     },
-    props: [],
-    data: function () {
-        return {};
+    computed: {
+        root() {
+            return `/pvp/${this.slug}`;
+        },
+        logo() {
+            const key = this.icon || this.slug;
+            return JX3BOX.__imgPath + "image/box/" + key + ".svg";
+        },
+        title() {
+            return app[this.slug]?.title || "";
+        },
     },
-    methods: {},
 };
 </script>
 
 <style lang="less">
-// @import "~@/assets/css/list.less";
+@import "~@/assets/css/list.less";
 </style>
