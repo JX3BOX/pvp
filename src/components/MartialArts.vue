@@ -82,11 +82,11 @@ import { iconLink, showMountIcon } from "@jx3box/jx3box-common/js/utils";
 import { getRecipe } from "@/service/node";
 import relation from "@jx3box/jx3box-data/data/xf/relation.json";
 
-import kungfumap_std from "@/assets/data/kungfu_std.json";
-import kungfumap_origin from "@/assets/data/kungfu_origin.json";
-import pasvmap from "@/assets/data/pasv.json";
-import zhenfamap from "@/assets/data/zhenfa.json";
-import kungfus from "@/assets/data/kungfuid.json";
+import kungfumap_std from "@/assets/data/martial/kungfu_std.json";
+import kungfumap_origin from "@/assets/data/martial/kungfu_origin.json";
+import pasvmap from "@/assets/data/martial/pasv.json";
+import zhenfamap from "@/assets/data/martial/zhenfa.json";
+import kungfus from "@/assets/data/martial/kungfuid.json";
 
 import { cloneDeep, flattenDeep } from "lodash";
 // 奇穴
