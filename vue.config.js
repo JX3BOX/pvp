@@ -1,5 +1,6 @@
 const path = require("path");
 const setting = require("./setting.json");
+const pkg = require("./package.json");
 module.exports = {
     //❤️ Multiple pages ~
     // pages: {
@@ -75,7 +76,7 @@ module.exports = {
     },
 
     //❤️ define path for static files ~
-    publicPath: process.env.NODE_ENV === "development" ? "/" : process.env.STATIC_PATH,
+    publicPath: process.env.NODE_ENV === "development" ? "/" : process.env.STATIC_PATH + pkg.name,
 
     //❤️ Webpack configuration
     chainWebpack: (config) => {
