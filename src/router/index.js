@@ -12,9 +12,8 @@ const routes = [
 
 // 4.Build An Instance
 const router = createRouter({
-    history: createWebHistory(),
-    base: "/pvp",
-    routes,
+    history: createWebHistory("/pvp"),
+    routes: routes,
 });
 
 export default router;
