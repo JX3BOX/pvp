@@ -7,7 +7,7 @@
 <script>
 import { useStore } from "@/store";
 import ListLayout from "@/layouts/ListLayout.vue";
-import MartialArts from "@/components/MartialArts.vue";
+import MartialArts from "@/views/MartialArts.vue";
 export default {
     name: "IndexPage",
     components: {

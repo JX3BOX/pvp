@@ -10,15 +10,28 @@
                         :key="skill?.SkillID"
                         :title="`${skill?.SkillName}`"
                     >
-                        <img v-if="skill?.IconID" :src="iconLink(skill.IconID)" :alt="skill.IconID" />
+                        <template v-if="skill?.IconID">
+                            <el-popover v-if="hasSkill(skill)" width="400px" :show-after="100">
+                                <div v-if="selectedSkill">
+                                    <skill-item :item="selectedSkill"></skill-item>
+                                </div>
+                                <template #reference>
+                                    <img
+                                        :src="iconLink(skill.IconID)"
+                                        :alt="skill.IconID"
+                                        @mousemove="showSkill(skill)"
+                                    />
+                                </template>
+                            </el-popover>
+                            <img v-else :src="iconLink(skill?.IconID)" :alt="skill.IconID" class="u-not-mount" />
+                        </template>
                         <img
                             v-if="getSkillRecipe(skill?.SkillID).length"
                             class="u-icon"
                             src="@/assets/img/challenge.png"
                             :ref="(el) => setRefs(el, skill)"
-                            @click="showRecipe(skill?.SkillID)"
+                            @click.stop="showRecipe(skill?.SkillID)"
                         />
-                        <!-- <div class="m-recipe">{{ getSkillRecipe(skill?.SkillID) }}</div> -->
                     </div>
                 </div>
             </div>
@@ -77,7 +90,7 @@
 import { ref } from "vue";
 import { useStore } from "@/store";
 import xfmap from "@jx3box/jx3box-data/data/xf/xf.json";
-import { getSkills, getTalents, getTalentVersions } from "../service/raw";
+import { getSkills, getTalents, getTalentVersions, getSkill } from "../service/raw";
 import { iconLink, showMountIcon } from "@jx3box/jx3box-common/js/utils";
 import { getRecipe } from "@/service/node";
 import relation from "@jx3box/jx3box-data/data/xf/relation.json";
@@ -93,8 +106,13 @@ import { cloneDeep, flattenDeep } from "lodash";
 import JX3_QIXUE from "@jx3box/jx3box-talent";
 import "@jx3box/jx3box-talent/talent.css";
 
+import SkillItem from "@/components/SkillItem.vue";
+
 export default {
     name: "MartialArts",
+    components: {
+        SkillItem,
+    },
     props: [],
     data() {
         return {
@@ -111,6 +129,9 @@ export default {
             visiblePopover: false,
             refMap: [],
             selectedRecipe: [],
+
+            skills: [],
+            selectedSkill: null,
         };
     },
     computed: {
@@ -187,10 +208,11 @@ export default {
     },
     watch: {
         subtype: {
-            handler: function () {
-                // this.kungfuid = "pasv";
-                this.loadSkills();
-                this.getRecipe();
+            async handler() {
+                this.refMap = [];
+                await this.loadSkills();
+                await this.getRecipe();
+                await this.getSkill();
                 this.reloadTalent();
             },
             immediate: true,
@@ -222,19 +244,11 @@ export default {
             this.selectedRecipe = this.getSkillRecipe(id);
             this.visiblePopover = true;
         },
-        loadSkills: function () {
+        async loadSkills() {
             this.loading = true;
             getSkills(this.params)
                 .then((res) => {
                     this.data = res.data;
-
-                    /**
-                     * TODO:
-                     * 1. 技能套路
-                     * 2. 阵眼
-                     * 3. 门派内功
-                     * 4. 秘籍
-                     */
                 })
                 .finally(() => {
                     this.loading = false;
@@ -270,6 +284,24 @@ export default {
                 });
             });
         },
+        async getSkill() {
+            getSkill(this.subtype, this.client).then((res) => {
+                const skills = res?.find((item) => item?.kungfuName == this.subtype);
+                this.skills = flattenDeep(
+                    skills?.remarks?.map((item) => {
+                        return item?.forceSkills;
+                    })
+                );
+            });
+        },
+
+        // 技能popup
+        showSkill: function ({ SkillID, SkillName }) {
+            this.selectedSkill = this.skills?.find((item) => item._id == SkillID || item.skillName == SkillName) || {};
+        },
+        hasSkill: function ({ SkillID, SkillName }) {
+            return this.skills?.find((item) => item._id == SkillID || item.skillName == SkillName);
+        },
 
         // 技能套路名称
         showKungfuName: function (val) {
@@ -297,7 +329,7 @@ export default {
         },
 
         // 秘籍
-        getRecipe() {
+        async getRecipe() {
             getRecipe({ school: this.school, client: this.client }).then((res) => {
                 this.recipe = res.data;
             });
