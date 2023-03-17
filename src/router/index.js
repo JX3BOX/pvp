@@ -5,8 +5,10 @@ import { createRouter, createWebHistory } from "vue-router";
 const Index = () => import("../views/Index.vue");
 
 // 3.Routes
-const routes = [{ path: "/", name: "index", component: Index }];
-
+const routes = [
+    { path: "/", name: "index", component: Index },
+    { name: "sandbox", path: "/pvp/sandbox", component: () => import("../views/Sandbox.vue") },
+];
 // 4.Build An Instance
 const router = createRouter({
     history: createWebHistory(), //history api
