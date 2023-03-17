@@ -2,17 +2,18 @@
 import { createRouter, createWebHistory } from "vue-router";
 
 // 2.Components
-const Index = () => import("../views/Index.vue");
-
+const Index = () => import("@/views/Index.vue");
+const Sandbox = () => import("@/views/Sandbox.vue");
 // 3.Routes
 const routes = [
     { path: "/", name: "index", component: Index },
-    { name: "sandbox", path: "/pvp/sandbox", component: () => import("../views/Sandbox.vue") },
+    { path: "/sandbox", name: "sandbox", component: Sandbox },
 ];
+
 // 4.Build An Instance
 const router = createRouter({
-    history: createWebHistory(), //history api
-    // base : '/rewrite root',
+    history: createWebHistory(),
+    base: "/pvp",
     routes,
 });
 

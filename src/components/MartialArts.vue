@@ -8,13 +8,15 @@
                         class="m-skill"
                         v-for="skill in kungfusSkills[kungfu]"
                         :key="skill?.SkillID"
-                        :title="skill?.Name"
+                        :title="`${skill?.SkillName}`"
                     >
                         <img v-if="skill?.IconID" :src="iconLink(skill.IconID)" :alt="skill.IconID" />
                         <img
                             v-if="getSkillRecipe(skill?.SkillID).length"
                             class="u-icon"
                             src="@/assets/img/challenge.png"
+                            :ref="(el) => setRefs(el, skill)"
+                            @click="showRecipe(skill?.SkillID)"
                         />
                         <!-- <div class="m-recipe">{{ getSkillRecipe(skill?.SkillID) }}</div> -->
                     </div>
@@ -27,32 +29,52 @@
             <div class="m-mount-info">
                 <div class="m-zhenfa">
                     <div class="u-title">阵法</div>
-                    <img
-                        :src="iconLink(zhenfa_info?.IconID)"
-                        :alt="zhenfa_info?.IconID"
-                        :title="zhenfa_info?.Name"
-                        class="u-pic"
-                    />
+                    <el-popover width="500px">
+                        <div v-html="formatZhenfa(zhenfa_info)"></div>
+                        <template #reference>
+                            <img
+                                :src="iconLink(zhenfa_info[0]?.IconID)"
+                                :alt="zhenfa_info[0]?.IconID"
+                                :title="zhenfa_info[0]?.Name"
+                                class="u-pic"
+                            />
+                        </template>
+                    </el-popover>
                 </div>
                 <div class="m-pasv">
                     <div class="u-title">门派内功</div>
-                    <img
-                        :src="showMountIcon(pasv_info?.BelongKungfu)"
-                        :alt="pasv_info?.BelongKungfu"
-                        :title="pasv_info?.Name"
-                        class="u-pic"
-                    />
+                    <el-popover width="450px">
+                        <div v-html="formatPasv(pasv_info)"></div>
+                        <template #reference
+                            ><img
+                                :src="showMountIcon(pasv_info?.BelongKungfu)"
+                                :alt="pasv_info?.BelongKungfu"
+                                :title="pasv_info?.Name"
+                                class="u-pic"
+                        /></template>
+                    </el-popover>
                 </div>
             </div>
         </div>
 
-        <!-- <el-popover v-model:visible="visiblePopover" :virtual-ref="iconRef" trigger="click" title="With title" virtual-triggering>
-            <span> Some content </span>
-        </el-popover> -->
+        <el-popover
+            v-model:visible="visiblePopover"
+            :virtual-ref="iconRef"
+            trigger="manual"
+            width="300px"
+            popper-class="m-recipe-pop"
+            virtual-triggering
+        >
+            <div class="u-recipe-item" v-for="item in selectedRecipe" :key="item.idKey" :title="item.Desc">
+                <img :src="iconLink(item.IconID)" class="u-icon" alt="" />
+                <span class="u-name" :class="'isQuality-' + item.Quality">{{ item.RecipeName }}</span>
+            </div>
+        </el-popover>
     </div>
 </template>
 
 <script>
+import { ref } from "vue";
 import { useStore } from "@/store";
 import xfmap from "@jx3box/jx3box-data/data/xf/xf.json";
 import { getSkills, getTalents, getTalentVersions } from "../service/raw";
@@ -60,11 +82,11 @@ import { iconLink, showMountIcon } from "@jx3box/jx3box-common/js/utils";
 import { getRecipe } from "@/service/node";
 import relation from "@jx3box/jx3box-data/data/xf/relation.json";
 
-import kungfumap_std from "@/assets/data/kungfu_std.json";
-import kungfumap_origin from "@/assets/data/kungfu_origin.json";
-import pasvmap from "@/assets/data/pasv.json";
-import zhenfamap from "@/assets/data/zhenfa.json";
-import kungfus from "@/assets/data/kungfuid.json";
+import kungfumap_std from "@/assets/data/martial/kungfu_std.json";
+import kungfumap_origin from "@/assets/data/martial/kungfu_origin.json";
+import pasvmap from "@/assets/data/martial/pasv.json";
+import zhenfamap from "@/assets/data/martial/zhenfa.json";
+import kungfus from "@/assets/data/martial/kungfuid.json";
 
 import { cloneDeep, flattenDeep } from "lodash";
 // 奇穴
@@ -83,6 +105,12 @@ export default {
 
             talentDriver: null,
             recipe: [],
+            version: "",
+
+            iconRef: ref(null),
+            visiblePopover: false,
+            refMap: [],
+            selectedRecipe: [],
         };
     },
     computed: {
@@ -133,10 +161,7 @@ export default {
             return (this.mountid && zhenfamap[this.mountid]) || [];
         },
         zhenfa_info: function () {
-            return (
-                this.data.filter((d) => d.SkillID === this.zhenfa_skills[0])?.sort((a, b) => b.Level - a.Level)?.[0] ||
-                {}
-            );
+            return this.data.filter((d) => d.SkillID === this.zhenfa_skills[0]);
         },
         // 奇穴id std
         talent_skills: function () {
@@ -165,10 +190,12 @@ export default {
             handler: function () {
                 // this.kungfuid = "pasv";
                 this.loadSkills();
+                this.getRecipe();
+                this.reloadTalent();
             },
+            immediate: true,
         },
         kungfuid: {
-            immediate: true,
             handler: function () {
                 this.loadSkills();
             },
@@ -177,11 +204,24 @@ export default {
     mounted: async function () {
         this.talents = await getTalents();
         this.installTalent();
-        this.getRecipe();
     },
     methods: {
         iconLink,
         showMountIcon,
+        setRefs: function (ref, item) {
+            if (ref) {
+                this.refMap.push({
+                    ref,
+                    item,
+                });
+            }
+        },
+        showRecipe: function (id) {
+            const index = this.refMap.findIndex((item) => item.item.SkillID == id);
+            this.iconRef = this.refMap[index].ref;
+            this.selectedRecipe = this.getSkillRecipe(id);
+            this.visiblePopover = true;
+        },
         loadSkills: function () {
             this.loading = true;
             getSkills(this.params)
@@ -238,16 +278,19 @@ export default {
         // 初始化奇穴模拟器（此时渲染使用空奇穴模板）
         installTalent: function () {
             getTalentVersions().then((res) => {
-                const version = res.data?.[0]?.version;
+                this.version = res.data?.[0]?.version;
                 this.talentDriver = new JX3_QIXUE();
-
-                this.$nextTick(() => {
-                    this.talentDriver.then((talent) => {
-                        talent.load({
-                            version,
-                            xf: this.subtype,
-                            editable: true,
-                        });
+                this.reloadTalent();
+            });
+        },
+        reloadTalent() {
+            this.$nextTick(() => {
+                if (!this.talentDriver) return;
+                this.talentDriver?.then((talent) => {
+                    talent.load({
+                        version: this.version,
+                        xf: this.subtype,
+                        editable: true,
                     });
                 });
             });
@@ -261,6 +304,21 @@ export default {
         },
         getSkillRecipe(id) {
             return this.recipe.filter((r) => r.SkillID == id);
+        },
+
+        // 阵法描述
+        formatZhenfa(arr) {
+            let desc = "";
+            // 去除最后一项
+            arr = arr.slice(0, -1);
+            arr.forEach((item) => {
+                desc += `${item.Desc}</br>`;
+            });
+            return desc;
+        },
+        formatPasv(info) {
+            if (!info.Desc) return;
+            return info.Desc.replace(/\\n/g, "</br>");
         },
     },
 };
