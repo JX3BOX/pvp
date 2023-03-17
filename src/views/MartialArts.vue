@@ -13,6 +13,7 @@
                                 v-if="hasSkill(skill) || subtype === '通用' || !subtype"
                                 width="400px"
                                 :show-after="100"
+                                :hide-after="0"
                                 popper-class="m-skill-pop"
                                 :show-arrow="false"
                                 placement="bottom-start"
@@ -99,6 +100,7 @@
             popper-class="m-recipe-pop"
             virtual-triggering
             placement="right"
+            effect="dark"
         >
             <el-tooltip
                 v-for="item in selectedRecipe"
@@ -392,7 +394,7 @@ export default {
         formatZhenfa(arr) {
             let desc = "";
             const nums = ["一重粗识", "二重略懂", "三重巧熟", "四重精妙", "五重游刃", "六重忘我"];
-            const name = arr[0].Name;
+            const name = arr[0]?.Name;
             // 去除最后一项
             arr = arr.slice(0, -1);
             arr.forEach((item, index) => {

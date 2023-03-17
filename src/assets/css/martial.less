@@ -54,6 +54,7 @@
         position: relative;
         display: flex;
         justify-content: center;
+        cursor: pointer;
 
         .u-icon {
             position: absolute;
@@ -111,6 +112,8 @@
     display: flex;
     gap: 10px;
     flex-wrap: wrap;
+    background: none !important;
+    opacity: 0.9;
     .u-recipe-item {
         cursor: pointer;
     }
@@ -133,7 +136,7 @@
 .m-skill-pop {
     padding: 0 !important;
     border: none !important;
-    border-radius: 0 !important;
+    background: none !important;
 }
 
 .m-recipe-tooltip {
@@ -142,6 +145,8 @@
 }
 
 .m-pasv-pop {
+    background-color: none !important;
+    opacity: 0.9;
     .u-name,
     .u-desc {
         color: @q_yellow;
