@@ -17,9 +17,9 @@ import { createPinia } from "pinia";
 app.use(createPinia());
 
 // element-plus
+import "@jx3box/jx3box-common/css/element-plus-override.scss";
 import ElementPlus from "element-plus";
 import zhCn from "element-plus/es/locale/lang/zh-cn";
-import "element-plus/dist/index.css";
 
 app.use(ElementPlus, {
     locale: zhCn,

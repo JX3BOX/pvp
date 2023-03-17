@@ -1,5 +1,6 @@
 const path = require("path");
 const setting = require("./setting.json");
+const pkg = require("./package.json");
 module.exports = {
     //❤️ Multiple pages ~
     // pages: {
@@ -75,7 +76,7 @@ module.exports = {
     },
 
     //❤️ define path for static files ~
-    publicPath: process.env.NODE_ENV === "development" ? "/" : process.env.STATIC_PATH,
+    publicPath: process.env.NODE_ENV === "development" ? "/" : process.env.STATIC_PATH + pkg.name,
 
     //❤️ Webpack configuration
     chainWebpack: (config) => {
@@ -104,6 +105,17 @@ module.exports = {
         //💖 import common less var * mixin ~
         const types = ["vue-modules", "vue", "normal-modules", "normal"];
         types.forEach((type) => addStyleResource(config.module.rule("less").oneOf(type)));
+
+        // 注册 sass-resources-loader
+        config.module
+            .rule("scss")
+            .oneOf("vue")
+            .use("sass-resources-loader")
+            .loader("sass-resources-loader")
+            .options({
+                // 这里也是你的自定义变量和样式文件的路径
+                resources: path.resolve(__dirname, "./src/assets/css/element-plus-override.scss"),
+            });
     },
 };
 
