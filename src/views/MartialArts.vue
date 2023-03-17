@@ -2,28 +2,44 @@
     <div class="p-martial-arts">
         <div class="m-martial-skills">
             <div v-for="kungfu in kungfus" :key="kungfu" class="m-martial-skill">
-                <div class="u-title">{{ showKungfuName(kungfu) }}</div>
+                <div class="u-title">
+                    <span class="u-title-name">{{ showKungfuName(kungfu) }}</span>
+                    <img src="../assets/img/skillset.png" class="u-title-img" alt="" />
+                </div>
                 <div class="m-skills" v-if="kungfusSkills[kungfu]">
-                    <div
-                        class="m-skill"
-                        v-for="skill in kungfusSkills[kungfu]"
-                        :key="skill?.SkillID"
-                        :title="`${skill?.SkillName}`"
-                    >
+                    <div class="m-skill" v-for="skill in kungfusSkills[kungfu]" :key="skill?.SkillID">
                         <template v-if="skill?.IconID">
-                            <el-popover v-if="hasSkill(skill)" width="400px" :show-after="100">
+                            <el-popover
+                                v-if="hasSkill(skill) || subtype === '通用' || !subtype"
+                                width="400px"
+                                :show-after="100"
+                                popper-class="m-skill-pop"
+                                :show-arrow="false"
+                                placement="bottom-start"
+                            >
                                 <div v-if="selectedSkill">
                                     <skill-item :item="selectedSkill"></skill-item>
                                 </div>
                                 <template #reference>
-                                    <img
-                                        :src="iconLink(skill.IconID)"
-                                        :alt="skill.IconID"
-                                        @mousemove="showSkill(skill)"
-                                    />
+                                    <div class="u-skill">
+                                        <img
+                                            class="u-skill-icon"
+                                            :src="iconLink(skill.IconID)"
+                                            :alt="skill.IconID"
+                                            @mousemove="showSkill(skill)"
+                                        />
+                                        <span class="u-name" :title="skill.Name">{{ skill.Name }}</span>
+                                    </div>
                                 </template>
                             </el-popover>
-                            <img v-else :src="iconLink(skill?.IconID)" :alt="skill.IconID" class="u-not-mount" />
+                            <div v-else class="u-skill">
+                                <img
+                                    :src="iconLink(skill?.IconID)"
+                                    :alt="skill.IconID"
+                                    class="u-not-mount u-talent-icon"
+                                />
+                                <span class="u-name" :title="skill.Name">{{ skill.Name }}</span>
+                            </div>
                         </template>
                         <img
                             v-if="getSkillRecipe(skill?.SkillID).length"
@@ -36,14 +52,14 @@
                 </div>
             </div>
 
-            <div class="m-talent-box qx-container"></div>
+            <div class="m-talent-box qx-container" v-show="subtype && subtype !== '通用'"></div>
         </div>
-        <div class="m-martial-extend">
+        <div class="m-martial-extend" v-if="subtype && subtype !== '通用'">
             <div class="m-mount-info">
                 <div class="m-zhenfa">
                     <div class="u-title">阵法</div>
-                    <el-popover width="500px">
-                        <div v-html="formatZhenfa(zhenfa_info)"></div>
+                    <el-popover width="500px" popper-class="m-pasv-pop" effect="dark">
+                        <div class="u-desc" v-html="formatZhenfa(zhenfa_info)"></div>
                         <template #reference>
                             <img
                                 :src="iconLink(zhenfa_info[0]?.IconID)"
@@ -56,8 +72,13 @@
                 </div>
                 <div class="m-pasv">
                     <div class="u-title">门派内功</div>
-                    <el-popover width="450px">
-                        <div v-html="formatPasv(pasv_info)"></div>
+                    <el-popover width="450px" popper-class="m-pasv-pop" effect="dark">
+                        <div class="m-pasv">
+                            <div class="u-title">{{ subtype }}</div>
+                            <div class="u-name">{{ pasv_info?.Name }}</div>
+                            <div class="u-subtitle">被动招式</div>
+                            <div class="u-desc" v-html="formatPasv(pasv_info)"></div>
+                        </div>
                         <template #reference
                             ><img
                                 :src="showMountIcon(pasv_info?.BelongKungfu)"
@@ -74,14 +95,27 @@
             v-model:visible="visiblePopover"
             :virtual-ref="iconRef"
             trigger="manual"
-            width="300px"
+            width="226px"
             popper-class="m-recipe-pop"
             virtual-triggering
+            placement="right"
         >
-            <div class="u-recipe-item" v-for="item in selectedRecipe" :key="item.idKey" :title="item.Desc">
-                <img :src="iconLink(item.IconID)" class="u-icon" alt="" />
-                <span class="u-name" :class="'isQuality-' + item.Quality">{{ item.RecipeName }}</span>
-            </div>
+            <el-tooltip
+                v-for="item in selectedRecipe"
+                :key="item.idKey"
+                popper-class="m-recipe-tooltip"
+                placement="top"
+            >
+                <template #content>
+                    <div class="m-recipe-detail">
+                        <div class="u-name" :class="'isQuality-' + item.Quality">{{ item.Name }}</div>
+                        <div>{{ item.Desc }}</div>
+                    </div>
+                </template>
+                <a class="u-recipe-item" :title="item.Desc" :href="recipeLink(item)">
+                    <img :src="iconLink(item.IconID)" class="u-icon" alt="" />
+                </a>
+            </el-tooltip>
         </el-popover>
     </div>
 </template>
@@ -285,6 +319,9 @@ export default {
             });
         },
         async getSkill() {
+            if (!this.subtype || this.subtype == "通用") {
+                return;
+            }
             getSkill(this.subtype, this.client).then((res) => {
                 const skills = res?.find((item) => item?.kungfuName == this.subtype);
                 this.skills = flattenDeep(
@@ -296,8 +333,17 @@ export default {
         },
 
         // 技能popup
-        showSkill: function ({ SkillID, SkillName }) {
-            this.selectedSkill = this.skills?.find((item) => item._id == SkillID || item.skillName == SkillName) || {};
+        showSkill: function (skill) {
+            if (!this.subtype || this.subtype == "通用") {
+                this.selectedSkill = {
+                    skillName: skill.Name,
+                    desc: skill.Desc,
+                };
+            } else {
+                const { SkillID, SkillName } = skill;
+                this.selectedSkill =
+                    this.skills?.find((item) => item._id == SkillID || item.skillName == SkillName) || {};
+            }
         },
         hasSkill: function ({ SkillID, SkillName }) {
             return this.skills?.find((item) => item._id == SkillID || item.skillName == SkillName);
@@ -316,6 +362,7 @@ export default {
             });
         },
         reloadTalent() {
+            if (!this.subtype || this.subtype == "通用") return;
             this.$nextTick(() => {
                 if (!this.talentDriver) return;
                 this.talentDriver?.then((talent) => {
@@ -337,16 +384,21 @@ export default {
         getSkillRecipe(id) {
             return this.recipe.filter((r) => r.SkillID == id);
         },
+        recipeLink(item) {
+            return `/item/search/${item.Name}`;
+        },
 
         // 阵法描述
         formatZhenfa(arr) {
             let desc = "";
+            const nums = ["一重粗识", "二重略懂", "三重巧熟", "四重精妙", "五重游刃", "六重忘我"];
+            const name = arr[0].Name;
             // 去除最后一项
             arr = arr.slice(0, -1);
-            arr.forEach((item) => {
-                desc += `${item.Desc}</br>`;
+            arr.forEach((item, index) => {
+                desc += `${nums[index]}：${item.Desc}</br>`;
             });
-            return desc;
+            return `${name}<br>${desc}`;
         },
         formatPasv(info) {
             if (!info.Desc) return;

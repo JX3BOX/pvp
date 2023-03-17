@@ -92,8 +92,8 @@
     </div>
 </template>
 <script>
-import { __imgPath } from "@jx3box/jx3box-common/data/jx3box.json";
-import { placeArr, placeAttacks, placeCamp, placeImg, placeName } from "@/assets/data/sandboxMap.json";
+import JX3BOX from "@jx3box/jx3box-common/data/jx3box.json";
+const { placeArr, placeAttacks, placeCamp, placeImg, placeName } = require("@/assets/data/sandboxMap.json");
 export default {
     name: "sandbox_maps",
     props: ["maps", "camp", "route"],
@@ -108,6 +108,7 @@ export default {
     methods: {
         // 图片路径
         imgPath(name, camp, key) {
+            const __imgPath = JX3BOX.__imgPath;
             switch (key) {
                 case "pic":
                     return camp == "haoqi"
@@ -188,7 +189,7 @@ export default {
         },
         // 展示弹窗
         showLog(item) {
-            item.img = __imgPath + "image/camp/" + item.name_pinyin + ".png";
+            item.img = JX3BOX.__imgPath + "image/camp/" + item.name_pinyin + ".png";
             this.$emit("mapClick", item);
         },
     },

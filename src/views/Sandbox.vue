@@ -14,9 +14,9 @@
 <script>
 import { useStore } from "@/store";
 import AppLayout from "@/layouts/AppLayout.vue";
-import sandboxSearch from "@/components/sandbox/search.vue";
-import sandboxMap from "@/components/sandbox/maps.vue";
-import sandboxLog from "@/components/sandbox/log.vue";
+import sandboxSearch from "@/components/sandbox/SandboxSearch.vue";
+import sandboxMap from "@/components/sandbox/SandboxMaps.vue";
+import sandboxLog from "@/components/sandbox/SandboxLog.vue";
 import { getCampDetail, getCamplist, getCampServers, getCampLog } from "@/service/sandbox";
 export default {
     name: "SandBoxPage",
