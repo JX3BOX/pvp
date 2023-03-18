@@ -52,9 +52,7 @@ export default {
 .m-skill-item {
     padding: 10px;
     .pr;
-    background-color: rgb(47, 60, 57);
-    opacity: 0.9;
-    border-radius: 4px;
+    background-color: rgba(0, 0, 0, 0.8);
 
     .u-name {
         .fz(14px, 1.8);

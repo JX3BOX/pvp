@@ -1,6 +1,6 @@
 <template>
     <AppLayout slug="sandbox">
-        <div class="p-pxp-sandbox">
+        <div class="p-pvp-sandbox">
             <sandboxSearch :servers="servers" @sandboxChange="onSandbox" />
             <div class="m-sandbox-map">
                 <sandboxMap :maps="sandMaps" :camp="camp" :route="route" @mapClick="mapClick"> </sandboxMap>

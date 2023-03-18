@@ -1,5 +1,5 @@
 <template>
-    <div class="m-sandboxMap">
+    <div class="m-sandbox-map">
         <div class="u-mapLine"></div>
         <!-- 恶人谷||浩气盟 -->
         <div v-for="item in camps" :key="item.key">
@@ -124,7 +124,7 @@ export default {
                 case "attacks":
                     return camp == "haoqi" ? __imgPath + "image/camp/charr.png" : __imgPath + "image/camp/cearr.png";
                 default:
-                    return "https://pics6.baidu.com/feed/2fdda3cc7cd98d10097a9171cd2e66057aec90e5.png@f_auto?token=05f22d6d4644d4bb788c9fa4e496f174";
+                    return "";
             }
         },
         // 图片及文字的定位
