@@ -17,6 +17,7 @@
                                 popper-class="m-skill-pop"
                                 :show-arrow="false"
                                 placement="bottom-start"
+                                :offset="0"
                             >
                                 <div v-if="selectedSkill">
                                     <skill-item :item="selectedSkill"></skill-item>
@@ -57,22 +58,8 @@
         </div>
         <div class="m-martial-extend" v-if="subtype && subtype !== '通用'">
             <div class="m-mount-info">
-                <div class="m-zhenfa">
-                    <div class="u-title">阵法</div>
-                    <el-popover width="500px" popper-class="m-pasv-pop" effect="dark">
-                        <div class="u-desc" v-html="formatZhenfa(zhenfa_info)"></div>
-                        <template #reference>
-                            <img
-                                :src="iconLink(zhenfa_info[0]?.IconID)"
-                                :alt="zhenfa_info[0]?.IconID"
-                                :title="zhenfa_info[0]?.Name"
-                                class="u-pic"
-                            />
-                        </template>
-                    </el-popover>
-                </div>
                 <div class="m-pasv">
-                    <div class="u-title">门派内功</div>
+                    <!-- <div class="u-title">门派内功</div> -->
                     <el-popover width="450px" popper-class="m-pasv-pop" effect="dark">
                         <div class="m-pasv">
                             <div class="u-title">{{ subtype }}</div>
@@ -85,8 +72,24 @@
                                 :src="showMountIcon(pasv_info?.BelongKungfu)"
                                 :alt="pasv_info?.BelongKungfu"
                                 :title="pasv_info?.Name"
-                                class="u-pic"
+                                class="u-pasv-pic"
                         /></template>
+                    </el-popover>
+                </div>
+                <div class="m-zhenfa">
+                    <!-- <div class="u-title">阵法</div> -->
+                    <el-popover width="500px" popper-class="m-pasv-pop" effect="dark">
+                        <div class="u-desc" v-html="formatZhenfa(zhenfa_info)"></div>
+                        <template #reference>
+                            <div class="u-zhenfa-bg" :style="zhenfaBg">
+                                <img
+                                    :src="iconLink(zhenfa_info[0]?.IconID)"
+                                    :alt="zhenfa_info[0]?.IconID"
+                                    :title="zhenfa_info[0]?.Name"
+                                    class="u-pic"
+                                />
+                            </div>
+                        </template>
                     </el-popover>
                 </div>
             </div>
@@ -116,7 +119,7 @@
                         <div>{{ item.Desc }}</div>
                     </div>
                 </template>
-                <a class="u-recipe-item" :title="item.Desc" :href="recipeLink(item)">
+                <a class="u-recipe-item" :href="recipeLink(item)">
                     <img :src="iconLink(item.IconID)" class="u-icon" alt="" />
                 </a>
             </el-tooltip>
@@ -221,6 +224,12 @@ export default {
         },
         zhenfa_info: function () {
             return this.data.filter((d) => d.SkillID === this.zhenfa_skills[0]);
+        },
+        zhenfaBg() {
+            const school = xfmap[this.subtype]?.school;
+            return {
+                "background-image": `url(${require(`@/assets/img/matrix/${school}.png`)})`,
+            };
         },
         // 奇穴id std
         talent_skills: function () {

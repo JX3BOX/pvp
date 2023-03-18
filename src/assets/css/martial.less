@@ -80,11 +80,11 @@
             justify-content: space-around;
         }
 
-        .m-zhenfa,
         .m-pasv {
             display: flex;
             align-items: center;
             flex-direction: column;
+            margin-top: -16px;
             img {
                 border: 2px solid #67aba0;
                 background-color: #2e4946;
@@ -93,7 +93,20 @@
             }
         }
 
+        .u-zhenfa-bg {
+            width: 128px;
+            height: 128px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
         .u-pic {
+            display: block;
+            width: 36px;
+            height: 36px;
+        }
+        .u-pasv-pic {
             display: block;
             width: 48px;
             height: 48px;
@@ -144,11 +157,6 @@
     border: 1px solid #68817e !important;
     background: none !important;
     border-radius: 0 !important;
-}
-
-.m-recipe-tooltip {
-    .m-recipe-detail {
-    }
 }
 
 .m-pasv-pop {
