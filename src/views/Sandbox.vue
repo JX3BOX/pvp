@@ -2,7 +2,7 @@
     <AppLayout slug="sandbox">
         <div class="p-pvp-sandbox">
             <sandboxSearch :servers="servers" @sandboxChange="onSandbox" />
-            <div class="m-sandbox-map">
+            <div class="m-sandbox-box">
                 <sandboxMap :maps="sandMaps" :camp="camp" :route="route" @mapClick="mapClick"> </sandboxMap>
                 <sandboxLog :item="itemLog" v-if="showLog" />
             </div>
