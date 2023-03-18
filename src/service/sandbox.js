@@ -1,4 +1,4 @@
-import { $helper } from "@jx3box/jx3box-common/js/https_v2";
+import { $helper, $cms } from "@jx3box/jx3box-common/js/https_v2";
 
 function getCampServers() {
     return $helper()
@@ -31,4 +31,8 @@ function getCampLog(sandmap_id = 1, castle_id = 1) {
         });
 }
 
-export { getCamplist, getCampServers, getCampLog, getCampDetail };
+function getSandboxIntro(id) {
+    return $cms(`/api/cms/post/${id}`);
+}
+
+export { getCamplist, getCampServers, getCampLog, getCampDetail, getSandboxIntro };
