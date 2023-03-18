@@ -1,6 +1,6 @@
 <template>
     <div class="p-martial-arts">
-        <div class="m-martial-skills">
+        <div class="m-martial-skills" v-loading="loading">
             <div v-for="kungfu in kungfus" :key="kungfu" class="m-martial-skill">
                 <div class="u-title">
                     <span class="u-title-name">{{ showKungfuName(kungfu) }}</span>
@@ -96,11 +96,13 @@
             v-model:visible="visiblePopover"
             :virtual-ref="iconRef"
             trigger="manual"
-            width="226px"
+            :width="226"
             popper-class="m-recipe-pop"
             virtual-triggering
             placement="right"
             effect="dark"
+            :show-arrow="false"
+            :offset="0"
         >
             <el-tooltip
                 v-for="item in selectedRecipe"
@@ -246,9 +248,11 @@ export default {
         subtype: {
             async handler() {
                 this.refMap = [];
+                this.loading = true;
                 await this.loadSkills();
                 await this.getRecipe();
                 await this.getSkill();
+                this.loading = false;
                 this.reloadTalent();
             },
             immediate: true,
