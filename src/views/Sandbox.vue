@@ -115,7 +115,7 @@ export default {
         border-left: 1px solid #eee;
         box-sizing: border-box;
         overflow-y: auto;
-        height: calc(100vh - 124px);
+        // height: calc(100vh - 124px);
         //
         .padding-r {
             padding: 0px 10px 0px 10px;
