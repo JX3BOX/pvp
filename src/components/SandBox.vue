@@ -1,5 +1,6 @@
 <template>
     <div class="v-pxp-sandbox">
+        <h1>阵营沙盘</h1>
         <sandboxSearch :servers="servers" @sandboxChange="onSandbox" />
         <div class="m-sandbox-map">
             <sandboxMap :maps="sandMaps" :camp="camp" :route="route" @mapClick="mapClick"> </sandboxMap>
@@ -49,6 +50,13 @@ export default {
             this.camp = camp;
             this.route = route;
             this.getSandbox();
+            for (let i = 0; i < this.servers.length; i++) {
+                const element = this.servers[i];
+                if (element.id == id) {
+                    this.$emit("sandboxChangeKey", element.server);
+                    break;
+                }
+            }
         },
         //获取沙盘数据 含沙盘攻防路线
         getSandbox() {

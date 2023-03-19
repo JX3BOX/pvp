@@ -7,7 +7,7 @@ const Sandbox = () => import("@/views/Sandbox.vue");
 // 3.Routes
 const routes = [
     { path: "/", name: "index", component: Index },
-    { path: "/sandbox", name: "sandbox", component: Sandbox },
+    { path: "/pvp/sandbox", name: "sandbox", component: Sandbox },
 ];
 
 // 4.Build An Instance
