@@ -52,7 +52,6 @@ export default {
     methods: {
         async initHandbookList() {
             let data = await getHandbookLogs();
-            console.log(data);
             this.handbookList = data;
         },
         ToDate(timeStr) {
