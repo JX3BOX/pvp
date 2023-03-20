@@ -1,32 +1,26 @@
 <template>
-    <AppLayout slug="sandbox">
-        <div class="p-pvp-sandbox">
-            <sandboxSearch :servers="servers" @sandboxChange="onSandbox" />
-            <div class="m-sandbox-box">
-                <sandboxMap :maps="sandMaps" :camp="camp" :route="route" @mapClick="mapClick"> </sandboxMap>
-                <sandboxLog :item="itemLog" v-if="showLog" />
-            </div>
-            <div class="m-mark" v-if="showLog" @click="closeLog"></div>
+    <div class="x-pvp-sandbox">
+        <h1>阵营沙盘</h1>
+        <sandboxSearch :servers="servers" @sandboxChange="onSandbox" />
+        <div class="m-sandbox-map">
+            <sandboxMap :maps="sandMaps" :camp="camp" :route="route" @mapClick="mapClick"> </sandboxMap>
+            <sandboxLog :item="itemLog" v-if="showLog" />
         </div>
-    </AppLayout>
+        <div class="m-mark" v-if="showLog" @click="closeLog"></div>
+    </div>
 </template>
-
 <script>
-import { useStore } from "@/store";
-import AppLayout from "@/layouts/AppLayout.vue";
 import sandboxSearch from "@/components/sandbox/SandboxSearch.vue";
 import sandboxMap from "@/components/sandbox/SandboxMaps.vue";
 import sandboxLog from "@/components/sandbox/SandboxLog.vue";
 import { getCampDetail, getCamplist, getCampServers, getCampLog } from "@/service/sandbox";
 export default {
-    name: "SandBoxPage",
+    name: "SandBox",
     components: {
-        AppLayout,
         sandboxSearch,
         sandboxMap,
         sandboxLog,
     },
-    props: [],
     data: function () {
         return {
             sandMaps: "",
@@ -41,19 +35,12 @@ export default {
         };
     },
     computed: {
-        client() {
-            return useStore().client;
-        },
-        params: function () {
+        parms: function () {
             return {
                 sandmap_id: this.id,
                 camp: this.camp,
             };
         },
-    },
-    mounted() {
-        this.getServers();
-        this.getSandbox();
     },
     methods: {
         //搜索更改 parms的条件
@@ -63,14 +50,21 @@ export default {
             this.camp = camp;
             this.route = route;
             this.getSandbox();
+            for (let i = 0; i < this.servers.length; i++) {
+                const element = this.servers[i];
+                if (element.id == id) {
+                    this.$emit("sandboxChangeKey", element.server);
+                    break;
+                }
+            }
         },
         //获取沙盘数据 含沙盘攻防路线
         getSandbox() {
-            getCamplist(this.params).then((res) => {
+            getCamplist(this.parms).then((res) => {
                 this.id = res.data.sandmap.id;
                 this.sandMaps = { ...this.sandMaps, list: res.data.sandmap.castles };
             });
-            getCampDetail(this.params).then((res) => {
+            getCampDetail(this.parms).then((res) => {
                 this.id = res.sandmap.id;
                 this.sandMaps = { ...this.sandMaps, detail: res.sandmap.maps };
             });
@@ -95,10 +89,13 @@ export default {
             this.showLog = false;
         },
     },
+
+    created: function () {
+        this.getServers();
+        this.getSandbox();
+    },
 };
 </script>
-
 <style lang="less">
-@import "@/assets/css/index.less";
 @import "~@/assets/css/sandbox.less";
 </style>

@@ -31,8 +31,22 @@ function getCampLog(sandmap_id = 1, castle_id = 1) {
         });
 }
 
-function getSandboxIntro(id) {
-    return $cms(`/api/cms/post/${id}`);
+// 获取沙盘右侧文章列表
+function getHandbookLogs(per = 10, page = 1, type = "bps", order = "update", client = "std", topic = "小攻防") {
+    return $cms()
+        .get(`/api/cms/posts?type=${type}&per=${per}&page=${page}&order=${order}&client=${client}&topic=${topic}`)
+        .then((res) => {
+            return res.data.data.list;
+        });
 }
 
-export { getCamplist, getCampServers, getCampLog, getCampDetail, getSandboxIntro };
+// 获取沙盘右侧攻略文章
+function getStrategy() {
+    return $cms()
+        .get(`/api/cms/post/56294`)
+        .then((res) => {
+            return res.data.data;
+        });
+}
+
+export { getCamplist, getCampServers, getCampLog, getCampDetail, getHandbookLogs, getStrategy };

@@ -1,5 +1,5 @@
 <template>
-    <div class="m-sandbox-map">
+    <div class="m-sandboxMap">
         <div class="u-mapLine"></div>
         <!-- 恶人谷||浩气盟 -->
         <div v-for="item in camps" :key="item.key">
@@ -93,6 +93,8 @@
 </template>
 <script>
 import JX3BOX from "@jx3box/jx3box-common/data/jx3box.json";
+const __imgPath = JX3BOX.__imgPath;
+console.log(JX3BOX);
 const { placeArr, placeAttacks, placeCamp, placeImg, placeName } = require("@/assets/data/sandboxMap.json");
 export default {
     name: "sandbox_maps",
@@ -108,7 +110,6 @@ export default {
     methods: {
         // 图片路径
         imgPath(name, camp, key) {
-            const __imgPath = JX3BOX.__imgPath;
             switch (key) {
                 case "pic":
                     return camp == "haoqi"
@@ -129,6 +130,7 @@ export default {
         },
         // 图片及文字的定位
         positionStyle(name, key, arr) {
+            console.log(name, key, arr);
             switch (key) {
                 case "pic":
                     return placeImg[name];
@@ -189,7 +191,7 @@ export default {
         },
         // 展示弹窗
         showLog(item) {
-            item.img = JX3BOX.__imgPath + "image/camp/" + item.name_pinyin + ".png";
+            item.img = __imgPath + "image/camp/" + item.name_pinyin + ".png";
             this.$emit("mapClick", item);
         },
     },
