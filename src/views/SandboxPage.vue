@@ -1,7 +1,7 @@
 <template>
     <AppLayout>
         <div class="pvp-sandbox-content">
-            <SandBox @sandboxChangeKey="onSandbox" />
+            <SandBoxCont @sandboxChangeKey="onSandboxLogs" />
             <div class="right-layout">
                 <div class="strategy-box">
                     <div class="strategy-page">
@@ -41,15 +41,15 @@
 <script>
 import { useStore } from "@/store";
 import AppLayout from "@/layouts/AppLayout.vue";
-import SandBox from "@/components/SandBox.vue";
-import sandboxLogs from "@/components/sandbox/logs.vue";
-import sandboxHandbook from "@/components/sandbox/handbook.vue";
+import SandBoxCont from "@/components/SandBox.vue";
+import sandboxLogs from "@/components/sandbox/Logs.vue";
+import sandboxHandbook from "@/components/sandbox/HandBook.vue";
 import { getStrategy } from "@/service/sandbox";
 import * as sandboxLogsJson from "@/assets/data/sandboxLog.json";
 export default {
     name: "SandBoxPage",
     components: {
-        SandBox,
+        SandBoxCont,
         AppLayout,
         sandboxLogs,
         sandboxHandbook,
@@ -63,17 +63,29 @@ export default {
             strategyIndex: 1,
         };
     },
+    computed: {
+        client() {
+            return useStore().client;
+        },
+        params: function () {
+            return {
+                sandmap_id: this.id,
+                camp: this.camp,
+            };
+        },
+    },
     methods: {
-        onSandbox(key = "斗转星移") {
+        // 取出所有日志数据
+        onSandboxLogs(key = "斗转星移") {
             this.sandboxLogsData = sandboxLogsJson[key] ? sandboxLogsJson[key] : [];
         },
+        // 获取并处理攻略文章
         async getStrategyData() {
             let data = await getStrategy();
-            console.log(data);
             data = data.post_content.split("<!--nextpage-->");
-            console.log(data);
             this.StrategyData = data;
         },
+        // 右侧切换分页
         checkPage(type = "l") {
             if (type == "l") {
                 return (this.strategyIndex = this.strategyIndex > 1 ? this.strategyIndex - 1 : 1);
@@ -82,13 +94,8 @@ export default {
                 this.strategyIndex < this.StrategyData.length ? this.strategyIndex + 1 : this.StrategyData.length;
         },
     },
-    computed: {
-        client() {
-            return useStore().client;
-        },
-    },
     mounted() {
-        this.onSandbox();
+        this.onSandboxLogs();
         this.getStrategyData();
     },
 };
@@ -96,6 +103,7 @@ export default {
 
 <style lang="less">
 @import "@/assets/css/index.less";
+@import "~@/assets/css/sandbox.less";
 </style>
 <style lang="less" scoped>
 .pvp-sandbox-content {
@@ -103,7 +111,6 @@ export default {
     position: relative;
     top: -60px;
     // justify-content: space-between;
-    padding: 0 0px 0 25px;
     -ms-overflow-style: none;
     overflow: -moz-scrollbars-none;
     ::-webkit-scrollbar {

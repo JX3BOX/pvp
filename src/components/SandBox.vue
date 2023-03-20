@@ -1,5 +1,5 @@
 <template>
-    <div class="v-pxp-sandbox">
+    <div class="x-pvp-sandbox">
         <h1>阵营沙盘</h1>
         <sandboxSearch :servers="servers" @sandboxChange="onSandbox" />
         <div class="m-sandbox-map">
@@ -10,9 +10,9 @@
     </div>
 </template>
 <script>
-import sandboxSearch from "@/components/sandbox/search.vue";
-import sandboxMap from "@/components/sandbox/maps.vue";
-import sandboxLog from "@/components/sandbox/log.vue";
+import sandboxSearch from "@/components/sandbox/SandboxSearch.vue";
+import sandboxMap from "@/components/sandbox/SandboxMaps.vue";
+import sandboxLog from "@/components/sandbox/SandboxLog.vue";
 import { getCampDetail, getCamplist, getCampServers, getCampLog } from "@/service/sandbox";
 export default {
     name: "SandBox",

@@ -1,20 +1,47 @@
 .p-martial-arts {
     display: flex;
+    background: #1a2b22;
+    padding: 20px;
+    border-radius: 8px;
     .m-martial-skills {
         flex: 1;
     }
     .m-martial-skill {
         .u-title {
-            font-weight: 600;
-            font-size: 14px;
             // 竖体显示
             writing-mode: tb-rl;
-            letter-spacing: 2px;
-            margin-right: 10px;
+            letter-spacing: 1px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .u-title-name {
+            z-index: 1;
+            color: #fff;
+            font-size: 12px;
+        }
+        .u-title-img {
+            width: 24px;
+            height: 71px;
+            position: absolute;
         }
         margin-bottom: 20px;
         display: flex;
         align-items: center;
+        gap: 20px;
+        // border: 1px solid rgb(40,107,113);
+        padding: 4px 0;
+        position: relative;
+
+        .u-name {
+            display: block;
+            color: #fff;
+            font-size: 12px;
+            text-align: center;
+            overflow: hidden;
+            white-space: nowrap;
+            width: 48px;
+        }
     }
     .m-skills {
         display: flex;
@@ -25,12 +52,14 @@
 
     .m-skill {
         position: relative;
+        display: flex;
+        justify-content: center;
+        cursor: pointer;
 
         .u-icon {
             position: absolute;
             left: -8px;
-            bottom: -4px;
-            // 翻转90度
+            bottom: 14px;
             transform: rotate(-90deg);
             width: 20px;
             height: 20px;
@@ -38,8 +67,12 @@
         }
     }
 
+    .u-not-mount {
+        filter: grayscale(100%);
+    }
+
     .m-martial-extend {
-        width: 320px;
+        width: 200px;
 
         .m-mount-info {
             display: flex;
@@ -47,13 +80,33 @@
             justify-content: space-around;
         }
 
-        .m-zhenfa,
         .m-pasv {
             display: flex;
             align-items: center;
+            flex-direction: column;
+            margin-top: -16px;
+            img {
+                border: 2px solid #67aba0;
+                background-color: #2e4946;
+                padding: 3px;
+                box-sizing: border-box;
+            }
+        }
+
+        .u-zhenfa-bg {
+            width: 128px;
+            height: 128px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
 
         .u-pic {
+            display: block;
+            width: 36px;
+            height: 36px;
+        }
+        .u-pasv-pic {
             display: block;
             width: 48px;
             height: 48px;
@@ -61,24 +114,32 @@
             box-shadow: inset 0 0 1px rgb(0 0 0 / 20%);
         }
         .u-title {
-            font-weight: 600;
             font-size: 14px;
             // 竖体显示
-            writing-mode: tb-rl;
-            letter-spacing: 2px;
-            margin-right: 10px;
+            color: #fff;
+            margin-bottom: 10px;
+        }
+
+        &.hidden {
+            opacity: 0;
         }
     }
 }
 
 .m-recipe-pop {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+    background-color: rgb(47, 60, 57) !important;
+    opacity: 0.9;
+
     .u-recipe-item {
-        display: flex;
-        align-items: center;
+        cursor: pointer;
     }
     .u-icon {
-        width: 32px;
+        // width: 32px;
         height: 32px;
+        border-radius: 2px;
     }
 
     .u-name {
@@ -89,4 +150,46 @@
     .isQuality-null {
         color: #bbb;
     }
+}
+
+.m-skill-pop {
+    padding: 1px !important;
+    border: 1px solid #68817e !important;
+    background: none !important;
+    border-radius: 0 !important;
+}
+
+.m-pasv-pop {
+    background-color: none !important;
+    opacity: 0.9;
+    .u-name,
+    .u-desc {
+        color: @q_yellow;
+        font-size: 14px;
+    }
+    .u-subtitle {
+        color: #fff;
+    }
+}
+
+// 品质颜色
+// 橙色品质：ffa500
+@q_orange: #ffa500;
+// 紫色品质：ff2dff
+@q_purple: #ff2dff;
+// 蓝色品质：007eff
+@q_blue: #007eff;
+// 绿色品质：00d24b
+@q_green: #00d24b;
+.isQuality-2 {
+    color: @q_green;
+}
+.isQuality-3 {
+    color: @q_blue;
+}
+.isQuality-4 {
+    color: @q_purple;
+}
+.isQuality-5 {
+    color: @q_orange;
 }

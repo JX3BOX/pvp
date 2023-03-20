@@ -92,8 +92,10 @@
     </div>
 </template>
 <script>
-import { __imgPath } from "@jx3box/jx3box-common/data/jx3box.json";
-import { placeArr, placeAttacks, placeCamp, placeImg, placeName } from "@/assets/data/sandboxMap.json";
+import JX3BOX from "@jx3box/jx3box-common/data/jx3box.json";
+const __imgPath = JX3BOX.__imgPath;
+console.log(JX3BOX);
+const { placeArr, placeAttacks, placeCamp, placeImg, placeName } = require("@/assets/data/sandboxMap.json");
 export default {
     name: "sandbox_maps",
     props: ["maps", "camp", "route"],
@@ -123,11 +125,12 @@ export default {
                 case "attacks":
                     return camp == "haoqi" ? __imgPath + "image/camp/charr.png" : __imgPath + "image/camp/cearr.png";
                 default:
-                    return "https://pics6.baidu.com/feed/2fdda3cc7cd98d10097a9171cd2e66057aec90e5.png@f_auto?token=05f22d6d4644d4bb788c9fa4e496f174";
+                    return "";
             }
         },
         // 图片及文字的定位
         positionStyle(name, key, arr) {
+            console.log(name, key, arr);
             switch (key) {
                 case "pic":
                     return placeImg[name];
