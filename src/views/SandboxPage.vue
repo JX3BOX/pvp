@@ -41,9 +41,9 @@
 <script>
 import { useStore } from "@/store";
 import AppLayout from "@/layouts/AppLayout.vue";
-import SandBoxCont from "@/components/SandBox.vue";
+import SandBoxCont from "@/components/sandbox/SandBoxIndex.vue";
 import sandboxLogs from "@/components/sandbox/Logs.vue";
-import sandboxHandbook from "@/components/sandbox/HandBook.vue";
+import sandboxHandbook from "@/components/sandbox/Handbook.vue";
 import { getStrategy } from "@/service/sandbox";
 import * as sandboxLogsJson from "@/assets/data/sandboxLog.json";
 export default {
