@@ -1,5 +1,5 @@
 <template>
-    <el-tabs class="m-tabs" v-model="view" @tab-click="changeView">
+    <el-tabs class="m-tabs" v-model="view">
         <el-tab-pane label="武学研习" name="index">
             <template #label>
                 <el-icon><Collection /></el-icon>
@@ -62,19 +62,20 @@ export default {
             immediate: true,
             deep: true,
         },
-    },
-    methods: {
-        changeView: function () {
-            const query =
-                this.view === "sandbox"
-                    ? {}
-                    : {
-                          subtype: this.$route.query.subtype,
-                      };
-            this.$router.push({
-                name: this.view,
-                query,
-            });
+        view: {
+            handler() {
+                const query =
+                    this.view === "sandbox"
+                        ? {}
+                        : {
+                              subtype: this.$route.query.subtype,
+                          };
+                this.$router.push({
+                    name: this.view,
+                    query,
+                });
+            },
+            immediate: true,
         },
     },
 };

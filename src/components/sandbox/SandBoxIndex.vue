@@ -1,5 +1,5 @@
 <template>
-    <div class="x-pvp-sandbox">
+    <div class="m-pvp-sandbox__content">
         <sandboxSearch :servers="servers" @sandboxChange="onSandbox" />
         <div class="m-sandbox-map">
             <sandboxMap :maps="sandMaps" :camp="camp" :route="route" @mapClick="mapClick"> </sandboxMap>

@@ -1,11 +1,9 @@
 <template>
     <div class="m-sandbox-intro" v-loading="loading">
-        <el-tabs v-model="tab">
-            <el-tab-pane label="规则简介" name="rule">
-                <div class="u-content" v-html="content.rule"></div>
+        <el-tabs type="card" v-model="active">
+            <el-tab-pane v-for="item in tabs" :key="item.name" :label="item.label" :name="item.name">
+                <div v-html="item?.html"></div>
             </el-tab-pane>
-            <el-tab-pane label="攻防技巧" name="tips">Config</el-tab-pane>
-            <el-tab-pane label="历史记录" name="history">Task</el-tab-pane>
         </el-tabs>
     </div>
 </template>
@@ -19,26 +17,44 @@ export default {
     data: function () {
         return {
             loading: false,
-            tab: "",
-            tabs: [],
-            content: {
-                rule: "",
-            },
+            data: [],
+            active: "",
         };
     },
-    computed: {},
-    watch: {},
-    methods: {},
-    created: function () {},
-    mounted: function () {
-        this.loading = true;
-        getSandboxIntro(56294)
-            .then((res) => {
-                this.content.rul = res.data.data?.post_content;
-            })
-            .finally(() => {
-                this.loading = false;
+    computed: {
+        tabs() {
+            return this.data.map((item) => {
+                return {
+                    name: item.name,
+                    label: item.label,
+                    html: item.html,
+                };
             });
+        },
+    },
+    watch: {
+        tabs: {
+            handler() {
+                this.active = this.tabs[0].name;
+            },
+            deep: true,
+        },
+    },
+    mounted() {
+        this.loadData();
+    },
+    methods: {
+        loadData() {
+            this.loading = true;
+            const key = "pvp_sandbox_intro,pvp_sandbox_rule";
+            getSandboxIntro({ names: key })
+                .then((res) => {
+                    this.data = res.data.data.list || [];
+                })
+                .finally(() => {
+                    this.loading = false;
+                });
+        },
     },
 };
 </script>

@@ -40,13 +40,11 @@ function getHandbookLogs(per = 10, page = 1, type = "bps", order = "update", cli
         });
 }
 
-// 获取沙盘右侧攻略文章
-function getStrategy() {
-    return $cms()
-        .get(`/api/cms/post/56294`)
-        .then((res) => {
-            return res.data.data;
-        });
+// 沙盘玩法简介
+function getSandboxIntro(params) {
+    return $cms().get(`/api/cms/helper/breadcrumbs`, {
+        params,
+    });
 }
 
-export { getCamplist, getCampServers, getCampLog, getCampDetail, getHandbookLogs, getStrategy };
+export { getCamplist, getCampServers, getCampLog, getCampDetail, getHandbookLogs, getSandboxIntro };

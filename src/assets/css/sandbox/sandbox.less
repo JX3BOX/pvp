@@ -1,6 +1,3 @@
-.x-pvp-sandbox h1 {
-    .x;
-}
 //沙盘搜索
 .m-sandbox-search {
     .flex;
@@ -294,6 +291,9 @@
 .m-pvp-sandbox-content {
     display: flex;
     position: relative;
+    .m-pvp-sandbox__content {
+        padding-top: 20px;
+    }
     .m-extend {
         width: 100%;
         border-left: 1px solid #eee;
@@ -306,7 +306,6 @@
         min-height: 200px;
         margin-bottom: 20px;
         position: relative;
-        padding: 0 8px;
         .m-strategy-content {
             position: absolute;
             top: 0;
@@ -345,7 +344,17 @@
         flex-wrap: wrap;
         flex-direction: column;
         .m-extend {
-            height: initial;
+            border-left: 0;
         }
+
+        .m-sandbox-map {
+            overflow-x: auto;
+        }
+    }
+}
+
+@media screen and (max-width: @smallpc) {
+    .m-sandbox-intro {
+        .mt(20px);
     }
 }

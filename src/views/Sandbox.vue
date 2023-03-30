@@ -5,16 +5,7 @@
 
             <div class="m-extend">
                 <div class="m-strategy-box">
-                    <div class="m-strategy-page">
-                        <i v-show="strategyIndex == 1"></i>
-                        <i class="u-icon" @click="checkPage('l')" v-show="strategyIndex !== 1"
-                            ><img svg-inline src="@/assets/img/left.png"
-                        /></i>
-                        <i class="u-icon" @click="checkPage('r')" v-show="strategyIndex < StrategyData.length"
-                            ><img svg-inline src="@/assets/img/right.png"
-                        /></i>
-                    </div>
-                    <div class="m-strategy-content" v-html="StrategyData[strategyIndex]"></div>
+                    <SandboxIntro />
                 </div>
 
                 <el-tabs class="m-tabs" v-model="view">
@@ -46,7 +37,8 @@ import ListLayout from "@/layouts/ListLayout.vue";
 import SandboxIndex from "@/components/sandbox/SandBoxIndex.vue";
 import SandboxLogs from "@/components/sandbox/SandboxLogs.vue";
 import SandboxHandbook from "@/components/sandbox/SandboxHandbook.vue";
-import { getStrategy } from "@/service/sandbox";
+import SandboxIntro from "@/components/sandbox/SandboxIntro.vue";
+
 import * as sandboxLogsJson from "@/assets/data/sandboxLog.json";
 export default {
     name: "SandBoxPage",
@@ -55,14 +47,12 @@ export default {
         ListLayout,
         SandboxLogs,
         SandboxHandbook,
+        SandboxIntro,
     },
-    props: [],
     data: function () {
         return {
             view: "index",
             sandboxLogsData: [],
-            StrategyData: [],
-            strategyIndex: 1,
         };
     },
     computed: {
@@ -81,24 +71,9 @@ export default {
         onSandboxLogs(key = "斗转星移") {
             this.sandboxLogsData = sandboxLogsJson[key] ? sandboxLogsJson[key] : [];
         },
-        // 获取并处理攻略文章
-        async getStrategyData() {
-            let data = await getStrategy();
-            data = data.post_content.split("<!--nextpage-->");
-            this.StrategyData = data;
-        },
-        // 右侧切换分页
-        checkPage(type = "l") {
-            if (type == "l") {
-                return (this.strategyIndex = this.strategyIndex > 1 ? this.strategyIndex - 1 : 1);
-            }
-            this.strategyIndex =
-                this.strategyIndex < this.StrategyData.length ? this.strategyIndex + 1 : this.StrategyData.length;
-        },
     },
     mounted() {
         this.onSandboxLogs();
-        this.getStrategyData();
     },
 };
 </script>
