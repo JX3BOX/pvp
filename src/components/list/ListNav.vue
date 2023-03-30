@@ -28,7 +28,7 @@
                 <span>配装模拟器</span>
                 <em>Assembly Simulator</em>
             </a>
-            <a href="/pvp/sandbox" target="_blank">
+            <a href="/pvp/sandbox">
                 <img class="u-icon" :src="getAppIcon('sandbox', true)" />
                 <span>阵营沙盘</span>
                 <em>JX3 Sandbox</em>

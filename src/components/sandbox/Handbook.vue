@@ -1,32 +1,99 @@
 <template>
     <div class="m-sandbox-handbook">
         <div class="m-log-box">
-            <ul class="u-cont" style="overflow: auto" v-if="handbookList.length > 0">
-                <li v-for="(items, i) in handbookList" :key="i">
-                    <div class="u-line" @click="linkTo(items.post_id)">
-                        <img class="u-img" :src="items.author_info?.user_avatar" />
-                        <div class="u-box">
-                            <div class="u-title">{{ items.post_title }}</div>
-                            <div class="u-desc">
-                                <a class="u-baike" :href="items.link" target="_blank">查看百科 &raquo;</a>
-                            </div>
-                            <div class="u-foot">
-                                <span class="u-title">作者: {{ items.author }}</span>
-                                <span class="u-desc">时间: {{ ToDate(items.post_modified) }}</span>
-                            </div>
+            <ul class="u-list" v-if="handbookList.length">
+                <li class="u-item" v-for="item in handbookList" :key="item.ID">
+                    <!-- Banner -->
+                    <a class="u-banner" :href="postLink(item.ID)" :target="target">
+                        <img :src="getBanner(item.post_banner, item.post_subtype)" :key="item.ID" />
+                        <span class="u-subject" :class="subject(item) || 'ALL'">{{ subject(item) || "ALL" }}</span>
+                    </a>
+
+                    <!-- 标题 -->
+                    <h2 class="u-post" :class="{ isSticky: item.sticky }">
+                        <img
+                            class="u-icon"
+                            :src="xficon(item.post_subtype)"
+                            :alt="item.post_subtype"
+                            :title="item.post_subtype"
+                        />
+
+                        <!-- 资料片 -->
+                        <span class="u-label u-zlp" v-if="item.zlp">{{ item.zlp }}</span>
+
+                        <!-- 标题文字 -->
+                        <a
+                            class="u-title"
+                            :style="showHighlight(item.color)"
+                            :href="postLink(item.ID)"
+                            :target="target"
+                            >{{ item.post_title || "无标题" }}</a
+                        >
+
+                        <!-- 角标 -->
+                        <span class="u-marks" v-if="item.mark && item.mark.length">
+                            <i v-for="mark in item.mark" class="u-mark" :key="mark">{{ showMark(mark) }}</i>
+                        </span>
+                    </h2>
+
+                    <!-- 字段 -->
+                    <div class="u-content u-desc">
+                        <!-- {{ item.post_excerpt || item.post_title || "这个作者很懒,什么都没有留下" }} -->
+                        <div class="u-metalist u-collection">
+                            <strong>小册</strong>
+                            <em>
+                                <template v-if="~~item.post_collection">
+                                    <a :href="`/collection/${item.post_collection}`" target="_blank"
+                                        >《{{ item.collection_info && item.collection_info.title }}》</a
+                                    >
+                                </template>
+                                <template v-else>-</template>
+                            </em>
                         </div>
+                        <div class="u-metalist u-topics">
+                            <strong>主题</strong>
+                            <em>
+                                <template v-if="item.topics && item.topics.length">
+                                    <a
+                                        class="u-topic"
+                                        :href="`/bps?topic=${topic}`"
+                                        v-for="topic in item.topics"
+                                        :key="topic"
+                                        >{{ topic }}</a
+                                    >
+                                </template>
+                                <template v-else>-</template>
+                            </em>
+                        </div>
+                    </div>
+
+                    <!-- 作者 -->
+                    <div class="u-misc">
+                        <img
+                            class="u-author-avatar"
+                            :src="showAvatar(item.author_info)"
+                            :alt="showNickname(item.author_info)"
+                        />
+                        <a class="u-author-name" :href="authorLink(item.post_author)" target="_blank">{{
+                            showNickname(item.author_info)
+                        }}</a>
+                        <span class="u-date">
+                            Updated on
+                            <time>{{ dateFormat(item.post_modified) }}</time>
+                        </span>
                     </div>
                 </li>
             </ul>
-            <div class="u-cont" v-else>
-                <div class="u-nonedata">暂无数据</div>
-            </div>
         </div>
     </div>
 </template>
 <script>
 import { getHandbookLogs } from "@/service/sandbox";
 import dayjs from "dayjs";
+import { showAvatar, authorLink, showBanner } from "@jx3box/jx3box-common/js/utils";
+import xfmap from "@jx3box/jx3box-data/data/xf/xf.json";
+import { __imgPath } from "@jx3box/jx3box-common/data/jx3box";
+import { cms as mark_map } from "@jx3box/jx3box-common/data/mark.json";
 
 // 扩展插件
 import isSameOrBefore from "dayjs/plugin/isSameOrBefore";
@@ -38,27 +105,55 @@ export default {
     data: function () {
         return {
             handbookList: [],
-            item: {
-                list: [
-                    {
-                        img: "",
-                        name: "pvp攻略1",
-                        desc: "pvp攻略1详细介绍介绍介绍介绍",
-                    },
-                ],
-            },
         };
     },
     methods: {
+        authorLink,
         async initHandbookList() {
             let data = await getHandbookLogs();
             this.handbookList = data;
         },
-        ToDate(timeStr) {
-            return dayjs(timeStr).format("YYYY-MM-DD");
+        getBanner: function (val, subtype) {
+            if (val) {
+                return showBanner(val);
+            } else {
+                let img_name = (subtype && xfmap[subtype]?.["id"]) || 0;
+                return __imgPath + "image/bps_thumbnail/" + img_name + ".png";
+            }
         },
-        linkTo(id) {
-            return window.open(`https://www.jx3box.com/bps/${id}`);
+        showAvatar(user) {
+            return showAvatar(user?.user_avatar);
+        },
+        showNickname(user) {
+            return user?.display_name || "匿名";
+        },
+        showMark: function (val) {
+            return mark_map[val] || val;
+        },
+        postLink(val) {
+            return location.origin + `/bps/` + val;
+        },
+        dateFormat(gmt) {
+            return dayjs(new Date(gmt)).format("YYYY-MM-DD");
+        },
+        xficon: function (val) {
+            if (!val || val == "其它") val = "通用";
+            let xf_id = xfmap[val] && xfmap[val]["id"];
+            return __imgPath + "image/xf/" + xf_id + ".png";
+        },
+        showHighlight: function (val) {
+            return val ? `color:${val};font-weight:600;` : "";
+        },
+        subject: function (item) {
+            let subject = "";
+            if (item.tags?.includes("PVE") && item.tags?.includes("PVP")) {
+                subject = "ALL";
+            } else if (item.tags?.includes("PVE")) {
+                subject = "PVE";
+            } else if (item.tags?.includes("PVP")) {
+                subject = "PVP";
+            }
+            return subject;
         },
     },
     created() {
@@ -68,34 +163,255 @@ export default {
 </script>
 <style lang="less" scoped>
 .m-sandbox-handbook {
-    .m-log-box {
-        ul {
-            padding-left: 0px;
-            li {
-                list-style: none;
+    .u-list {
+        padding: 0;
+        margin: 0;
+        list-style: none;
+    }
+
+    .u-item {
+        border-bottom: 1px solid @border-hr;
+        padding-bottom: 20px;
+        .mb(20px);
+        .clearfix;
+        .pr;
+    }
+
+    // 海报
+    .u-banner {
+        .fl;
+        .mr(10px);
+        .w(180px);
+        .h(100px);
+        overflow: hidden;
+        .db;
+        .pr;
+        .z(1);
+        border: 1px solid #eee;
+        padding: 5px;
+        box-sizing: border-box;
+        img {
+            .size(100%);
+            filter: saturate(120%);
+            transition: 0.06s all ease-in-out;
+        }
+        transition: 0.06s border ease-in-out;
+        &:hover {
+            img {
+                filter: saturate(140%) brightness(120%);
+            }
+            border-color: @border;
+        }
+    }
+
+    .u-subject {
+        .pa;
+        .lt(5px);
+        color: #fff;
+        .fz(12px);
+        padding: 2px 5px;
+        background-color: #eee;
+        &.PVE {
+            // background-color: #36daee;
+            background-color: #abd603;
+        }
+        &.PVP {
+            // background-color: #ff2d8c;
+            background-color: #fc3c3c;
+        }
+        &.ALL {
+            // background-color: #ff2d8c;
+            background-color: #fba524;
+        }
+    }
+
+    // 标题
+    .u-post {
+        margin: 0;
+        padding: 0;
+        .nobreak;
+        .mb(5px);
+        .u-icon {
+            .size(16px);
+            .y(-3px);
+            .mr(5px);
+        }
+        &.isSticky {
+            .u-title::before {
+                content: "🎯";
+                .mr(5px);
+            }
+            // .u-title:hover{
+            //     box-shadow: 0 1px 0 #f00;
+            // }
+        }
+        .u-label {
+            .fz(12px,1.2);
+            .r(3px);
+            .mr(5px);
+            padding: 2px 5px;
+        }
+        .u-zlp {
+            border: 1px solid #fa80a2;
+            color: #fa80a2;
+        }
+        .u-title {
+            // color:@darkblue;
+            font-weight: 400;
+            &:hover {
+                box-shadow: 0 1px 0 @primary;
+            }
+        }
+        .fz(15px, 2);
+        font-weight: normal;
+        .lh(2);
+        font-weight: 400;
+    }
+
+    // 角标
+    .u-mark {
+        font-style: normal;
+        font-size: 12px;
+        padding: 1px 5px 2px 5px;
+        margin-left: 5px;
+        border-radius: 2px;
+        background-color: #6f42c1;
+        color: #fff;
+        .ml(5px);
+    }
+
+    // 内容
+    .u-content {
+        .db;
+        padding-left: 20px;
+        .pr;
+    }
+
+    // 内容·描述类
+    .u-desc {
+        .db;
+        .fz(12px, 1.8);
+        color: #555;
+        .break(2);
+        .mb(6px);
+        padding: 0 2px;
+        .mr(200px);
+    }
+
+    // 内容·meta列表
+    .u-metalist {
+        .nobreak;
+        .db;
+        .fz(12px, 25px);
+        .mb(4px);
+        strong {
+            .dbi;
+            .y(top);
+            padding: 0 10px;
+            .mr(10px);
+            .r(4px);
+            background-color: #f1f8ff;
+            color: @color-link;
+            font-weight: normal;
+        }
+        em {
+            font-style: normal;
+        }
+        b {
+            font-weight: normal;
+        }
+        a {
+            color: #333;
+            &:hover {
+                color: @color-link;
+                box-shadow: 0 1px 0 @color-link;
             }
         }
     }
-    .u-line {
-        display: flex;
-        margin-bottom: 15px;
-        cursor: pointer;
-        .u-img {
-            width: 80px;
-            height: 80px;
-            border-radius: 50%;
-            margin-right: 8px;
+    .u-topic {
+        background-color: @bg-gray;
+        padding: 3px 5px;
+        .r(2px);
+        .mr(5px);
+        &:hover {
+            box-shadow: none !important;
+            background-color: #def;
         }
-        .u-box {
-            width: 100%;
-            .u-desc {
-                padding: 6px 0;
-            }
-            .u-foot {
-                display: flex;
-                justify-content: space-between;
-            }
+    }
+    .u-tag {
+        .db;
+        .nobreak;
+        a,
+        b {
+            padding: 0.2em 0.8em;
+            margin: 0 0.5em 0 0;
+            background-color: #f1f8ff;
+            border-radius: 3px;
+            .fz(12px);
+            color: #4989d2;
         }
+        a:hover {
+            background-color: #def;
+        }
+    }
+    .u-types {
+        .db;
+        .nobreak;
+        b {
+            padding: 0.1em 0.8em;
+            margin: 0 0.5em 0.5em 0;
+            border-radius: 3px;
+            .fz(12px);
+            .dbi;
+            .y(top);
+        }
+    }
+
+    // 底部
+    .u-misc {
+        .db;
+        .pa;
+        .rb(10px, 24px);
+        .x(right);
+        .fz(12px, 20px);
+        color: #777;
+    }
+
+    .u-author {
+        // .pa;.rt(0);
+    }
+    .u-author-avatar {
+        .size(24px);
+        .y;
+        .r(2px);
+        .mr(5px);
+        // .fr;
+        // .ml(5px);
+    }
+    .u-author-name {
+        .fz(12px, 24px);
+        // .fl;
+        color: #666;
+        &:hover {
+            color: @pink;
+        }
+    }
+    .u-date {
+        .db;
+        .mt(3px);
+        .clear;
+    }
+
+    .u-down {
+        // .u-btn-white;
+        i {
+            .size(12px);
+            .y(-1px);
+        }
+    }
+    .u-pipe {
+        margin: 0 5px;
+        color: #999;
     }
 }
 </style>
