@@ -53,6 +53,3 @@ export default {
     mounted: function () {},
 };
 </script>
-<style lang="less">
-//@import '@/assets/css/demo.less';
-</style>

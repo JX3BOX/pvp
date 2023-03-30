@@ -96,5 +96,5 @@ export default {
 };
 </script>
 <style lang="less">
-@import "~@/assets/css/sandbox.less";
+// @import "~@/assets/css/sandbox/sandbox.less";
 </style>

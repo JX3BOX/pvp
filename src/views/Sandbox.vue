@@ -1,10 +1,11 @@
 <template>
     <ListLayout :has-right="false">
-        <div class="pvp-sandbox-content">
-            <SandBoxCont @sandboxChangeKey="onSandboxLogs" />
-            <div class="right-layout">
-                <div class="strategy-box">
-                    <div class="strategy-page">
+        <div class="m-pvp-sandbox-content">
+            <SandboxIndex @sandboxChangeKey="onSandboxLogs" />
+
+            <div class="m-extend">
+                <div class="m-strategy-box">
+                    <div class="m-strategy-page">
                         <i v-show="strategyIndex == 1"></i>
                         <i class="u-icon" @click="checkPage('l')" v-show="strategyIndex !== 1"
                             ><img svg-inline src="@/assets/img/left.png"
@@ -13,9 +14,10 @@
                             ><img svg-inline src="@/assets/img/right.png"
                         /></i>
                     </div>
-                    <div class="strategy-content" v-html="StrategyData[strategyIndex]"></div>
+                    <div class="m-strategy-content" v-html="StrategyData[strategyIndex]"></div>
                 </div>
-                <el-tabs class="m-tabs padding-r" v-model="view">
+
+                <el-tabs class="m-tabs" v-model="view">
                     <el-tab-pane label="沙盘指南" name="index">
                         <template #label>
                             <el-icon><Collection /></el-icon>
@@ -29,9 +31,9 @@
                         </template>
                     </el-tab-pane>
                 </el-tabs>
-                <div class="tab-contnet padding-r">
-                    <sandboxLogs v-if="view == 'logs'" :sandboxData="sandboxLogsData" />
-                    <sandboxHandbook v-if="view == 'index'"></sandboxHandbook>
+                <div class="m-tab-content">
+                    <SandboxLogs v-if="view == 'logs'" :sandboxData="sandboxLogsData" />
+                    <SandboxHandbook v-if="view == 'index'" />
                 </div>
             </div>
         </div>
@@ -41,18 +43,18 @@
 <script>
 import { useStore } from "@/store";
 import ListLayout from "@/layouts/ListLayout.vue";
-import SandBoxCont from "@/components/sandbox/SandBoxIndex.vue";
-import sandboxLogs from "@/components/sandbox/SandboxLogs.vue";
-import sandboxHandbook from "@/components/sandbox/Handbook.vue";
+import SandboxIndex from "@/components/sandbox/SandBoxIndex.vue";
+import SandboxLogs from "@/components/sandbox/SandboxLogs.vue";
+import SandboxHandbook from "@/components/sandbox/SandboxHandbook.vue";
 import { getStrategy } from "@/service/sandbox";
 import * as sandboxLogsJson from "@/assets/data/sandboxLog.json";
 export default {
     name: "SandBoxPage",
     components: {
-        SandBoxCont,
+        SandboxIndex,
         ListLayout,
-        sandboxLogs,
-        sandboxHandbook,
+        SandboxLogs,
+        SandboxHandbook,
     },
     props: [],
     data: function () {
@@ -103,58 +105,5 @@ export default {
 
 <style lang="less">
 @import "@/assets/css/index.less";
-@import "~@/assets/css/sandbox.less";
-</style>
-<style lang="less" scoped>
-.pvp-sandbox-content {
-    display: flex;
-    position: relative;
-    // top: -60px;
-    // justify-content: space-between;
-    -ms-overflow-style: none;
-    overflow: -moz-scrollbars-none;
-    ::-webkit-scrollbar {
-        width: 0 !important;
-    }
-    // ie10+
-    .right-layout {
-        width: 100%;
-        border-left: 1px solid #eee;
-        box-sizing: border-box;
-        overflow-y: auto;
-        // height: calc(100vh - 124px);
-        //
-        .padding-r {
-            padding: 0px 10px 0px 10px;
-        }
-    }
-
-    .strategy-box {
-        min-height: 200px;
-        margin-bottom: 20px;
-        position: relative;
-        padding: 0 8px;
-        .strategy-page {
-            display: flex;
-            justify-content: space-between;
-            width: calc(100% - 20px);
-            position: absolute;
-            top: 10px;
-            z-index: 2;
-            .u-icon {
-                width: 25px;
-                height: 25px;
-                cursor: pointer;
-            }
-            .page-disabled {
-                cursor: not-allowed;
-                pointer-events: none;
-            }
-        }
-        .strategy-content {
-            position: absolute;
-            top: 0;
-        }
-    }
-}
+@import "~@/assets/css/sandbox/sandbox.less";
 </style>

@@ -1,0 +1,202 @@
+//沙盘搜索
+.m-sandbox-search {
+    .flex;
+    .size(620px,45px);
+    .r(10px);
+    .fz(18px);
+    .pl(20px);
+    .auto(x);
+    justify-content: center;
+    align-items: center;
+
+    background-color: #f5f7fa;
+    border: 1px solid #a7abaf;
+    letter-spacing: 1px;
+    text-shadow: 0 0 1px @fontColor;
+    .u-camp {
+        .pointer;
+        .mr(20px);
+        display: flex;
+        align-items: center;
+        b {
+            .pr;
+            .size(12px);
+            .mr(5px);
+            .r(50%);
+            border: 1px solid @fontColor;
+
+            &.active:after {
+                content: "";
+                .pa;
+                .size(6px);
+                .r(50%);
+                .lt(50%,50%);
+                margin: -3px 0 0 -3px;
+                background: @blue;
+                opacity: 0.8;
+            }
+        }
+
+        span {
+            .fz(18px);
+            .nobreak;
+            text-shadow: 0 0 1px @fontColor;
+        }
+    }
+    .u-route {
+        .mr(20px);
+    }
+    .el-select {
+        flex: 1;
+    }
+    .el-select,
+    .el-input,
+    .select-trigger,
+    .el-input__inner {
+        height: 100%;
+        .fz(18px);
+        .r(0);
+        border-top-right-radius: 10px;
+        border-bottom-right-radius: 10px;
+    }
+    .el-input__inner {
+        border: 0;
+    }
+    .el-input {
+        border-right: 1px solid #d4d4d2;
+        border-left: 1px solid #d4d4d2;
+    }
+    .el-select .el-input.is-focus .el-input__inner,
+    .el-select .el-input__inner:focus {
+        border-color: transparent;
+    }
+    .el-switch__label * {
+        .fz(16px);
+    }
+    .el-switch__label.is-active {
+        color: @color;
+    }
+}
+
+//沙盘地图
+.m-sandbox-map {
+    .pr;
+    .mt(30px);
+    .auto(x);
+    .size(898px,797px);
+    background: url("@{img}image/camp/backgroud.png") no-repeat center center;
+    padding: 53px 275px 66px 166px;
+    // left: -26px;
+}
+.u-mapLine {
+    .pa;
+    .size(727px,491px);
+    .lt(-32px,144px);
+    .z(2);
+    background: url("@{img}image/camp/line.png") no-repeat center center;
+}
+.m-sandboxMap {
+    .pr;
+    .size(898px,797px);
+
+    .u-pic,
+    .u-icon,
+    .u-name,
+    .u-camps,
+    .u-attacks {
+        .pa;
+        user-select: none;
+    }
+    .u-name {
+        .db;
+        .color(#fffcd0);
+        .fz(12px, 18px);
+        .w(1em);
+        text-shadow: 1px 1px 1px #000;
+    }
+    .u-attacks,
+    .u-icon {
+        .z(2);
+    }
+    .u-name {
+        .z(3);
+    }
+    .u-icon {
+        .pointer;
+    }
+}
+
+// 简介弹窗
+.el-popover {
+    .u-box {
+        .full(x);
+        .pr;
+        display: flex;
+        flex-wrap: nowrap;
+        align-items: flex-start;
+        img {
+            .size(78px);
+            .mr(10px);
+        }
+        .u-log {
+            .pa;
+            .fz(22px);
+            .rt(-2px, -8px);
+            .x;
+            cursor: pointer;
+        }
+        .u-txt {
+            width: 100%;
+            min-height: 78px;
+            box-sizing: border-box;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            .u-line {
+                span {
+                    .fz(12px, 1.5);
+                }
+                .u-camp {
+                    .fz(16px);
+                    .bold;
+                }
+                &.u-gang {
+                    display: flex;
+                    flex-direction: column;
+                    span {
+                        &:last-child {
+                            .x;
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+
+.m-mark {
+    .full;
+    .pa;
+    .z(8);
+    .lt(0,0);
+    background-color: rgba(0, 0, 0, 0.1);
+}
+
+.eren {
+    color: #f00;
+}
+.haoqi {
+    color: #0366d6;
+}
+.sandbox-em-hq {
+    color: rgb(20, 156, 219);
+    font-style: inherit;
+}
+.sandbox-em-er {
+    color: rgb(190, 74, 74);
+    font-style: inherit;
+}
+.sandbox-em-point {
+    color: #4a8c3a;
+    font-style: inherit;
+}
