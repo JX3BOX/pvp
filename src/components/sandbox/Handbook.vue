@@ -26,7 +26,7 @@
 </template>
 <script>
 import { getHandbookLogs } from "@/service/sandbox";
-import { dayjs } from "element-plus";
+import dayjs from "dayjs";
 
 // 扩展插件
 import isSameOrBefore from "dayjs/plugin/isSameOrBefore";

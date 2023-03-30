@@ -7,31 +7,37 @@
                 <em class="u-secret">权威白皮书</em>
             </template>
         </el-tab-pane>
-        <el-tab-pane label="招募大厅" name="index" disabled>
+        <el-tab-pane label="阵营沙盘" name="sandbox">
+            <template #label>
+                <el-icon><Collection /></el-icon>
+                <b>阵营沙盘</b>
+            </template>
+        </el-tab-pane>
+        <el-tab-pane label="招募大厅" name="zm" disabled>
             <template #label>
                 <el-icon><Collection /></el-icon>
                 <b>招募大厅</b>
             </template>
         </el-tab-pane>
-        <el-tab-pane label="阵营攻防" name="index" disabled>
+        <el-tab-pane label="阵营攻防" name="gf" disabled>
             <template #label>
                 <el-icon><Collection /></el-icon>
                 <b>阵营攻防</b>
             </template>
         </el-tab-pane>
-        <el-tab-pane label="绝境战场" name="index" disabled>
+        <el-tab-pane label="绝境战场" name="cj" disabled>
             <template #label>
                 <el-icon><Collection /></el-icon>
                 <b>绝境战场</b>
             </template>
         </el-tab-pane>
-        <el-tab-pane label="竞技场" name="index" disabled>
+        <el-tab-pane label="竞技场" name="jjc" disabled>
             <template #label>
                 <el-icon><Collection /></el-icon>
                 <b>竞技场</b>
             </template>
         </el-tab-pane>
-        <el-tab-pane label="斗鱼直播" name="index" disabled>
+        <el-tab-pane label="斗鱼直播" name="douyu" disabled>
             <template #label>
                 <el-icon><Collection /></el-icon>
                 <b>斗鱼直播</b>
@@ -59,11 +65,15 @@ export default {
     },
     methods: {
         changeView: function () {
+            const query =
+                this.view === "sandbox"
+                    ? {}
+                    : {
+                          subtype: this.$route.query.subtype,
+                      };
             this.$router.push({
                 name: this.view,
-                query: {
-                    subtype: this.$route.query.subtype,
-                },
+                query,
             });
         },
     },

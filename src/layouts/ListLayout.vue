@@ -15,7 +15,7 @@
         <LeftSidebar>
             <Nav class="m-nav" />
         </LeftSidebar>
-        <Main :withoutRight="false">
+        <Main :withoutRight="!hasRight">
             <div class="m-main">
                 <tabs />
                 <slot></slot>
@@ -40,7 +40,12 @@ import Side from "@/components/list/RightSide.vue";
 import Tabs from "@/components/Tabs.vue";
 export default {
     name: "App",
-    props: [],
+    props: {
+        hasRight: {
+            type: Boolean,
+            default: true,
+        },
+    },
     data: function () {
         return {};
     },

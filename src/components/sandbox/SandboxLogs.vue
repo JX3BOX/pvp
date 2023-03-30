@@ -12,7 +12,7 @@
     </div>
 </template>
 <script>
-import { dayjs } from "element-plus";
+import dayjs from "dayjs";
 
 // 扩展插件
 import isSameOrBefore from "dayjs/plugin/isSameOrBefore";
@@ -44,9 +44,6 @@ export default {
             let t3 = t2.replaceAll("【", `<i class='sandbox-em-point'>【`).replaceAll("】", `】</i>`);
             return t3;
         },
-    },
-    created() {
-        console.log(this.sandboxData);
     },
 };
 </script>

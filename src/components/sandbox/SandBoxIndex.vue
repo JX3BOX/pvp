@@ -1,6 +1,5 @@
 <template>
     <div class="x-pvp-sandbox">
-        <h1>阵营沙盘</h1>
         <sandboxSearch :servers="servers" @sandboxChange="onSandbox" />
         <div class="m-sandbox-map">
             <sandboxMap :maps="sandMaps" :camp="camp" :route="route" @mapClick="mapClick"> </sandboxMap>

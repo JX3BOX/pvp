@@ -1,5 +1,5 @@
 <template>
-    <AppLayout>
+    <ListLayout :has-right="false">
         <div class="pvp-sandbox-content">
             <SandBoxCont @sandboxChangeKey="onSandboxLogs" />
             <div class="right-layout">
@@ -35,14 +35,14 @@
                 </div>
             </div>
         </div>
-    </AppLayout>
+    </ListLayout>
 </template>
 
 <script>
 import { useStore } from "@/store";
-import AppLayout from "@/layouts/AppLayout.vue";
+import ListLayout from "@/layouts/ListLayout.vue";
 import SandBoxCont from "@/components/sandbox/SandBoxIndex.vue";
-import sandboxLogs from "@/components/sandbox/Logs.vue";
+import sandboxLogs from "@/components/sandbox/SandboxLogs.vue";
 import sandboxHandbook from "@/components/sandbox/Handbook.vue";
 import { getStrategy } from "@/service/sandbox";
 import * as sandboxLogsJson from "@/assets/data/sandboxLog.json";
@@ -50,7 +50,7 @@ export default {
     name: "SandBoxPage",
     components: {
         SandBoxCont,
-        AppLayout,
+        ListLayout,
         sandboxLogs,
         sandboxHandbook,
     },
@@ -109,7 +109,7 @@ export default {
 .pvp-sandbox-content {
     display: flex;
     position: relative;
-    top: -60px;
+    // top: -60px;
     // justify-content: space-between;
     -ms-overflow-style: none;
     overflow: -moz-scrollbars-none;
