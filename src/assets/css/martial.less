@@ -1,8 +1,15 @@
+.active-icon {
+    border: 2px solid #a5ffd0;
+    box-shadow: 0 0 5px rgb(47, 251, 178, 0.8);
+    border-radius: 6px;
+    transition: all 0.3s;
+}
 .p-martial-arts {
     display: flex;
     background: #1a2b22;
     padding: 20px;
     border-radius: 8px;
+
     .m-martial-skills {
         flex: 1;
     }
@@ -65,6 +72,15 @@
             height: 20px;
             cursor: pointer;
         }
+
+        .u-skill-icon {
+            box-sizing: border-box;
+            border: 2px solid #1a2b22;
+
+            &.active-icon {
+                .active-icon;
+            }
+        }
     }
 
     .u-not-mount {
@@ -84,28 +100,18 @@
             display: flex;
             align-items: center;
             flex-direction: column;
-            margin-top: -16px;
-            img {
+            .u-pasv-pic {
                 border: 2px solid #67aba0;
                 background-color: #2e4946;
                 padding: 3px;
                 box-sizing: border-box;
+
+                &.active-icon {
+                    .active-icon;
+                }
             }
         }
 
-        .u-zhenfa-bg {
-            width: 128px;
-            height: 128px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .u-pic {
-            display: block;
-            width: 36px;
-            height: 36px;
-        }
         .u-pasv-pic {
             display: block;
             width: 48px;
@@ -169,6 +175,26 @@
     }
     .u-subtitle {
         color: #fff;
+    }
+
+    .m-zhenfa-info {
+        .flex;
+        gap: 10px;
+        align-items: center;
+    }
+    .u-zhenfa-bg {
+        min-width: 148px;
+        height: 128px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background-repeat: no-repeat;
+        background-position: center;
+    }
+    .u-pic {
+        display: block;
+        width: 36px;
+        height: 36px;
     }
 }
 

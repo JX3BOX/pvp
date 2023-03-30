@@ -23,9 +23,10 @@
                                     <skill-item :item="selectedSkill"></skill-item>
                                 </div>
                                 <template #reference>
-                                    <div class="u-skill">
+                                    <div class="u-skill" @click="setSkill(skill)">
                                         <img
                                             class="u-skill-icon"
+                                            :class="{ 'active-icon': activeSkill == skill.SkillID }"
                                             :src="iconLink(skill.IconID)"
                                             :alt="skill.IconID"
                                             @mousemove="showSkill(skill)"
@@ -73,20 +74,34 @@
                                 :alt="pasv_info?.BelongKungfu"
                                 :title="pasv_info?.Name"
                                 class="u-pasv-pic"
+                                :class="{ 'active-icon': activeSkill == pasv_info.SkillID }"
+                                @click="setSkill(pasv_info)"
                         /></template>
                     </el-popover>
                 </div>
                 <div class="m-zhenfa">
                     <!-- <div class="u-title">阵法</div> -->
                     <el-popover width="500px" popper-class="m-pasv-pop" effect="dark">
-                        <div class="u-desc" v-html="formatZhenfa(zhenfa_info)"></div>
-                        <template #reference>
+                        <div class="m-zhenfa-info">
                             <div class="u-zhenfa-bg" :style="zhenfaBg">
                                 <img
                                     :src="iconLink(zhenfa_info[0]?.IconID)"
                                     :alt="zhenfa_info[0]?.IconID"
                                     :title="zhenfa_info[0]?.Name"
                                     class="u-pic"
+                                />
+                            </div>
+                            <div class="u-desc" v-html="formatZhenfa(zhenfa_info)"></div>
+                        </div>
+                        <template #reference>
+                            <div class="m-pasv">
+                                <img
+                                    :src="iconLink(zhenfa_info[0]?.IconID)"
+                                    :alt="zhenfa_info[0]?.IconID"
+                                    :title="zhenfa_info[0]?.Name"
+                                    class="u-pasv-pic"
+                                    :class="{ 'active-icon': activeSkill == zhenfa_info[0]?.SkillID }"
+                                    @click="setSkill(zhenfa_info[0])"
                                 />
                             </div>
                         </template>
@@ -149,6 +164,8 @@ import "@jx3box/jx3box-talent/talent.css";
 
 import SkillItem from "@/components/SkillItem.vue";
 
+const $store = useStore();
+
 export default {
     name: "MartialArts",
     components: {
@@ -188,7 +205,10 @@ export default {
             return xfmap[this.subtype]?.["id"] || "0";
         },
         client() {
-            return useStore().client;
+            return $store.client;
+        },
+        activeSkill() {
+            return $store.activeSkill;
         },
         // 门派技能套路id
         kungfus: function () {
@@ -298,6 +318,8 @@ export default {
             getSkills(this.params)
                 .then((res) => {
                     this.data = res.data;
+
+                    this.setSkill(this.pasv_info);
                 })
                 .finally(() => {
                     this.loading = false;
@@ -362,6 +384,10 @@ export default {
         },
         hasSkill: function ({ SkillID, SkillName }) {
             return this.skills?.find((item) => item._id == SkillID || item.skillName == SkillName);
+        },
+        // 设置activeSkill
+        setSkill(skill) {
+            $store.setActiveSkill(skill?.SkillID);
         },
 
         // 技能套路名称

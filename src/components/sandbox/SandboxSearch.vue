@@ -12,7 +12,7 @@
 </template>
 <script>
 export default {
-    name: "sandbox_search",
+    name: "SandboxSearch",
     props: ["servers"],
     data: function () {
         return {

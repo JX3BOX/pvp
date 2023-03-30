@@ -32,7 +32,7 @@
 </template>
 <script>
 export default {
-    name: "sendbox_log",
+    name: "SandBoxLog",
     props: ["item"],
     data: function () {
         return {};

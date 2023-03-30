@@ -97,7 +97,7 @@ const __imgPath = JX3BOX.__imgPath;
 console.log(JX3BOX);
 const { placeArr, placeAttacks, placeCamp, placeImg, placeName } = require("@/assets/data/sandboxMap.json");
 export default {
-    name: "sandbox_maps",
+    name: "SandBoxMaps",
     props: ["maps", "camp", "route"],
     data: function () {
         return {
