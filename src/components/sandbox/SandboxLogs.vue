@@ -45,6 +45,7 @@ export default {
             return t3;
         },
     },
+    created() {},
 };
 </script>
 <style lang="less" scoped>
