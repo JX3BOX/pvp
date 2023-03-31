@@ -1,6 +1,6 @@
 <template>
     <div class="pvp-hot-sect-list">
-        <div class="edit_icon" @click="dialogFormVisible = true">
+        <div class="edit_icon" v-if="isEdit" @click="dialogFormVisible = true">
             <el-icon><Setting /></el-icon>
         </div>
         <el-collapse v-model="activeNames" @change="handleChange" accordion>
@@ -98,6 +98,8 @@ import draggable from "vuedraggable";
 import { getRankList, createRankItem, putRankList, delRankList } from "@/service/raw.js";
 import school from "@jx3box/jx3box-data/data/xf/school.json";
 import { showSchoolIcon } from "@jx3box/jx3box-common/js/utils";
+
+import User from "@jx3box/jx3box-common/js/user.js";
 export default {
     name: "SkillItem",
     components: {
@@ -134,6 +136,11 @@ export default {
             RankList: [],
             thatRankId: 0,
         };
+    },
+    computed: {
+        isEdit() {
+            return User.isEditor();
+        },
     },
     methods: {
         async getRankList() {
