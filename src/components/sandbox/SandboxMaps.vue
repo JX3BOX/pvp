@@ -195,3 +195,7 @@ export default {
     },
 };
 </script>
+
+<style lang="less">
+@import "@/assets/css/sandbox/sandbox_map.less";
+</style>

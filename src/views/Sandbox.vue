@@ -9,15 +9,15 @@
                 </div>
 
                 <el-tabs class="m-tabs" v-model="view">
-                    <el-tab-pane label="沙盘指南" name="index">
+                    <el-tab-pane label="沙盘攻略" name="index">
                         <template #label>
                             <el-icon><Collection /></el-icon>
-                            <b>沙盘指南</b>
+                            <b>沙盘攻略</b>
                         </template>
                     </el-tab-pane>
                     <el-tab-pane label="沙盘记录" name="logs">
                         <template #label>
-                            <el-icon><Collection /></el-icon>
+                            <el-icon><DataAnalysis /></el-icon>
                             <b>沙盘记录</b>
                         </template>
                     </el-tab-pane>

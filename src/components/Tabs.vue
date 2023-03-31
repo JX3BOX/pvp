@@ -9,7 +9,7 @@
         </el-tab-pane>
         <el-tab-pane label="阵营沙盘" name="sandbox">
             <template #label>
-                <el-icon><Collection /></el-icon>
+                <el-icon><Compass /></el-icon>
                 <b>阵营沙盘</b>
             </template>
         </el-tab-pane>

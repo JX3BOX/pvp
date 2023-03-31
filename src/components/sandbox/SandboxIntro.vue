@@ -1,7 +1,9 @@
 <template>
     <div class="m-sandbox-intro" v-loading="loading">
-        <el-tabs type="card" v-model="active">
+        <el-tabs v-model="active">
             <el-tab-pane v-for="item in tabs" :key="item.name" :label="item.label" :name="item.name">
+                <el-icon><Compass /></el-icon>
+                <el-icon><DataBoard /></el-icon>
                 <div v-html="item?.html"></div>
             </el-tab-pane>
         </el-tabs>
