@@ -32,9 +32,9 @@ function getCampLog(sandmap_id = 1, castle_id = 1) {
 }
 
 // 获取沙盘右侧文章列表
-function getHandbookLogs(per = 10, page = 1, type = "bps", order = "update", client = "std", topic = "小攻防") {
+function getHandbookLogs(params) {
     return $cms()
-        .get(`/api/cms/posts?type=${type}&per=${per}&page=${page}&order=${order}&client=${client}&topic=${topic}`)
+        .get(`/api/cms/posts`, { params })
         .then((res) => {
             return res.data.data.list;
         });

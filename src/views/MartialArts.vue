@@ -68,15 +68,19 @@
                             <div class="u-subtitle">被动招式</div>
                             <div class="u-desc" v-html="formatPasv(pasv_info)"></div>
                         </div>
-                        <template #reference
-                            ><img
-                                :src="showMountIcon(pasv_info?.BelongKungfu)"
-                                :alt="pasv_info?.BelongKungfu"
-                                :title="pasv_info?.Name"
-                                class="u-pasv-pic"
-                                :class="{ 'active-icon': activeSkill == pasv_info.SkillID }"
-                                @click="setSkill(pasv_info)"
-                        /></template>
+                        <template #reference>
+                            <div>
+                                <img
+                                    :src="showMountIcon(pasv_info?.BelongKungfu)"
+                                    :alt="pasv_info?.BelongKungfu"
+                                    :title="pasv_info?.Name"
+                                    class="u-pasv-pic"
+                                    :class="{ 'active-icon': activeSkill == pasv_info.SkillID }"
+                                    @click="setSkill(pasv_info)"
+                                />
+                                <span class="u-name" :title="pasv_info.Name">{{ pasv_info.Name }}</span>
+                            </div>
+                        </template>
                     </el-popover>
                 </div>
                 <div class="m-zhenfa">
@@ -103,6 +107,7 @@
                                     :class="{ 'active-icon': activeSkill == zhenfa_info[0]?.SkillID }"
                                     @click="setSkill(zhenfa_info[0])"
                                 />
+                                <span class="u-name" :title="zhenfa_info[0]?.Name">{{ zhenfa_info[0]?.Name }}</span>
                             </div>
                         </template>
                     </el-popover>

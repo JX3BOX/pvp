@@ -85,6 +85,7 @@
             </ul>
 
             <el-pagination
+                v-model="page"
                 hide-on-single-page
                 class="u-pagination"
                 small
@@ -97,12 +98,14 @@
     </div>
 </template>
 <script>
+import { mapState } from "pinia";
+import { useStore } from "@/store";
 import { getHandbookLogs } from "@/service/sandbox";
 import dayjs from "dayjs";
 import { showAvatar, authorLink, showBanner } from "@jx3box/jx3box-common/js/utils";
 import xfmap from "@jx3box/jx3box-data/data/xf/xf.json";
 import JX3BOX from "@jx3box/jx3box-common/data/jx3box";
-import { cms as mark_map } from "@jx3box/jx3box-common/data/mark.json";
+import MARK from "@jx3box/jx3box-common/data/mark.json";
 
 // 扩展插件
 import isSameOrBefore from "dayjs/plugin/isSameOrBefore";
@@ -123,15 +126,29 @@ export default {
             loading: true,
 
             per: 10,
+            page: 1,
             total: 0,
         };
+    },
+    computed: {
+        ...mapState(useStore, ["client"]),
+        params() {
+            return {
+                per: this.per,
+                page: this.page,
+                type: "bps",
+                order: "update",
+                client: this.client,
+                topic: "小攻防",
+            };
+        },
     },
     methods: {
         authorLink,
         async initHandbookList() {
             try {
                 this.loading = true;
-                let data = await getHandbookLogs();
+                let data = await getHandbookLogs(this.params);
                 this.handbookList = data;
             } catch (e) {
                 console.log(e);
@@ -154,7 +171,7 @@ export default {
             return user?.display_name || "匿名";
         },
         showMark: function (val) {
-            return mark_map[val] || val;
+            return MARK.cms[val] || val;
         },
         postLink(val) {
             return location.origin + `/bps/` + val;
