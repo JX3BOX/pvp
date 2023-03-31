@@ -94,7 +94,6 @@
 <script>
 import JX3BOX from "@jx3box/jx3box-common/data/jx3box.json";
 const __imgPath = JX3BOX.__imgPath;
-console.log(JX3BOX);
 const { placeArr, placeAttacks, placeCamp, placeImg, placeName } = require("@/assets/data/sandboxMap.json");
 export default {
     name: "sandbox_maps",
@@ -130,7 +129,6 @@ export default {
         },
         // 图片及文字的定位
         positionStyle(name, key, arr) {
-            console.log(name, key, arr);
             switch (key) {
                 case "pic":
                     return placeImg[name];

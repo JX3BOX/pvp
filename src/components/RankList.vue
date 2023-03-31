@@ -4,14 +4,19 @@
             <el-icon><Setting /></el-icon>
         </div>
         <el-collapse v-model="activeNames" @change="handleChange" accordion>
-            <el-collapse-item title="Consistency" name="1">
-                <div class="_list">
+            <el-collapse-item
+                :title="item['label']"
+                :name="item['label']"
+                v-for="(item, index) in RankList"
+                :key="index"
+            >
+                <div class="_list" v-for="(eitem, eindex) in toJson(item.content)" :key="eindex">
                     <div class="_item">
                         <div class="_img">
-                            <img src="" alt="" srcset="" />
+                            <img :src="getImgToName(eitem.name)" alt="" srcset="" />
                         </div>
-                        <div class="_text">七秀</div>
-                        <div class="_num">188人</div>
+                        <div class="_text">{{ eitem.name }}</div>
+                        <div class="_num">{{ eitem.num }}人</div>
                     </div>
                 </div>
             </el-collapse-item>
@@ -27,7 +32,7 @@
                         default-first-option
                         :reserve-keyword="false"
                         placeholder="请选择现有榜单或输入新的榜单"
-                        @change="changeRankItem()"
+                        @change="changeRankItem"
                     >
                         <el-option
                             v-for="item in labelOptions"
@@ -61,10 +66,14 @@
                     </div>
                     <div class="_rank_form_cont">
                         <draggable :list="content" ghost-class="ghost" chosen-class="chosenClass" animation="300">
-                            <template #item="{ element }">
+                            <template #item="{ element, index }">
                                 <div class="item-list" :key="element.id">
-                                    <el-input v-model="element.name" autocomplete="off" />
-                                    <el-input v-model="element.num" autocomplete="off" />
+                                    <el-input placeholder="请输入门派" v-model="element.name" autocomplete="off" />
+                                    <el-input placeholder="请输入数量" v-model="element.num" autocomplete="off" />
+
+                                    <div class="_icon" @click="delRankItem(index)">
+                                        <el-icon><DeleteFilled /></el-icon>
+                                    </div>
                                 </div>
                             </template>
                         </draggable>
@@ -77,8 +86,8 @@
 
             <template #footer>
                 <span class="dialog-footer">
-                    <el-button @click="dialogFormVisible = false">Cancel</el-button>
-                    <el-button type="primary" @click="dialogFormVisible = false"> 保存 </el-button>
+                    <el-button @click="delRankList()">删除</el-button>
+                    <el-button type="primary" @click="saveRankList()"> 保存 </el-button>
                 </span>
             </template>
         </el-dialog>
@@ -86,8 +95,9 @@
 </template>
 <script>
 import draggable from "vuedraggable";
-import { getRankList, createRankItem } from "@/service/raw.js";
-
+import { getRankList, createRankItem, putRankList, delRankList } from "@/service/raw.js";
+import school from "@jx3box/jx3box-data/data/xf/school.json";
+import { showSchoolIcon } from "@jx3box/jx3box-common/js/utils";
 export default {
     name: "SkillItem",
     components: {
@@ -104,19 +114,9 @@ export default {
             lableOptions: [],
             content: [
                 {
-                    name: "七秀1",
-                    num: "123",
+                    name: "七秀",
+                    num: "1",
                     id: 0,
-                },
-                {
-                    name: "七秀2",
-                    num: "123",
-                    id: 1,
-                },
-                {
-                    name: "七秀3",
-                    num: "123",
-                    id: 2,
                 },
             ],
             labelVal: "",
@@ -131,13 +131,23 @@ export default {
                     value: "origin",
                 },
             ],
+            RankList: [],
+            thatRankId: 0,
         };
     },
     methods: {
-        // /api/cms/bps/pvp-jjc-rank
         async getRankList() {
-            let data = await getRankList();
-            console.log(data);
+            let data = await getRankList({
+                client: "std",
+                status: "1",
+            });
+            this.RankList = data.data.reverse();
+            data.data.forEach((res, index) => {
+                this.labelOptions[index] = {
+                    label: res.label,
+                    value: res.label,
+                };
+            });
         },
         handleChange() {},
         addRankItem() {
@@ -146,28 +156,84 @@ export default {
                 num: "",
             };
         },
+        delRankItem(index) {
+            this.content.splice(index, 1);
+        },
         // 键入新的标题则创建
         async createRankItem() {
             let data = {
                 client: this.client,
                 status: this.status ? "1" : "0",
                 label: this.labelVal,
-                content: "",
+                content: JSON.stringify([
+                    {
+                        name: "",
+                        num: "",
+                    },
+                ]),
             };
-            console.log(data);
             let res = await createRankItem(data);
             if (res) {
                 this.getRankList();
             }
         },
-        // 提交
-        saveRankItem() {},
-        changeRankItem() {
-            console.log();
-            if (this.labelOptions.indexOf(this.labelVal) == -1) {
-                // 之前没有，需要创建
-                this.createRankItem();
+
+        changeRankItem(val) {
+            for (let i = 0; i < this.labelOptions.length; i++) {
+                const el = this.labelOptions[i];
+                if (el.value == val) {
+                    this.loadRankItem(val);
+                    return false;
+                }
             }
+            this.createRankItem();
+        },
+        // 根据下拉框的选择 显示对应详情
+        loadRankItem(val) {
+            for (let i = 0; i < this.RankList.length; i++) {
+                let el = this.RankList[i];
+
+                if (val == el.label) {
+                    this.client = el.client ? el.client : "";
+                    this.content = JSON.parse(el.content ? el.content : []);
+                    this.status = el.status ? true : false;
+                    this.labelVal = el.label;
+                    this.thatRankId = el.id;
+                    return;
+                }
+            }
+        },
+        async delRankList() {
+            let res = await delRankList(this.thatRankId);
+            if (res) {
+                this.dialogFormVisible = false;
+                this.$message({ type: "success", message: "删除成功" });
+                this.getRankList();
+            }
+        },
+        // 提交
+        async saveRankList() {
+            let data = {
+                client: this.client,
+                status: this.status ? "1" : "0",
+                label: this.labelVal,
+                content: JSON.stringify(this.content),
+            };
+            console.log(data);
+            let res = await putRankList(this.thatRankId, data);
+            if (res) {
+                this.dialogFormVisible = false;
+                this.$message({ type: "success", message: "保存成功" });
+                this.getRankList();
+            }
+        },
+
+        toJson(str) {
+            return JSON.parse(str ? str : "[]");
+        },
+        getImgToName(name) {
+            let schoolId = school[name] ? school[name].school_id : 1;
+            return showSchoolIcon(schoolId);
         },
     },
     created() {
@@ -177,14 +243,33 @@ export default {
 </script>
 <style lang="less" scoped>
 .pvp-hot-sect-list {
+    position: relative;
+    .edit_icon {
+        font-size: 24px;
+        position: absolute;
+        top: 10px;
+        right: 30px;
+    }
     ._list {
         ._item {
             display: flex;
-            justify-content: center;
+            // justify-content: center;
             align-items: center;
-            ._text {
+            width: 100%;
+            padding: 0 21px;
+            ._img {
+                width: 60px;
+                height: 60px;
+                margin-right: 10px;
+                image {
+                    width: inherit;
+                    height: inherit;
+                }
             }
             ._text {
+                width: 60px;
+            }
+            ._num {
             }
         }
     }
@@ -210,6 +295,8 @@ export default {
             }
             .item-list {
                 display: flex;
+                align-items: center;
+                margin-bottom: 10px;
             }
             ._rank_form_cont {
                 .rank-item-create {
@@ -223,6 +310,11 @@ export default {
                     font-size: 21px;
                     border-radius: 6px;
                     margin: 12px 0px;
+                }
+                .item-list {
+                    ._icon {
+                        cursor: pointer;
+                    }
                 }
             }
         }

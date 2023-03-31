@@ -45,9 +45,7 @@ export default {
             return t3;
         },
     },
-    created() {
-        console.log(this.sandboxData);
-    },
+    created() {},
 };
 </script>
 <style lang="less" scoped>
