@@ -76,9 +76,15 @@
         .u-skill-icon {
             box-sizing: border-box;
             border: 2px solid #1a2b22;
+        }
 
-            &.active-icon {
+        .u-skill.active {
+            .u-skill-icon {
                 .active-icon;
+            }
+            .u-name {
+                color: #a5ffd0;
+                text-shadow: 0 0 3px #2ffbb2;
             }
         }
     }
@@ -105,10 +111,6 @@
                 background-color: #2e4946;
                 padding: 3px;
                 box-sizing: border-box;
-
-                &.active-icon {
-                    .active-icon;
-                }
             }
 
             .u-name {
@@ -121,6 +123,16 @@
                 white-space: nowrap;
                 // width: 48px;
                 margin-top: 4px;
+            }
+
+            &.active {
+                .u-name {
+                    color: #a5ffd0;
+                    text-shadow: 0 0 3px #2ffbb2;
+                }
+                .u-pasv-pic {
+                    .active-icon;
+                }
             }
         }
 
