@@ -7,7 +7,7 @@
             <el-collapse-item
                 :title="item['label']"
                 :name="item['label']"
-                v-for="(item, index) in RankList"
+                v-for="(item, index) in rankList"
                 :key="index"
             >
                 <div class="m-rank-cont-list" v-for="(eitem, eindex) in toJson(item.content)" :key="eindex">
@@ -22,7 +22,7 @@
             </el-collapse-item>
         </el-collapse>
 
-        <el-dialog v-model="dialogFormVisible" title="排行榜设置" center>
+        <el-dialog v-model="dialogFormVisible" title="排行榜设置" center destroy-on-close>
             <el-form>
                 <el-form-item label="榜单" :label-width="formLabelWidth">
                     <el-select
@@ -65,7 +65,13 @@
                         <div>数量</div>
                     </div>
                     <div class="m-rank-form-cont">
-                        <draggable :list="content" ghost-class="ghost" chosen-class="chosenClass" animation="300">
+                        <draggable
+                            :list="content"
+                            ghost-class="ghost"
+                            chosen-class="chosenClass"
+                            animation="300"
+                            itemKey="index"
+                        >
                             <template #item="{ element, index }">
                                 <div class="item-list" :key="element.id">
                                     <el-input placeholder="请输入门派" v-model="element.name" autocomplete="off" />
@@ -98,8 +104,8 @@ import draggable from "vuedraggable";
 import { getRankList, createRankItem, putRankList, delRankList } from "@/service/raw.js";
 import school from "@jx3box/jx3box-data/data/xf/school.json";
 import { showSchoolIcon } from "@jx3box/jx3box-common/js/utils";
-
 import User from "@jx3box/jx3box-common/js/user.js";
+
 export default {
     name: "SkillItem",
     components: {
@@ -109,11 +115,10 @@ export default {
         return {
             dialogFormVisible: false,
             activeNames: "1",
-            client: "std", //客户端 std/origin
             status: true, // number 状态 0 隐藏 1 显示
             label: "", //榜单
             formLabelWidth: "120",
-            lableOptions: [],
+            client: "std",
             content: [
                 {
                     name: "七秀",
@@ -133,7 +138,7 @@ export default {
                     value: "origin",
                 },
             ],
-            RankList: [],
+            rankList: [],
             thatRankId: 0,
         };
     },
@@ -145,10 +150,9 @@ export default {
     methods: {
         async getRankList() {
             let data = await getRankList({
-                client: "std",
-                status: "1",
+                client: this.client,
             });
-            this.RankList = data.data.reverse();
+            this.rankList = data.data.reverse();
             data.data.forEach((res, index) => {
                 this.labelOptions[index] = {
                     label: res.label,
@@ -170,17 +174,14 @@ export default {
         async createRankItem() {
             let data = {
                 client: this.client,
-                status: this.status ? "1" : "0",
+                status: this.status ? 1 : 0,
                 label: this.labelVal,
-                content: JSON.stringify([
-                    {
-                        name: "",
-                        num: "",
-                    },
-                ]),
+                content: JSON.stringify(this.content || []),
             };
             let res = await createRankItem(data);
             if (res) {
+                this.dialogFormVisible = false;
+                this.$message({ type: "success", message: "保存成功" });
                 this.getRankList();
             }
         },
@@ -193,22 +194,27 @@ export default {
                     return false;
                 }
             }
-            this.createRankItem();
+            this.thatRankId = 0;
+            this.content = [
+                {
+                    name: "七秀",
+                    num: "1",
+                    id: 0,
+                },
+            ];
+            // this.createRankItem();
         },
         // 根据下拉框的选择 显示对应详情
         loadRankItem(val) {
-            for (let i = 0; i < this.RankList.length; i++) {
-                let el = this.RankList[i];
-
-                if (val == el.label) {
-                    this.client = el.client ? el.client : "";
-                    this.content = JSON.parse(el.content ? el.content : []);
-                    this.status = el.status ? true : false;
-                    this.labelVal = el.label;
-                    this.thatRankId = el.id;
-                    return;
-                }
-            }
+            let thatItem = this.rankList.find(function (item) {
+                return val == item.label;
+            });
+            console.log(thatItem);
+            this.client = thatItem.client || "";
+            this.content = JSON.parse(thatItem.content || []);
+            this.status = thatItem.status ? 1 : 0;
+            this.labelVal = thatItem.label;
+            this.thatRankId = thatItem.id;
         },
         async delRankList() {
             let res = await delRankList(this.thatRankId);
@@ -222,11 +228,16 @@ export default {
         async saveRankList() {
             let data = {
                 client: this.client,
-                status: this.status ? "1" : "0",
+                status: this.status ? 1 : 0,
                 label: this.labelVal,
                 content: JSON.stringify(this.content),
             };
-            console.log(data);
+            console.log(this.thatRankId);
+            if (!this.thatRankId) {
+                console.log("创建");
+                this.createRankItem();
+                return false;
+            }
             let res = await putRankList(this.thatRankId, data);
             if (res) {
                 this.dialogFormVisible = false;
@@ -254,7 +265,7 @@ export default {
 <style lang="less">
 .m-rank-list {
     .el-collapse-item__header {
-        font-size: 22px;
+        font-size: 18px;
         padding-left: 24px;
     }
     .el-dialog__body {
