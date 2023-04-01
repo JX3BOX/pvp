@@ -14,18 +14,16 @@
                             <el-icon><Collection /></el-icon>
                             <b>沙盘攻略</b>
                         </template>
+                        <SandboxHandbook />
                     </el-tab-pane>
                     <el-tab-pane label="沙盘记录" name="logs">
                         <template #label>
                             <el-icon><DataAnalysis /></el-icon>
                             <b>沙盘记录</b>
                         </template>
+                        <SandboxLogs :sandboxData="sandboxLogsData" />
                     </el-tab-pane>
                 </el-tabs>
-                <div class="m-tab-content">
-                    <SandboxLogs v-if="view == 'logs'" :sandboxData="sandboxLogsData" />
-                    <SandboxHandbook v-if="view == 'index'" />
-                </div>
             </div>
         </div>
     </ListLayout>

@@ -37,6 +37,7 @@ export default {
                 this.toEmit();
             },
             deep: true,
+            immediate: true,
         },
     },
     methods: {
@@ -47,10 +48,6 @@ export default {
             this.$emit("sandboxChange", this.serverData);
         },
     },
-    created: function () {
-        this.toEmit();
-    },
-    mounted: function () {},
 };
 </script>
 

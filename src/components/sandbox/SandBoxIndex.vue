@@ -1,23 +1,24 @@
 <template>
-    <div class="m-pvp-sandbox__content">
+    <div class="m-pvp-sandbox__content" ref="sandboxMap">
         <sandboxSearch :servers="servers" @sandboxChange="onSandbox" />
         <div class="m-sandbox-map">
-            <sandboxMap :maps="sandMaps" :camp="camp" :route="route" @mapClick="mapClick"> </sandboxMap>
+            <sandboxMaps :maps="sandMaps" :camp="camp" :route="route" @mapClick="mapClick"> </sandboxMaps>
             <sandboxLog :item="itemLog" v-if="showLog" />
         </div>
-        <div class="m-mark" v-if="showLog" @click="closeLog"></div>
+        <div class="m-mask" v-if="showLog" @click="closeLog"></div>
     </div>
 </template>
 <script>
+import { onClickOutside } from "@vueuse/core";
 import sandboxSearch from "@/components/sandbox/SandboxSearch.vue";
-import sandboxMap from "@/components/sandbox/SandboxMaps.vue";
+import sandboxMaps from "@/components/sandbox/SandboxMaps.vue";
 import sandboxLog from "@/components/sandbox/SandboxLog.vue";
 import { getCampDetail, getCamplist, getCampServers, getCampLog } from "@/service/sandbox";
 export default {
     name: "SandBox",
     components: {
         sandboxSearch,
-        sandboxMap,
+        sandboxMaps,
         sandboxLog,
     },
     data: function () {
@@ -40,6 +41,13 @@ export default {
                 camp: this.camp,
             };
         },
+    },
+    mounted() {
+        onClickOutside(this.$refs.sandboxMap, () => {
+            if (this.showLog) {
+                this.showLog = false;
+            }
+        });
     },
     methods: {
         //搜索更改 parms的条件
