@@ -209,7 +209,6 @@ export default {
             let thatItem = this.rankList.find(function (item) {
                 return val == item.label;
             });
-            console.log(thatItem);
             this.client = thatItem.client || "";
             this.content = JSON.parse(thatItem.content || []);
             this.status = thatItem.status ? 1 : 0;
@@ -232,7 +231,6 @@ export default {
                 label: this.labelVal,
                 content: JSON.stringify(this.content),
             };
-            console.log(this.thatRankId);
             if (!this.thatRankId) {
                 console.log("创建");
                 this.createRankItem();

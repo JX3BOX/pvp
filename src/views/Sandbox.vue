@@ -68,7 +68,6 @@ export default {
         // 取出所有日志数据
         async onSandboxLogs(key = "斗转星移") {
             let data = await getSandboxLogs({ server: key });
-            console.log(data);
             this.sandboxLogsData = data.data ? data.data.list : [];
         },
     },

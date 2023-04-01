@@ -85,13 +85,11 @@ export default {
                 source_id: this.activeSkill,
                 client: "std",
             });
-            console.log(data);
             this.wikiData = data.data ? data.data[this.activeSkill] : {};
             this.userData = this.wikiData?.users;
         },
         publish_url: publishLink,
         martialAltsToPasv_skills(data) {
-            console.log(data);
             this.pasv_skills_data = data;
         },
         ToDate(timeStr) {
@@ -100,12 +98,8 @@ export default {
         },
     },
     watch: {
-        activeSkill(newVal) {
-            console.log(newVal);
+        activeSkill() {
             this.getWikkToSkill();
-        },
-        pasv_skills_props(newVal) {
-            console.log(newVal);
         },
     },
 };
