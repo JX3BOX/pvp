@@ -81,7 +81,10 @@ export default {
     },
     methods: {
         async getWikkToSkill() {
-            let data = await getWikkToSkill(this.activeSkill);
+            let data = await getWikkToSkill({
+                source_id: this.activeSkill,
+                client: "std",
+            });
             console.log(data);
             this.wikiData = data.data ? data.data[this.activeSkill] : {};
             this.userData = this.wikiData?.users;
