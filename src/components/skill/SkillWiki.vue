@@ -37,15 +37,19 @@
         </div>
         <div class="m-wiki-post-empty" v-if="is_empty">
             <!-- 非默认心法技能说明此处已选技能但无百科 -->
-            <!-- <div class="no-active-skill" v-if="pasv_skills_data.length<1||pasv_skills_data.indexOf(activeSkill) !== -1">
+
+            <!-- <div class="no_active_skill" v-if="pasv_skills_data.length<1||pasv_skills_data.indexOf(activeSkill) !== -1">
                 <span>请先选择技能后查看技能百科</span>
             </div> -->
-            <div class="no-skill-post" v-if="pasv_skills_data.indexOf(activeSkill) == -1">
+            <div class="no_skill_post" v-if="pasv_skills_data.indexOf(activeSkill) == -1">
+
                 <i class="el-icon-s-opportunity"></i>
                 <span>暂无百科，我要</span>
                 <a class="s-link" target="_blank" :href="publish_url(`skill/${activeSkill}`)">完善百科</a>
             </div>
-            <div class="no-active-skill" v-else>
+
+            <div class="no_active_skill" v-else>
+
                 <span>请先选择技能后查看技能百科</span>
             </div>
         </div>
@@ -81,15 +85,18 @@ export default {
     },
     methods: {
         async getWikkToSkill() {
+
             let data = await getWikkToSkill({
                 source_id: this.activeSkill,
                 client: "std",
             });
+
             this.wikiData = data.data ? data.data[this.activeSkill] : {};
             this.userData = this.wikiData?.users;
         },
         publish_url: publishLink,
         martialAltsToPasv_skills(data) {
+
             this.pasv_skills_data = data;
         },
         ToDate(timeStr) {
@@ -101,6 +108,7 @@ export default {
         activeSkill() {
             this.getWikkToSkill();
         },
+
     },
 };
 </script>
