@@ -4,7 +4,7 @@
             <template #label>
                 <el-icon><Collection /></el-icon>
                 <b>武学研习</b>
-                <em class="u-secret">权威白皮书</em>
+                <em class="u-secret">竞技全指南</em>
             </template>
         </el-tab-pane>
         <el-tab-pane label="阵营沙盘" name="sandbox">

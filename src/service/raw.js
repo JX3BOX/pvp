@@ -70,6 +70,7 @@ async function delRankList(id) {
             return res.data;
         });
 }
+
 // 获取指定技能百科
 function getWikkToSkill(source_id) {
     return $helper()

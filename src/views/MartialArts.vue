@@ -24,10 +24,13 @@
                                         <skill-item :item="selectedSkill"></skill-item>
                                     </div>
                                     <template #reference>
-                                        <div class="u-skill" @click="setSkill(skill)">
+                                        <div
+                                            class="u-skill"
+                                            @click="setSkill(skill)"
+                                            :class="{ active: activeSkill == skill.SkillID }"
+                                        >
                                             <img
                                                 class="u-skill-icon"
-                                                :class="{ 'active-icon': activeSkill == skill.SkillID }"
                                                 :src="iconLink(skill.IconID)"
                                                 :alt="skill.IconID"
                                                 @mousemove="showSkill(skill)"
@@ -40,7 +43,7 @@
                                     <img
                                         :src="iconLink(skill?.IconID)"
                                         :alt="skill.IconID"
-                                        class="u-not-mount u-talent-icon"
+                                        class="u-not-mount u-skill-icon"
                                     />
                                     <span class="u-name" :title="skill.Name">{{ skill.Name }}</span>
                                 </div>
@@ -70,16 +73,15 @@
                                 <div class="u-desc" v-html="formatPasv(pasv_info)"></div>
                             </div>
                             <template #reference>
-                                <div>
+                                <div class="m-pasv" :class="{ active: activeSkill == pasv_info.SkillID }">
                                     <img
                                         :src="showMountIcon(pasv_info?.BelongKungfu)"
                                         :alt="pasv_info?.BelongKungfu"
                                         :title="pasv_info?.Name"
                                         class="u-pasv-pic"
-                                        :class="{ 'active-icon': activeSkill == pasv_info.SkillID }"
                                         @click="setSkill(pasv_info)"
                                     />
-                                    <span class="u-name" :title="pasv_info.Name">{{ pasv_info.Name }}</span>
+                                    <span class="u-name" :title="subtype">{{ subtype }}</span>
                                 </div>
                             </template>
                         </el-popover>
@@ -99,13 +101,12 @@
                                 <div class="u-desc" v-html="formatZhenfa(zhenfa_info)"></div>
                             </div>
                             <template #reference>
-                                <div class="m-pasv">
+                                <div class="m-pasv" :class="{ active: activeSkill == zhenfa_info[0]?.SkillID }">
                                     <img
                                         :src="iconLink(zhenfa_info[0]?.IconID)"
                                         :alt="zhenfa_info[0]?.IconID"
                                         :title="zhenfa_info[0]?.Name"
                                         class="u-pasv-pic"
-                                        :class="{ 'active-icon': activeSkill == zhenfa_info[0]?.SkillID }"
                                         @click="setSkill(zhenfa_info[0])"
                                     />
                                     <span class="u-name" :title="zhenfa_info[0]?.Name">{{ zhenfa_info[0]?.Name }}</span>
@@ -173,7 +174,7 @@ import JX3_QIXUE from "@jx3box/jx3box-talent";
 import "@jx3box/jx3box-talent/talent.css";
 
 import SkillItem from "@/components/SkillItem.vue";
-import skillWiki from "@/components/skill/skillWiki.vue";
+import skillWiki from "@/components/skill/SkillWiki.vue";
 const $store = useStore();
 
 export default {
