@@ -37,15 +37,15 @@
         </div>
         <div class="m-wiki-post-empty" v-if="is_empty">
             <!-- 非默认心法技能说明此处已选技能但无百科 -->
-            <!-- <div class="no_active_skill" v-if="pasv_skills_data.length<1||pasv_skills_data.indexOf(activeSkill) !== -1">
+            <!-- <div class="no-active-skill" v-if="pasv_skills_data.length<1||pasv_skills_data.indexOf(activeSkill) !== -1">
                 <span>请先选择技能后查看技能百科</span>
             </div> -->
-            <div class="no_skill_post" v-if="pasv_skills_data.indexOf(activeSkill) == -1">
+            <div class="no-skill-post" v-if="pasv_skills_data.indexOf(activeSkill) == -1">
                 <i class="el-icon-s-opportunity"></i>
                 <span>暂无百科，我要</span>
                 <a class="s-link" target="_blank" :href="publish_url(`skill/${activeSkill}`)">完善百科</a>
             </div>
-            <div class="no_active_skill" v-else>
+            <div class="no-active-skill" v-else>
                 <span>请先选择技能后查看技能百科</span>
             </div>
         </div>
@@ -108,136 +108,5 @@ export default {
 };
 </script>
 <style lang="less" scoped>
-.m-skill-wiki {
-    background-color: #fafbfc;
-    border: 1px solid #eee;
-    border-radius: 5px;
-    font-size: 14px;
-    .mt(20px);
-    .u-trigger {
-        .pointer;
-        .x;
-        font-size: 12px;
-        border-top: 1px dashed #eee;
-        padding-top: 8px;
-        i {
-            .mr(3px);
-        }
-    }
-    .head-title {
-        font-size: 17px;
-        font-weight: 300;
-        padding: 10px 0;
-        color: #6c645c;
-        margin: 0;
-        font-weight: 500;
-        padding: 10px 15px;
-        background-color: #f5f7fa;
-        border-bottom: 1px solid #eee;
-    }
-    .m-wiki-metas {
-        color: #3d454d;
-        font-family: -apple-system, Microsoft YaHei, Trebuchet MS, Calibri, BlinkMacSystemFont, Segoe UI, Helvetica Neue,
-            Helvetica, sans-serif;
-        text-rendering: optimizelegibility;
-        letter-spacing: 0.2px;
-        line-height: 1.6em;
-        word-break: break-all;
-        outline: none;
-        margin-bottom: 5px;
-        font-size: 12px;
-        padding: 10px 15px 0px;
-        display: flex;
-        .u-meta {
-            height: 28px;
-            line-height: 28px;
-            margin-right: 10px;
-            padding: 3px 8px;
-
-            font-style: normal;
-            color: #666;
-            display: flex;
-            align-items: center;
-            .u-creator {
-                display: inline-block;
-                *display: inline;
-                *zoom: 1;
-                width: 24px;
-                height: 24px;
-                margin-right: 5px;
-                border-radius: 50%;
-                overflow: hidden;
-            }
-            .u-label {
-                font-style: normal;
-                margin-right: 10px;
-                padding: 3px 8px;
-                background-color: #f2f2f2;
-                border-radius: 2px;
-                font-style: normal;
-                color: #666;
-            }
-        }
-    }
-
-    .m-panel-body {
-        padding: 0 15px;
-        line-height: 1.6em;
-        word-break: break-all;
-    }
-}
-.m-wiki-post-empty {
-    .u-msg-yellow;
-    .x;
-    .s-link {
-        .underline(@color-link);
-    }
-    letter-spacing: 2px;
-    .fz(14px);
-}
-
-.m-wiki-compatible {
-    .u-msg-yellow;
-    margin: 10px auto;
-    padding: 5px 10px;
-    a {
-        .underline(@color-link);
-    }
-}
-
-.m-wiki-signature {
-    .x(right);
-    color: #999;
-    .fz(12px,2);
-    border-top: 1px dashed #ddd;
-    padding: 5px 0;
-}
-
-details {
-    border: 1px solid #eee;
-    border-radius: 4px;
-    padding: 10px 10px 0;
-}
-
-.u-wiki__title {
-    font-size: 17px;
-    font-weight: 300;
-    color: #6c645c;
-    margin: -10px -10px 0;
-    padding: 10px;
-    .pointer;
-    .pr;
-    i {
-        margin-right: 5px;
-    }
-}
-
-details[open] {
-    padding: 10px;
-}
-
-details[open] summary {
-    border-bottom: 1px solid #eee;
-    margin-bottom: 10px;
-}
+@import "@/assets/css/skill-wiki.less";
 </style>

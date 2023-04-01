@@ -173,7 +173,7 @@ import JX3_QIXUE from "@jx3box/jx3box-talent";
 import "@jx3box/jx3box-talent/talent.css";
 
 import SkillItem from "@/components/SkillItem.vue";
-import skillWiki from "@/components/skill/skillWiki.vue";
+import skillWiki from "@/components/skill/SkillWiki.vue";
 const $store = useStore();
 
 export default {

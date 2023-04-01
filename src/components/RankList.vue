@@ -1,6 +1,6 @@
 <template>
-    <div class="pvp-hot-sect-list">
-        <div class="edit_icon" v-if="isEdit" @click="dialogFormVisible = true">
+    <div class="m-rank-list">
+        <div class="m-rank-edit-icon" v-if="isEdit" @click="dialogFormVisible = true">
             <el-icon><Setting /></el-icon>
         </div>
         <el-collapse v-model="activeNames" @change="handleChange" accordion>
@@ -10,13 +10,13 @@
                 v-for="(item, index) in RankList"
                 :key="index"
             >
-                <div class="_list" v-for="(eitem, eindex) in toJson(item.content)" :key="eindex">
-                    <div class="_item">
-                        <div class="_img">
+                <div class="m-rank-cont-list" v-for="(eitem, eindex) in toJson(item.content)" :key="eindex">
+                    <div class="m-rank-cont-item">
+                        <div class="m-rank-cont-img">
                             <img :src="getImgToName(eitem.name)" alt="" srcset="" />
                         </div>
-                        <div class="_text">{{ eitem.name }}</div>
-                        <div class="_num">{{ eitem.num }}人</div>
+                        <div class="m-rank-cont-text">{{ eitem.name }}</div>
+                        <div class="m-rank-cont-num">{{ eitem.num }}人</div>
                     </div>
                 </div>
             </el-collapse-item>
@@ -57,21 +57,21 @@
                 </el-form-item>
             </el-form>
 
-            <div class="_rank_form">
-                <div class="_left">排行</div>
-                <div class="_right">
-                    <div class="_rank_form_header">
+            <div class="m-rank-form">
+                <div class="m-left">排行</div>
+                <div class="m-right">
+                    <div class="m-rank-form-header">
                         <div>门派</div>
                         <div>数量</div>
                     </div>
-                    <div class="_rank_form_cont">
+                    <div class="m-rank-form-cont">
                         <draggable :list="content" ghost-class="ghost" chosen-class="chosenClass" animation="300">
                             <template #item="{ element, index }">
                                 <div class="item-list" :key="element.id">
                                     <el-input placeholder="请输入门派" v-model="element.name" autocomplete="off" />
                                     <el-input placeholder="请输入数量" v-model="element.num" autocomplete="off" />
 
-                                    <div class="_icon" @click="delRankItem(index)">
+                                    <div class="m-rank-form-icon" @click="delRankItem(index)">
                                         <el-icon><DeleteFilled /></el-icon>
                                     </div>
                                 </div>
@@ -249,79 +249,24 @@ export default {
 };
 </script>
 <style lang="less" scoped>
-.pvp-hot-sect-list {
-    position: relative;
-    .edit_icon {
-        font-size: 24px;
-        position: absolute;
-        top: 10px;
-        right: 30px;
+@import "@/assets/css/rank-list.less";
+</style>
+<style lang="less">
+.m-rank-list {
+    .el-collapse-item__header {
+        font-size: 22px;
+        padding-left: 24px;
     }
-    ._list {
-        ._item {
-            display: flex;
-            // justify-content: center;
-            align-items: center;
+    .el-dialog__body {
+        width: 500px;
+        margin: 0 auto;
+        .el-select {
             width: 100%;
-            padding: 0 21px;
-            ._img {
-                width: 60px;
-                height: 60px;
-                margin-right: 10px;
-                image {
-                    width: inherit;
-                    height: inherit;
-                }
-            }
-            ._text {
-                width: 60px;
-            }
-            ._num {
-            }
         }
-    }
-
-    ._rank_form {
-        display: flex;
-        justify-content: center;
-        width: 100%;
-        ._left {
-            width: 140px;
-            text-align: right;
-            padding-right: 14px;
-        }
-        ._right {
-            width: 100%;
-            ._rank_form_header {
-                display: flex;
-                margin-bottom: 20px;
-                div {
-                    width: 100%;
-                    text-align: center;
-                }
-            }
+        .m-rank-form-cont {
             .item-list {
-                display: flex;
-                align-items: center;
-                margin-bottom: 10px;
-            }
-            ._rank_form_cont {
-                .rank-item-create {
-                    width: 100%;
-                    height: 30px;
-                    background: #80ccff;
-                    display: flex;
-                    justify-content: center;
-                    align-items: center;
-                    cursor: pointer;
-                    font-size: 21px;
-                    border-radius: 6px;
-                    margin: 12px 0px;
-                }
-                .item-list {
-                    ._icon {
-                        cursor: pointer;
-                    }
+                .el-input {
+                    margin-right: 15px;
                 }
             }
         }
