@@ -24,7 +24,8 @@
         "element-plus": "^2.3.0",
         "pinia": "^2.0.33",
         "vue": "^3.2.13",
-        "vue-router": "^4.0.16"
+        "vue-router": "^4.0.16",
+        "vuedraggable": "^4.1.0"
     },
     "devDependencies": {
         "@babel/core": "^7.12.16",

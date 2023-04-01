@@ -1,150 +1,154 @@
 <template>
-    <div class="p-martial-arts">
-        <div class="m-martial-skills" v-loading="loading">
-            <div v-for="kungfu in kungfus" :key="kungfu" class="m-martial-skill">
-                <div class="u-title">
-                    <span class="u-title-name">{{ showKungfuName(kungfu) }}</span>
-                    <img src="../assets/img/skillset.png" class="u-title-img" alt="" />
-                </div>
-                <div class="m-skills" v-if="kungfusSkills[kungfu]">
-                    <div class="m-skill" v-for="skill in kungfusSkills[kungfu]" :key="skill?.SkillID">
-                        <template v-if="skill?.IconID">
-                            <el-popover
-                                v-if="hasSkill(skill) || subtype === '通用' || !subtype"
-                                width="400px"
-                                :show-after="100"
-                                :hide-after="0"
-                                popper-class="m-skill-pop"
-                                :show-arrow="false"
-                                placement="bottom-start"
-                                :offset="0"
-                            >
-                                <div v-if="selectedSkill">
-                                    <skill-item :item="selectedSkill"></skill-item>
-                                </div>
-                                <template #reference>
-                                    <div
-                                        class="u-skill"
-                                        @click="setSkill(skill)"
-                                        :class="{ active: activeSkill == skill.SkillID }"
-                                    >
-                                        <img
-                                            class="u-skill-icon"
-                                            :src="iconLink(skill.IconID)"
-                                            :alt="skill.IconID"
-                                            @mousemove="showSkill(skill)"
-                                        />
-                                        <span class="u-name" :title="skill.Name">{{ skill.Name }}</span>
+    <div class="p-martial-content">
+        <div class="p-martial-arts">
+            <div class="m-martial-skills" v-loading="loading">
+                <div v-for="kungfu in kungfus" :key="kungfu" class="m-martial-skill">
+                    <div class="u-title">
+                        <span class="u-title-name">{{ showKungfuName(kungfu) }}</span>
+                        <img src="../assets/img/skillset.png" class="u-title-img" alt="" />
+                    </div>
+                    <div class="m-skills" v-if="kungfusSkills[kungfu]">
+                        <div class="m-skill" v-for="skill in kungfusSkills[kungfu]" :key="skill?.SkillID">
+                            <template v-if="skill?.IconID">
+                                <el-popover
+                                    v-if="hasSkill(skill) || subtype === '通用' || !subtype"
+                                    width="400px"
+                                    :show-after="100"
+                                    :hide-after="0"
+                                    popper-class="m-skill-pop"
+                                    :show-arrow="false"
+                                    placement="bottom-start"
+                                    :offset="0"
+                                >
+                                    <div v-if="selectedSkill">
+                                        <skill-item :item="selectedSkill"></skill-item>
                                     </div>
-                                </template>
-                            </el-popover>
-                            <div v-else class="u-skill">
-                                <img
-                                    :src="iconLink(skill?.IconID)"
-                                    :alt="skill.IconID"
-                                    class="u-not-mount u-skill-icon"
-                                />
-                                <span class="u-name" :title="skill.Name">{{ skill.Name }}</span>
+                                    <template #reference>
+                                        <div class="u-skill" @click="setSkill(skill)">
+                                            <img
+                                                class="u-skill-icon"
+                                                :class="{ 'active-icon': activeSkill == skill.SkillID }"
+                                                :src="iconLink(skill.IconID)"
+                                                :alt="skill.IconID"
+                                                @mousemove="showSkill(skill)"
+                                            />
+                                            <span class="u-name" :title="skill.Name">{{ skill.Name }}</span>
+                                        </div>
+                                    </template>
+                                </el-popover>
+                                <div v-else class="u-skill">
+                                    <img
+                                        :src="iconLink(skill?.IconID)"
+                                        :alt="skill.IconID"
+                                        class="u-not-mount u-talent-icon"
+                                    />
+                                    <span class="u-name" :title="skill.Name">{{ skill.Name }}</span>
+                                </div>
+                            </template>
+                            <img
+                                v-if="getSkillRecipe(skill?.SkillID).length"
+                                class="u-icon"
+                                src="@/assets/img/challenge.png"
+                                :ref="(el) => setRefs(el, skill)"
+                                @click.stop="showRecipe(skill?.SkillID)"
+                            />
+                        </div>
+                    </div>
+                </div>
+
+                <div class="m-talent-box qx-container" v-show="subtype && subtype !== '通用'"></div>
+            </div>
+            <div class="m-martial-extend" v-if="subtype && subtype !== '通用'">
+                <div class="m-mount-info">
+                    <div class="m-pasv">
+                        <!-- <div class="u-title">门派内功</div> -->
+                        <el-popover width="450px" popper-class="m-pasv-pop" effect="dark">
+                            <div class="m-pasv">
+                                <div class="u-title">{{ subtype }}</div>
+                                <div class="u-name">{{ pasv_info?.Name }}</div>
+                                <div class="u-subtitle">被动招式</div>
+                                <div class="u-desc" v-html="formatPasv(pasv_info)"></div>
                             </div>
-                        </template>
-                        <img
-                            v-if="getSkillRecipe(skill?.SkillID).length"
-                            class="u-icon"
-                            src="@/assets/img/challenge.png"
-                            :ref="(el) => setRefs(el, skill)"
-                            @click.stop="showRecipe(skill?.SkillID)"
-                        />
+                            <template #reference>
+                                <div>
+                                    <img
+                                        :src="showMountIcon(pasv_info?.BelongKungfu)"
+                                        :alt="pasv_info?.BelongKungfu"
+                                        :title="pasv_info?.Name"
+                                        class="u-pasv-pic"
+                                        :class="{ 'active-icon': activeSkill == pasv_info.SkillID }"
+                                        @click="setSkill(pasv_info)"
+                                    />
+                                    <span class="u-name" :title="pasv_info.Name">{{ pasv_info.Name }}</span>
+                                </div>
+                            </template>
+                        </el-popover>
+                    </div>
+                    <div class="m-zhenfa">
+                        <!-- <div class="u-title">阵法</div> -->
+                        <el-popover width="500px" popper-class="m-pasv-pop" effect="dark">
+                            <div class="m-zhenfa-info">
+                                <div class="u-zhenfa-bg" :style="zhenfaBg">
+                                    <img
+                                        :src="iconLink(zhenfa_info[0]?.IconID)"
+                                        :alt="zhenfa_info[0]?.IconID"
+                                        :title="zhenfa_info[0]?.Name"
+                                        class="u-pic"
+                                    />
+                                </div>
+                                <div class="u-desc" v-html="formatZhenfa(zhenfa_info)"></div>
+                            </div>
+                            <template #reference>
+                                <div class="m-pasv">
+                                    <img
+                                        :src="iconLink(zhenfa_info[0]?.IconID)"
+                                        :alt="zhenfa_info[0]?.IconID"
+                                        :title="zhenfa_info[0]?.Name"
+                                        class="u-pasv-pic"
+                                        :class="{ 'active-icon': activeSkill == zhenfa_info[0]?.SkillID }"
+                                        @click="setSkill(zhenfa_info[0])"
+                                    />
+                                    <span class="u-name" :title="zhenfa_info[0]?.Name">{{ zhenfa_info[0]?.Name }}</span>
+                                </div>
+                            </template>
+                        </el-popover>
                     </div>
                 </div>
             </div>
 
-            <div class="m-talent-box qx-container" v-show="subtype && subtype !== '通用'"></div>
-        </div>
-        <div class="m-martial-extend" v-if="subtype && subtype !== '通用'">
-            <div class="m-mount-info">
-                <div class="m-pasv">
-                    <!-- <div class="u-title">门派内功</div> -->
-                    <el-popover width="450px" popper-class="m-pasv-pop" effect="dark">
-                        <div class="m-pasv">
-                            <div class="u-title">{{ subtype }}</div>
-                            <div class="u-name">{{ pasv_info?.Name }}</div>
-                            <div class="u-subtitle">被动招式</div>
-                            <div class="u-desc" v-html="formatPasv(pasv_info)"></div>
-                        </div>
-                        <template #reference>
-                            <div class="m-pasv" :class="{ active: activeSkill == pasv_info.SkillID }">
-                                <img
-                                    :src="showMountIcon(pasv_info?.BelongKungfu)"
-                                    :alt="pasv_info?.BelongKungfu"
-                                    :title="pasv_info?.Name"
-                                    class="u-pasv-pic"
-                                    @click="setSkill(pasv_info)"
-                                />
-                                <span class="u-name" :title="subtype">{{ subtype }}</span>
-                            </div>
-                        </template>
-                    </el-popover>
-                </div>
-                <div class="m-zhenfa">
-                    <!-- <div class="u-title">阵法</div> -->
-                    <el-popover width="500px" popper-class="m-pasv-pop" effect="dark">
-                        <div class="m-zhenfa-info">
-                            <div class="u-zhenfa-bg" :style="zhenfaBg">
-                                <img
-                                    :src="iconLink(zhenfa_info[0]?.IconID)"
-                                    :alt="zhenfa_info[0]?.IconID"
-                                    :title="zhenfa_info[0]?.Name"
-                                    class="u-pic"
-                                />
-                            </div>
-                            <div class="u-desc" v-html="formatZhenfa(zhenfa_info)"></div>
-                        </div>
-                        <template #reference>
-                            <div class="m-pasv" :class="{ active: activeSkill == zhenfa_info[0]?.SkillID }">
-                                <img
-                                    :src="iconLink(zhenfa_info[0]?.IconID)"
-                                    :alt="zhenfa_info[0]?.IconID"
-                                    :title="zhenfa_info[0]?.Name"
-                                    class="u-pasv-pic"
-                                    @click="setSkill(zhenfa_info[0])"
-                                />
-                                <span class="u-name" :title="zhenfa_info[0]?.Name">{{ zhenfa_info[0]?.Name }}</span>
-                            </div>
-                        </template>
-                    </el-popover>
-                </div>
-            </div>
-        </div>
-
-        <el-popover
-            v-model:visible="visiblePopover"
-            :virtual-ref="iconRef"
-            trigger="manual"
-            :width="226"
-            popper-class="m-recipe-pop"
-            virtual-triggering
-            placement="right"
-            effect="dark"
-            :show-arrow="false"
-            :offset="0"
-        >
-            <el-tooltip
-                v-for="item in selectedRecipe"
-                :key="item.idKey"
-                popper-class="m-recipe-tooltip"
-                placement="top"
+            <el-popover
+                v-model:visible="visiblePopover"
+                :virtual-ref="iconRef"
+                trigger="manual"
+                :width="226"
+                popper-class="m-recipe-pop"
+                virtual-triggering
+                placement="right"
+                effect="dark"
+                :show-arrow="false"
+                :offset="0"
             >
-                <template #content>
-                    <div class="m-recipe-detail">
-                        <div class="u-name" :class="'isQuality-' + item.Quality">{{ item.Name }}</div>
-                        <div>{{ item.Desc }}</div>
-                    </div>
-                </template>
-                <a class="u-recipe-item" :href="recipeLink(item)">
-                    <img :src="iconLink(item.IconID)" class="u-icon" alt="" />
-                </a>
-            </el-tooltip>
-        </el-popover>
+                <el-tooltip
+                    v-for="item in selectedRecipe"
+                    :key="item.idKey"
+                    popper-class="m-recipe-tooltip"
+                    placement="top"
+                >
+                    <template #content>
+                        <div class="m-recipe-detail">
+                            <div class="u-name" :class="'isQuality-' + item.Quality">{{ item.Name }}</div>
+                            <div>{{ item.Desc }}</div>
+                        </div>
+                    </template>
+                    <a class="u-recipe-item" :href="recipeLink(item)">
+                        <img :src="iconLink(item.IconID)" class="u-icon" alt="" />
+                    </a>
+                </el-tooltip>
+            </el-popover>
+        </div>
+        <div class="skill">
+            <skillWiki ref="skillWiki" v-model:pasv_skills_props="pasv_skills"></skillWiki>
+        </div>
     </div>
 </template>
 
@@ -169,13 +173,14 @@ import JX3_QIXUE from "@jx3box/jx3box-talent";
 import "@jx3box/jx3box-talent/talent.css";
 
 import SkillItem from "@/components/SkillItem.vue";
-
+import skillWiki from "@/components/skill/skillWiki.vue";
 const $store = useStore();
 
 export default {
     name: "MartialArts",
     components: {
         SkillItem,
+        skillWiki,
     },
     props: [],
     data() {
@@ -457,4 +462,8 @@ export default {
 
 <style lang="less">
 @import "@/assets/css/martial.less";
+.p-martial-content {
+    display: flex;
+    flex-direction: column;
+}
 </style>
