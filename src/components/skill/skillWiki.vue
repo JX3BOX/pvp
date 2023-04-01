@@ -107,6 +107,6 @@ export default {
     },
 };
 </script>
-<style lang="less" scoped>
-@import "@/assets/css/skill-wiki.less";
+<style lang="less">
+@import "@/assets/css/wiki.less";
 </style>

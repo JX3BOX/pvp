@@ -1,7 +1,11 @@
 <template>
     <div class="m-sandbox-intro" v-loading="loading">
-        <el-tabs type="card" v-model="active">
+        <el-tabs v-model="active">
             <el-tab-pane v-for="item in tabs" :key="item.name" :label="item.label" :name="item.name">
+                <template #label>
+                    <el-icon class="u-tab-icon"><component :is="icons[item.name]"></component></el-icon>
+                    <b>{{ item.label }}</b>
+                </template>
                 <div v-html="item?.html"></div>
             </el-tab-pane>
         </el-tabs>
@@ -10,6 +14,7 @@
 
 <script>
 import { getSandboxIntro } from "@/service/sandbox";
+import { markRaw } from "vue";
 export default {
     name: "SandboxIntro",
     props: [],
@@ -19,6 +24,11 @@ export default {
             loading: false,
             data: [],
             active: "",
+
+            icons: markRaw({
+                pvp_sandbox_intro: "Compass",
+                pvp_sandbox_rule: "DataBoard",
+            }),
         };
     },
     computed: {
