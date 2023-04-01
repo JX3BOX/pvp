@@ -23,8 +23,8 @@
                     </el-tab-pane>
                 </el-tabs>
                 <div class="m-tab-content">
-                    <SandboxLogs v-if="view == 'logs'" :sandboxData="sandboxLogsData" />
-                    <SandboxHandbook v-if="view == 'index'" />
+                    <SandboxLogs v-show="view == 'logs'" :sandboxData="sandboxLogsData" />
+                    <SandboxHandbook v-show="view == 'index'" />
                 </div>
             </div>
         </div>
