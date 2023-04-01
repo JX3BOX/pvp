@@ -1,83 +1,3 @@
-//沙盘搜索
-.m-sandbox-search {
-    .flex;
-    .size(620px,45px);
-    .r(10px);
-    .fz(18px);
-    .pl(20px);
-    .auto(x);
-    justify-content: center;
-    align-items: center;
-
-    background-color: #f5f7fa;
-    border: 1px solid #a7abaf;
-    letter-spacing: 1px;
-    text-shadow: 0 0 1px @fontColor;
-    .u-camp {
-        .pointer;
-        .mr(20px);
-        display: flex;
-        align-items: center;
-        b {
-            .pr;
-            .size(12px);
-            .mr(5px);
-            .r(50%);
-            border: 1px solid @fontColor;
-
-            &.active:after {
-                content: "";
-                .pa;
-                .size(6px);
-                .r(50%);
-                .lt(50%,50%);
-                margin: -3px 0 0 -3px;
-                background: @blue;
-                opacity: 0.8;
-            }
-        }
-
-        span {
-            .fz(18px);
-            .nobreak;
-            text-shadow: 0 0 1px @fontColor;
-        }
-    }
-    .u-route {
-        .mr(20px);
-    }
-    .el-select {
-        flex: 1;
-    }
-    .el-select,
-    .el-input,
-    .select-trigger,
-    .el-input__inner {
-        height: 100%;
-        .fz(18px);
-        .r(0);
-        border-top-right-radius: 10px;
-        border-bottom-right-radius: 10px;
-    }
-    .el-input__inner {
-        border: 0;
-    }
-    .el-input {
-        border-right: 1px solid #d4d4d2;
-        border-left: 1px solid #d4d4d2;
-    }
-    .el-select .el-input.is-focus .el-input__inner,
-    .el-select .el-input__inner:focus {
-        border-color: transparent;
-    }
-    .el-switch__label * {
-        .fz(16px);
-    }
-    .el-switch__label.is-active {
-        color: @color;
-    }
-}
-
 //沙盘地图
 .m-sandbox-map {
     .pr;
@@ -174,8 +94,97 @@
     }
 }
 
-.m-mark {
+// 日志弹窗
+.m-sandbox-log {
     .full;
+    .pa;
+    .lt(0,0);
+
+    .m-log-box {
+        .pa;
+        .z(9);
+        .rt(160px, 180px);
+        .size(300px, 480px);
+        padding: 30px 20px 20px 20px;
+        .r(10px);
+        background-color: #fff;
+
+        .u-cont {
+            height: 320px;
+            list-style: none;
+            padding: 10px 0;
+            border: 1px solid #ddd;
+            .scrollbar();
+            .r(3px);
+            .u-nonedata {
+                .x;
+                padding: 10px;
+            }
+            li {
+                margin: 0 10px;
+                border-bottom: 1px solid #ddd;
+                padding: 10px;
+                overflow: hidden;
+                text-overflow: ellipsis;
+                white-space: nowrap;
+                &:last-child {
+                    border-bottom: 0;
+                }
+                .u-line {
+                    .mb(5px);
+                }
+
+                .u-line {
+                    overflow: hidden;
+                    text-overflow: ellipsis;
+                    white-space: nowrap;
+                }
+            }
+        }
+    }
+    .m-box-info {
+        display: flex;
+        align-items: center;
+        .mb(24px);
+        .u-img {
+            .size(78px);
+            .mr(10px);
+        }
+        .u-box {
+            min-height: 80px;
+            box-sizing: border-box;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            .fz(14px);
+            .u-title {
+                .fz(18px);
+                .bold;
+                .color(#555);
+            }
+            .u-desc {
+                .color(#777);
+                .fz(12px, 2);
+                min-height: 30px;
+                text-overflow: -o-ellipsis-lastline;
+                overflow: hidden;
+                text-overflow: ellipsis;
+                display: -webkit-box;
+                -webkit-line-clamp: 2;
+                line-clamp: 2;
+                -webkit-box-orient: vertical;
+            }
+            .u-baike {
+                .fz(13px, 2);
+                .color(@color-link, @pink);
+            }
+        }
+    }
+}
+
+.m-mask {
+    width: 100%;
+    height: 1030px;
     .pa;
     .z(8);
     .lt(0,0);

@@ -28,38 +28,20 @@
                     v-for="(item, o) in maps.list"
                     :key="o"
                 >
-                    <el-popover placement="top-start" width="240" trigger="hover">
-                        <div class="u-box">
-                            <img :src="imgPath(item.name_pinyin, item.camp, 'camp')" />
-                            <div class="u-txt">
-                                <div class="u-line">
-                                    <span class="u-camp">{{ item.name }}</span>
-                                </div>
-                                <div class="u-line">
-                                    <span>占领势力：</span>
-                                    <span :class="item.camp">【{{ item.camp == "haoqi" ? "浩气盟" : "恶人谷" }}】</span>
-                                </div>
-                                <div class="u-line u-gang">
-                                    <span>占领帮会：</span>
-                                    <span :class="item.camp">- {{ item.gang }} -</span>
-                                </div>
-                            </div>
-                            <div class="u-log" @click="showLog(item)">
-                                <i class="el-icon-date"></i>
-                            </div>
-                        </div>
-                        <template #reference>
-                            <div @click="showLog(item)">
-                                <img :src="imgPath(item.id, item.camp, 'icon')" />
-                            </div>
-                        </template>
-                    </el-popover>
+                    <div
+                        @click="showLog(item)"
+                        :ref="(el) => setRefs(el, item)"
+                        @mousemove="showPopover(item)"
+                        @mouseleave="hidePopover"
+                    >
+                        <img :src="imgPath(item.id, item.camp, 'icon')" />
+                    </div>
                 </div>
 
                 <div class="u-name" :style="positionStyle(item.name_pinyin, 'name')">{{ item.name }}</div>
             </div>
         </template>
-        <template v-if="maps.detail && maps.detail.length > 0">
+        <template v-if="maps.detail && maps.detail.length">
             <div class="detail" v-for="item in maps.detail" :key="item.id">
                 <img
                     class="u-camps"
@@ -89,9 +71,40 @@
                 </template>
             </div>
         </template>
+
+        <el-popover
+            v-model:visible="visiblePopover"
+            :virtual-ref="activeRef"
+            trigger="manual"
+            width="240"
+            virtual-triggering
+            placement="top-start"
+            :show-arrow="false"
+        >
+            <div class="u-box" v-if="active">
+                <img :src="imgPath(active.name_pinyin, active.camp, 'camp')" />
+                <div class="u-txt">
+                    <div class="u-line">
+                        <span class="u-camp">{{ active.name }}</span>
+                    </div>
+                    <div class="u-line">
+                        <span>占领势力：</span>
+                        <span :class="active.camp">【{{ active.camp == "haoqi" ? "浩气盟" : "恶人谷" }}】</span>
+                    </div>
+                    <div class="u-line u-gang">
+                        <span>占领帮会：</span>
+                        <span :class="active.camp">- {{ active.gang }} -</span>
+                    </div>
+                </div>
+                <div class="u-log" @click="showLog(active)">
+                    <i class="el-icon-date"></i>
+                </div>
+            </div>
+        </el-popover>
     </div>
 </template>
 <script>
+import { ref } from "vue";
 import JX3BOX from "@jx3box/jx3box-common/data/jx3box.json";
 const __imgPath = JX3BOX.__imgPath;
 const { placeArr, placeAttacks, placeCamp, placeImg, placeName } = require("@/assets/data/sandboxMap.json");
@@ -104,9 +117,31 @@ export default {
                 { id: 27, name: "eren", names: "恶人谷", key: "erengu" },
                 { id: 25, name: "haoqi", names: "浩气盟", key: "haoqimeng" },
             ],
+
+            active: "",
+            activeRef: ref(null),
+            visiblePopover: false,
+            refMap: [],
         };
     },
     methods: {
+        setRefs: function (ref, item) {
+            if (ref) {
+                this.refMap.push({
+                    ref,
+                    item,
+                });
+            }
+        },
+        showPopover: function (item) {
+            const index = this.refMap.findIndex((i) => i.item.id === item.id);
+            this.activeRef = this.refMap[index].ref;
+            this.active = item;
+            this.visiblePopover = true;
+        },
+        hidePopover: function () {
+            this.visiblePopover = false;
+        },
         // 图片路径
         imgPath(name, camp, key) {
             switch (key) {
@@ -195,3 +230,7 @@ export default {
     },
 };
 </script>
+
+<style lang="less">
+@import "@/assets/css/sandbox/sandbox_map.less";
+</style>

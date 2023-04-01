@@ -206,7 +206,7 @@ export default {
     computed: {
         // 心法中文名
         subtype() {
-            return this.$route.query.subtype || "通用";
+            return this.$route.query.subtype || "冰心诀";
         },
         school() {
             return relation.mount_belong_school[this.subtype];

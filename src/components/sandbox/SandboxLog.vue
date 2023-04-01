@@ -1,5 +1,5 @@
 <template>
-    <div class="m-sandbox-log">
+    <div class="m-sandbox-log" v-if="item">
         <div class="m-log-box">
             <div class="m-box-info">
                 <img class="u-img" :src="item.img" />
@@ -9,7 +9,7 @@
                     <a class="u-baike" :href="item.link" target="_blank">查看百科 &raquo;</a>
                 </div>
             </div>
-            <ul class="u-cont" style="overflow: auto" v-if="item.list.length > 0">
+            <ul class="u-cont" style="overflow: auto" v-if="item?.list?.length">
                 <li v-for="(items, i) in item.list" :key="i">
                     <div class="u-line">
                         <span class="u-time">{{ items.date }}</span>
