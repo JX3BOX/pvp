@@ -1,28 +1,28 @@
 <template>
-    <div class="pvp-hot-sect-list">
-        <div class="edit_icon" v-if="isEdit" @click="dialogFormVisible = true">
+    <div class="m-rank-list">
+        <div class="m-rank-edit-icon" v-if="isEdit" @click="dialogFormVisible = true">
             <el-icon><Setting /></el-icon>
         </div>
         <el-collapse v-model="activeNames" @change="handleChange" accordion>
             <el-collapse-item
                 :title="item['label']"
                 :name="item['label']"
-                v-for="(item, index) in RankList"
+                v-for="(item, index) in rankList"
                 :key="index"
             >
-                <div class="_list" v-for="(eitem, eindex) in toJson(item.content)" :key="eindex">
-                    <div class="_item">
-                        <div class="_img">
+                <div class="m-rank-cont-list" v-for="(eitem, eindex) in toJson(item.content)" :key="eindex">
+                    <div class="m-rank-cont-item">
+                        <div class="m-rank-cont-img">
                             <img :src="getImgToName(eitem.name)" alt="" srcset="" />
                         </div>
-                        <div class="_text">{{ eitem.name }}</div>
-                        <div class="_num">{{ eitem.num }}人</div>
+                        <div class="m-rank-cont-text">{{ eitem.name }}</div>
+                        <div class="m-rank-cont-num">{{ eitem.num }}人</div>
                     </div>
                 </div>
             </el-collapse-item>
         </el-collapse>
 
-        <el-dialog v-model="dialogFormVisible" title="排行榜设置" center>
+        <el-dialog v-model="dialogFormVisible" title="排行榜设置" center destroy-on-close>
             <el-form>
                 <el-form-item label="榜单" :label-width="formLabelWidth">
                     <el-select
@@ -57,21 +57,27 @@
                 </el-form-item>
             </el-form>
 
-            <div class="_rank_form">
-                <div class="_left">排行</div>
-                <div class="_right">
-                    <div class="_rank_form_header">
+            <div class="m-rank-form">
+                <div class="m-left">排行</div>
+                <div class="m-right">
+                    <div class="m-rank-form-header">
                         <div>门派</div>
                         <div>数量</div>
                     </div>
-                    <div class="_rank_form_cont">
-                        <draggable :list="content" ghost-class="ghost" chosen-class="chosenClass" animation="300">
+                    <div class="m-rank-form-cont">
+                        <draggable
+                            :list="content"
+                            ghost-class="ghost"
+                            chosen-class="chosenClass"
+                            animation="300"
+                            itemKey="index"
+                        >
                             <template #item="{ element, index }">
                                 <div class="item-list" :key="element.id">
                                     <el-input placeholder="请输入门派" v-model="element.name" autocomplete="off" />
                                     <el-input placeholder="请输入数量" v-model="element.num" autocomplete="off" />
 
-                                    <div class="_icon" @click="delRankItem(index)">
+                                    <div class="m-rank-form-icon" @click="delRankItem(index)">
                                         <el-icon><DeleteFilled /></el-icon>
                                     </div>
                                 </div>
@@ -98,8 +104,8 @@ import draggable from "vuedraggable";
 import { getRankList, createRankItem, putRankList, delRankList } from "@/service/raw.js";
 import school from "@jx3box/jx3box-data/data/xf/school.json";
 import { showSchoolIcon } from "@jx3box/jx3box-common/js/utils";
-
 import User from "@jx3box/jx3box-common/js/user.js";
+
 export default {
     name: "SkillItem",
     components: {
@@ -109,11 +115,10 @@ export default {
         return {
             dialogFormVisible: false,
             activeNames: "1",
-            client: "std", //客户端 std/origin
             status: true, // number 状态 0 隐藏 1 显示
             label: "", //榜单
             formLabelWidth: "120",
-            lableOptions: [],
+            client: "std",
             content: [
                 {
                     name: "七秀",
@@ -133,7 +138,7 @@ export default {
                     value: "origin",
                 },
             ],
-            RankList: [],
+            rankList: [],
             thatRankId: 0,
         };
     },
@@ -145,10 +150,9 @@ export default {
     methods: {
         async getRankList() {
             let data = await getRankList({
-                client: "std",
-                status: "1",
+                client: this.client,
             });
-            this.RankList = data.data.reverse();
+            this.rankList = data.data.reverse();
             data.data.forEach((res, index) => {
                 this.labelOptions[index] = {
                     label: res.label,
@@ -170,17 +174,14 @@ export default {
         async createRankItem() {
             let data = {
                 client: this.client,
-                status: this.status ? "1" : "0",
+                status: this.status ? 1 : 0,
                 label: this.labelVal,
-                content: JSON.stringify([
-                    {
-                        name: "",
-                        num: "",
-                    },
-                ]),
+                content: JSON.stringify(this.content || []),
             };
             let res = await createRankItem(data);
             if (res) {
+                this.dialogFormVisible = false;
+                this.$message({ type: "success", message: "保存成功" });
                 this.getRankList();
             }
         },
@@ -193,22 +194,26 @@ export default {
                     return false;
                 }
             }
-            this.createRankItem();
+            this.thatRankId = 0;
+            this.content = [
+                {
+                    name: "七秀",
+                    num: "1",
+                    id: 0,
+                },
+            ];
+            // this.createRankItem();
         },
         // 根据下拉框的选择 显示对应详情
         loadRankItem(val) {
-            for (let i = 0; i < this.RankList.length; i++) {
-                let el = this.RankList[i];
-
-                if (val == el.label) {
-                    this.client = el.client ? el.client : "";
-                    this.content = JSON.parse(el.content ? el.content : []);
-                    this.status = el.status ? true : false;
-                    this.labelVal = el.label;
-                    this.thatRankId = el.id;
-                    return;
-                }
-            }
+            let thatItem = this.rankList.find(function (item) {
+                return val == item.label;
+            });
+            this.client = thatItem.client || "";
+            this.content = JSON.parse(thatItem.content || []);
+            this.status = thatItem.status ? 1 : 0;
+            this.labelVal = thatItem.label;
+            this.thatRankId = thatItem.id;
         },
         async delRankList() {
             let res = await delRankList(this.thatRankId);
@@ -222,11 +227,15 @@ export default {
         async saveRankList() {
             let data = {
                 client: this.client,
-                status: this.status ? "1" : "0",
+                status: this.status ? 1 : 0,
                 label: this.labelVal,
                 content: JSON.stringify(this.content),
             };
-            console.log(data);
+            if (!this.thatRankId) {
+                console.log("创建");
+                this.createRankItem();
+                return false;
+            }
             let res = await putRankList(this.thatRankId, data);
             if (res) {
                 this.dialogFormVisible = false;
@@ -249,79 +258,24 @@ export default {
 };
 </script>
 <style lang="less" scoped>
-.pvp-hot-sect-list {
-    position: relative;
-    .edit_icon {
-        font-size: 24px;
-        position: absolute;
-        top: 10px;
-        right: 30px;
+@import "@/assets/css/rank-list.less";
+</style>
+<style lang="less">
+.m-rank-list {
+    .el-collapse-item__header {
+        font-size: 18px;
+        padding-left: 24px;
     }
-    ._list {
-        ._item {
-            display: flex;
-            // justify-content: center;
-            align-items: center;
+    .el-dialog__body {
+        width: 500px;
+        margin: 0 auto;
+        .el-select {
             width: 100%;
-            padding: 0 21px;
-            ._img {
-                width: 60px;
-                height: 60px;
-                margin-right: 10px;
-                image {
-                    width: inherit;
-                    height: inherit;
-                }
-            }
-            ._text {
-                width: 60px;
-            }
-            ._num {
-            }
         }
-    }
-
-    ._rank_form {
-        display: flex;
-        justify-content: center;
-        width: 100%;
-        ._left {
-            width: 140px;
-            text-align: right;
-            padding-right: 14px;
-        }
-        ._right {
-            width: 100%;
-            ._rank_form_header {
-                display: flex;
-                margin-bottom: 20px;
-                div {
-                    width: 100%;
-                    text-align: center;
-                }
-            }
+        .m-rank-form-cont {
             .item-list {
-                display: flex;
-                align-items: center;
-                margin-bottom: 10px;
-            }
-            ._rank_form_cont {
-                .rank-item-create {
-                    width: 100%;
-                    height: 30px;
-                    background: #80ccff;
-                    display: flex;
-                    justify-content: center;
-                    align-items: center;
-                    cursor: pointer;
-                    font-size: 21px;
-                    border-radius: 6px;
-                    margin: 12px 0px;
-                }
-                .item-list {
-                    ._icon {
-                        cursor: pointer;
-                    }
+                .el-input {
+                    margin-right: 15px;
                 }
             }
         }

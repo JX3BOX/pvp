@@ -1,4 +1,4 @@
-import { $node, axios, $cms, $helper } from "@jx3box/jx3box-common/js/https_v2";
+import { $node, axios, $cms, $helper, $next } from "@jx3box/jx3box-common/js/https_v2";
 import JX3BOX from "@jx3box/jx3box-common/data/jx3box.json";
 import xfmap from "@jx3box/jx3box-data/data/xf/xf.json";
 
@@ -72,10 +72,21 @@ async function delRankList(id) {
 }
 
 // 获取指定技能百科
-function getWikkToSkill(source_id) {
+function getWikkToSkill(params) {
     return $helper()
         .get("/api/wiki/posts/skill", {
-            params: { source_id: source_id, client: "std" },
+            params: params,
+        })
+        .then((res) => {
+            return res.data;
+        });
+}
+
+// 获取所有日志数据
+function getSandboxLogs(params) {
+    return $next()
+        .get("/api/game/reporter/sandbox", {
+            params: params,
         })
         .then((res) => {
             return res.data;
@@ -93,4 +104,5 @@ export {
     putRankList,
     delRankList,
     getWikkToSkill,
+    getSandboxLogs,
 };
