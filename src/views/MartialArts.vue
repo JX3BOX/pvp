@@ -42,7 +42,7 @@
                                 <img
                                     :src="iconLink(skill?.IconID)"
                                     :alt="skill.IconID"
-                                    class="u-not-mount u-talent-icon"
+                                    class="u-not-mount u-skill-icon"
                                 />
                                 <span class="u-name" :title="skill.Name">{{ skill.Name }}</span>
                             </div>
@@ -80,7 +80,7 @@
                                     class="u-pasv-pic"
                                     @click="setSkill(pasv_info)"
                                 />
-                                <span class="u-name" :title="pasv_info.Name">{{ pasv_info.Name }}</span>
+                                <span class="u-name" :title="subtype">{{ subtype }}</span>
                             </div>
                         </template>
                     </el-popover>
@@ -201,7 +201,7 @@ export default {
     computed: {
         // 心法中文名
         subtype() {
-            return this.$route.query.subtype || "通用";
+            return this.$route.query.subtype || "冰心诀";
         },
         school() {
             return relation.mount_belong_school[this.subtype];
