@@ -37,7 +37,7 @@ import SandboxLogs from "@/components/sandbox/SandboxLogs.vue";
 import SandboxHandbook from "@/components/sandbox/SandboxHandbook.vue";
 import SandboxIntro from "@/components/sandbox/SandboxIntro.vue";
 
-import * as sandboxLogsJson from "@/assets/data/sandboxLog.json";
+import { getSandboxLogs } from "@/service/raw.js";
 export default {
     name: "SandBoxPage",
     components: {
@@ -66,8 +66,10 @@ export default {
     },
     methods: {
         // 取出所有日志数据
-        onSandboxLogs(key = "斗转星移") {
-            this.sandboxLogsData = sandboxLogsJson[key] ? sandboxLogsJson[key] : [];
+        async onSandboxLogs(key = "斗转星移") {
+            let data = await getSandboxLogs({ server: key });
+            console.log(data);
+            this.sandboxLogsData = data.data ? data.data.list : [];
         },
     },
     mounted() {

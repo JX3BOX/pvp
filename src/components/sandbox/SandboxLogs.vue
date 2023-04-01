@@ -12,13 +12,8 @@
     </div>
 </template>
 <script>
-import dayjs from "dayjs";
+import { getFormatDate } from "@/assets/js/mUtils";
 
-// 扩展插件
-import isSameOrBefore from "dayjs/plugin/isSameOrBefore";
-import isSameOrAfter from "dayjs/plugin/isSameOrAfter";
-dayjs.extend(isSameOrBefore);
-dayjs.extend(isSameOrAfter);
 export default {
     name: "sendbox_handbook",
     props: ["sandboxData"],
@@ -31,9 +26,8 @@ export default {
     },
     methods: {
         ToDate(timeStr) {
-            // console.log(timeStr+'000'))
-            let tiem = new Date(Number(timeStr + "000"));
-            return dayjs(tiem).format("YYYY-MM-DD HH:MM");
+            let time = Number(timeStr + "000");
+            return getFormatDate(time, "yyyy-mm-dd MM:mm");
         },
         toLogText(text) {
             let arr = text.split("贡献前三名的帮会将均分");
