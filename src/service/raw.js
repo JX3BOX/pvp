@@ -18,7 +18,7 @@ async function getTalents() {
 }
 
 function getTalentVersions() {
-    return axios.get(JX3BOX.__ossRoot + "data/qixue/index.json");
+    return $oss.get("data/qixue/index.json");
 }
 
 async function getTalents2() {

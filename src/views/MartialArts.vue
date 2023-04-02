@@ -148,7 +148,7 @@
             </el-popover>
         </div>
         <div class="skill">
-            <skillWiki ref="skillWiki" v-model:pasv_skills_props="pasv_skills"></skillWiki>
+            <SkillWiki ref="skillWiki" v-model:pasv_skills_props="pasv_skills"></SkillWiki>
         </div>
     </div>
 </template>
@@ -174,14 +174,14 @@ import JX3_QIXUE from "@jx3box/jx3box-talent";
 import "@jx3box/jx3box-talent/talent.css";
 
 import SkillItem from "@/components/SkillItem.vue";
-import skillWiki from "@/components/skill/SkillWiki.vue";
+import SkillWiki from "@/components/skill/SkillWiki.vue";
 const $store = useStore();
 
 export default {
     name: "MartialArts",
     components: {
         SkillItem,
-        skillWiki,
+        SkillWiki,
     },
     props: [],
     data() {
