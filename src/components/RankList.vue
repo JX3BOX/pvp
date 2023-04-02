@@ -100,12 +100,14 @@
     </div>
 </template>
 <script>
+import { useStore } from "@/store";
 import draggable from "vuedraggable";
 import { getRankList, createRankItem, putRankList, delRankList } from "@/service/raw.js";
 import school from "@jx3box/jx3box-data/data/xf/school.json";
 import { showSchoolIcon } from "@jx3box/jx3box-common/js/utils";
 import User from "@jx3box/jx3box-common/js/user.js";
 
+const $store = useStore();
 export default {
     name: "SkillItem",
     components: {
@@ -147,6 +149,9 @@ export default {
         isEdit() {
             return User.isEditor();
         },
+        thatClient() {
+            return $store.client;
+        },
     },
     methods: {
         async getRankList() {
@@ -154,7 +159,7 @@ export default {
                 client: this.client,
             });
             this.rankList = data.data.reverse();
-            this.statusRankList = this.rankList.filter((item) => item.status);
+            this.statusRankList = this.rankList.filter((item) => item.status && item.client == this.thatClient);
             this.labelOptions = [];
             data.data.forEach((res, index) => {
                 this.labelOptions[index] = {

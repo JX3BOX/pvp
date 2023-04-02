@@ -115,6 +115,9 @@
                         </el-popover>
                     </div>
                 </div>
+                <div>
+                    <ExtraPoint :mountid="mountid" />
+                </div>
             </div>
 
             <el-popover
@@ -175,6 +178,8 @@ import "@jx3box/jx3box-talent/talent.css";
 
 import SkillItem from "@/components/SkillItem.vue";
 import SkillWiki from "@/components/skill/SkillWiki.vue";
+import ExtraPoint from "@/components/skill/ExtraPoint.vue";
+
 const $store = useStore();
 
 export default {
@@ -182,6 +187,7 @@ export default {
     components: {
         SkillItem,
         SkillWiki,
+        ExtraPoint,
     },
     props: [],
     data() {

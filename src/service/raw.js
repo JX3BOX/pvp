@@ -93,6 +93,42 @@ function getSandboxLogs(params) {
         });
 }
 
+// 获取所有奇穴方案列表
+function getExtraPointList(params) {
+    return $cms()
+        .get("/api/cms/bps/talent-recommend", {
+            params: params,
+        })
+        .then((res) => {
+            return res.data;
+        });
+}
+
+// 创建奇穴镇派方案
+function createExtraPointItem(data) {
+    return $cms()
+        .post(`/api/cms/bps/talent-recommend`, data)
+        .then((res) => {
+            return res.data;
+        });
+}
+
+// 修改奇穴镇派方案
+function putExtraPointItem(data) {
+    return $cms()
+        .post(`/api/cms/bps/talent-recommend`, data)
+        .then((res) => {
+            return res.data;
+        });
+}
+function delExtraPointItem(id) {
+    return $cms()
+        .delete(`/api/cms/bps/talent-recommend/${id}`)
+        .then((res) => {
+            return res.data;
+        });
+}
+
 export {
     getSkills,
     getSkill,
@@ -105,4 +141,8 @@ export {
     delRankList,
     getWikkToSkill,
     getSandboxLogs,
+    getExtraPointList,
+    createExtraPointItem,
+    putExtraPointItem,
+    delExtraPointItem,
 };
