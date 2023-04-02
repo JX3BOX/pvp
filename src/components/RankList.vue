@@ -7,7 +7,7 @@
             <el-collapse-item
                 :title="item['label']"
                 :name="item['label']"
-                v-for="(item, index) in rankList"
+                v-for="(item, index) in statusRankList"
                 :key="index"
             >
                 <div class="m-rank-cont-list" v-for="(eitem, eindex) in toJson(item.content)" :key="eindex">
@@ -22,7 +22,7 @@
             </el-collapse-item>
         </el-collapse>
 
-        <el-dialog v-model="dialogFormVisible" title="排行榜设置" center destroy-on-close>
+        <el-dialog v-model="dialogFormVisible" title="排行榜设置" center destroy-on-close @open="openDialogEventFn">
             <el-form>
                 <el-form-item label="榜单" :label-width="formLabelWidth">
                     <el-select
@@ -53,7 +53,7 @@
                     </el-select>
                 </el-form-item>
                 <el-form-item label="状态" :label-width="formLabelWidth">
-                    <el-switch v-model="status" />
+                    <el-switch :active-value="1" :inactive-value="0" v-model="status" />
                 </el-form-item>
             </el-form>
 
@@ -115,7 +115,7 @@ export default {
         return {
             dialogFormVisible: false,
             activeNames: "1",
-            status: true, // number 状态 0 隐藏 1 显示
+            status: 1, // number 状态 0 隐藏 1 显示
             label: "", //榜单
             formLabelWidth: "120",
             client: "std",
@@ -140,6 +140,7 @@ export default {
             ],
             rankList: [],
             thatRankId: 0,
+            statusRankList: [],
         };
     },
     computed: {
@@ -153,6 +154,8 @@ export default {
                 client: this.client,
             });
             this.rankList = data.data.reverse();
+            this.statusRankList = this.rankList.filter((item) => item.status);
+            this.labelOptions = [];
             data.data.forEach((res, index) => {
                 this.labelOptions[index] = {
                     label: res.label,
@@ -174,7 +177,7 @@ export default {
         async createRankItem() {
             let data = {
                 client: this.client,
-                status: this.status ? 1 : 0,
+                status: this.status,
                 label: this.labelVal,
                 content: JSON.stringify(this.content || []),
             };
@@ -209,6 +212,7 @@ export default {
             let thatItem = this.rankList.find(function (item) {
                 return val == item.label;
             });
+
             this.client = thatItem.client || "";
             this.content = JSON.parse(thatItem.content || []);
             this.status = thatItem.status ? 1 : 0;
@@ -227,12 +231,11 @@ export default {
         async saveRankList() {
             let data = {
                 client: this.client,
-                status: this.status ? 1 : 0,
+                status: this.status,
                 label: this.labelVal,
                 content: JSON.stringify(this.content),
             };
             if (!this.thatRankId) {
-                console.log("创建");
                 this.createRankItem();
                 return false;
             }
@@ -250,6 +253,11 @@ export default {
         getImgToName(name) {
             let schoolId = school[name] ? school[name].school_id : 1;
             return showSchoolIcon(schoolId);
+        },
+        // 打开弹出重新计算thatRankId
+        openDialogEventFn() {
+            this.labelVal = this.labelOptions[0].label;
+            this.loadRankItem(this.labelVal);
         },
     },
     created() {
