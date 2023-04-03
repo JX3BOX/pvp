@@ -3,7 +3,13 @@
         <div class="m-extra-point-recommend">
             <div class="m-extra-point-recommend-header">
                 <div class="lf">
-                    <el-select v-model="labelVal" class="m-2" placeholder="Select" size="large">
+                    <el-select
+                        v-model="labelVal"
+                        class="m-2"
+                        placeholder="Select"
+                        size="large"
+                        v-show="ExtraPointList.length > 0"
+                    >
                         <el-option
                             v-for="item in labelOptions"
                             :key="item.value"
@@ -17,9 +23,15 @@
                 </div>
             </div>
         </div>
-        <div class="m-extra-point-content">
-            <div class="m-cont"></div>
-            <div class="m—desc"></div>
+        <div class="m-extra-point-content" v-show="ExtraPointList.length > 0">
+            <div class="m-cont">
+                <div class="m-cont-img" v-for="(item, index) in strToJson(thatExtraPointData.pz_code)" :key="index">
+                    <img :src="iconLink(item.icon)" alt="" srcset="" />
+                    <div class="_name">{{ item.name }}</div>
+                </div>
+            </div>
+            <div class="m-tit">奇穴描述：</div>
+            <div class="m—desc">{{ thatExtraPointData.desc }}</div>
         </div>
 
         <!-- <div>
@@ -67,9 +79,16 @@
             <div class="m-rank-form">
                 <div class="m-left">{{ filtersTypeName() }}描述</div>
                 <div class="m-right">
-                    <el-input v-model="desc" :rows="2" type="textarea" placeholder="Please input" />
+                    <el-input
+                        v-model="desc"
+                        :rows="2"
+                        type="textarea"
+                        placeholder="请添加相关描述"
+                        :autosize="autosize"
+                    />
                 </div>
             </div>
+
             <div class="m-rank-form">
                 <div class="m-left">
                     {{ filtersTypeName() }}编码
@@ -78,7 +97,31 @@
                     </a>
                 </div>
                 <div class="m-right">
-                    <el-input v-model="pz_code" :rows="2" type="textarea" placeholder="Please input" />
+                    <el-input
+                        v-model="code"
+                        :rows="2"
+                        type="textarea"
+                        placeholder="请前往复制对应编码填入"
+                        :autosize="autosize"
+                    />
+                </div>
+            </div>
+
+            <div class="m-rank-form">
+                <div class="m-left">
+                    配装编码
+                    <a class="u-recipe-item" :href="recipeLink">
+                        去复制<el-icon><Promotion /></el-icon>
+                    </a>
+                </div>
+                <div class="m-right">
+                    <el-input
+                        v-model="pz_code"
+                        :rows="2"
+                        type="textarea"
+                        placeholder="请前往复制对应编码填入"
+                        :autosize="autosize"
+                    />
                 </div>
             </div>
 
@@ -95,12 +138,13 @@
 import { useStore } from "@/store";
 import User from "@jx3box/jx3box-common/js/user.js";
 import { createExtraPointItem, getExtraPointList, putExtraPointItem, delExtraPointItem } from "@/service/raw";
+import { iconLink } from "@jx3box/jx3box-common/js/utils";
 const $store = useStore();
 export default {
     props: ["mountid"],
     data() {
         return {
-            dialogFormVisible: true,
+            dialogFormVisible: false,
             formLabelWidth: "120",
             options: [],
             labelOptions: [],
@@ -124,6 +168,8 @@ export default {
 
             ExtraPointList: [],
             thatExtraPointId: 0,
+            autosize: { minRows: 2, maxRows: 4 },
+            thatExtraPointData: {},
         };
     },
     computed: {
@@ -135,6 +181,7 @@ export default {
         },
     },
     methods: {
+        iconLink,
         filtersTypeName() {
             return this.client == "std" ? "奇穴" : "镇派";
         },
@@ -157,6 +204,10 @@ export default {
                     value: res.key,
                 };
             });
+            if (!this.thatExtraPointId && this.labelOptions.length > 0) {
+                this.labelVal = this.labelOptions[0].value;
+                this.loadExtraPointItem(this.labelVal);
+            }
         },
         async saveExtraPoint() {
             let data = {
@@ -164,7 +215,7 @@ export default {
                 subtype: this.subtype,
                 key: this.labelVal,
                 client: this.client,
-                code: "",
+                code: this.code,
                 pz_code: this.pz_code,
                 desc: this.desc,
             };
@@ -187,7 +238,7 @@ export default {
                 subtype: this.subtype,
                 key: this.labelVal,
                 client: this.client,
-                code: "",
+                code: this.code,
                 pz_code: this.pz_code,
                 desc: this.desc,
             };
@@ -221,8 +272,10 @@ export default {
             this.subtype = thatItem.subtype || "pvp";
             this.pz_code = thatItem.pz_code || "";
             this.desc = thatItem.desc || "";
+            this.code = thatItem.code || "";
 
             this.thatExtraPointId = thatItem.id;
+            this.thatExtraPointData = thatItem;
         },
         changeExtraPointItem(val) {
             for (let i = 0; i < this.labelOptions.length; i++) {
@@ -239,13 +292,79 @@ export default {
             this.desc = "";
             // this.createRankItem();
         },
+        strToJson(data) {
+            try {
+                return JSON.parse(data);
+            } catch (error) {
+                return [];
+            }
+        },
+
+        // 抛出给父组件方法刷新子组件
+        reloadElement() {
+            this.code = "";
+            this.desc = "";
+            this.pz_code = "";
+            this.ExtraPointList = [];
+            this.thatExtraPointId = 0;
+            this.thatExtraPointData = {};
+            this.getExtraPointList();
+        },
     },
-    created() {
-        this.getExtraPointList();
-    },
+    created() {},
     mounted() {
+        this.getExtraPointList();
         console.log(this.mountid);
     },
 };
 </script>
-<style lang="less" scoped></style>
+<style lang="less" scoped>
+.m-extra-point-recommend-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 20px 0;
+    .lf {
+    }
+    .m-rank-edit-icon {
+        color: #fff;
+        font-size: 22px;
+        margin-left: 10px;
+        cursor: pointer;
+    }
+}
+
+.m-extra-point-content {
+    .m-cont {
+        display: flex;
+        flex-wrap: wrap;
+        .m-cont-img {
+            margin-right: 8px;
+            margin-bottom: 12px;
+            img {
+                width: 38px;
+                height: 38px;
+            }
+            ._name {
+                color: #fff;
+                font-size: 12px;
+                text-align: center;
+            }
+        }
+    }
+    .m-tit {
+        font-size: 16px;
+        color: #fff;
+        margin: 10px 0;
+    }
+    .m—desc {
+        font-size: 14px;
+        color: #fff;
+        height: 150px;
+        border: 1px solid #27381a;
+        overflow-y: hidden;
+        padding: 15px;
+        border-radius: 8px;
+    }
+}
+</style>

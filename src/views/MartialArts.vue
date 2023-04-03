@@ -116,7 +116,7 @@
                     </div>
                 </div>
                 <div>
-                    <ExtraPoint :mountid="mountid" />
+                    <ExtraPoint ref="ExtraPoint" :key="mountid" :mountid="mountid" />
                 </div>
             </div>
 
@@ -208,6 +208,7 @@ export default {
 
             skills: [],
             selectedSkill: null,
+            ExtraPointKey: "",
         };
     },
     computed: {
@@ -311,6 +312,7 @@ export default {
         },
     },
     mounted: async function () {
+        console.log(this);
         this.talents = await getTalents();
         this.installTalent();
     },

@@ -114,9 +114,9 @@ function createExtraPointItem(data) {
 }
 
 // 修改奇穴镇派方案
-function putExtraPointItem(data) {
+function putExtraPointItem(id, data) {
     return $cms()
-        .post(`/api/cms/bps/talent-recommend`, data)
+        .put(`/api/cms/bps/talent-recommend/${id}`, data)
         .then((res) => {
             return res.data;
         });
