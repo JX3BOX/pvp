@@ -147,9 +147,11 @@
                 </el-tooltip>
             </el-popover>
         </div>
-        <div class="skill">
+        <div class="m-skill-wiki">
             <skillWiki ref="skillWiki" v-model:pasv_skills_props="pasv_skills"></skillWiki>
         </div>
+
+        <CompetitiveTrick />
     </div>
 </template>
 
@@ -175,6 +177,7 @@ import "@jx3box/jx3box-talent/talent.css";
 
 import SkillItem from "@/components/SkillItem.vue";
 import skillWiki from "@/components/skill/SkillWiki.vue";
+import CompetitiveTrick from "@/components/CompetitiveTrick.vue";
 const $store = useStore();
 
 export default {
@@ -182,8 +185,8 @@ export default {
     components: {
         SkillItem,
         skillWiki,
+        CompetitiveTrick,
     },
-    props: [],
     data() {
         return {
             loading: false,

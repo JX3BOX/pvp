@@ -28,6 +28,7 @@ export default {
             icons: markRaw({
                 pvp_sandbox_intro: "Compass",
                 pvp_sandbox_rule: "DataBoard",
+                pvp_sandbox_background: "Monitor",
             }),
         };
     },
@@ -56,7 +57,7 @@ export default {
     methods: {
         loadData() {
             this.loading = true;
-            const key = "pvp_sandbox_intro,pvp_sandbox_rule";
+            const key = "pvp_sandbox_intro,pvp_sandbox_rule,pvp_sandbox_background";
             getSandboxIntro({ names: key })
                 .then((res) => {
                     this.data = res.data.data.list || [];
