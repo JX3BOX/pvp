@@ -1,6 +1,6 @@
 <template>
-    <div class="m-skill-wiki">
-        <div class="m-wiki-post-panel" v-if="wikiData && wikiData.post">
+    <div class="m-skill-wiki" v-if="wikiData && wikiData.post">
+        <div class="m-wiki-post-panel">
             <div class="head-title">
                 <span class="u-txt">技能百科</span>
                 <a
@@ -43,21 +43,21 @@
                 </div>
             </div>
         </div>
-        <div class="m-wiki-post-empty" v-if="is_empty">
-            <!-- 非默认心法技能说明此处已选技能但无百科 -->
+    </div>
+    <div class="m-wiki-post-empty" v-if="is_empty">
+        <!-- 非默认心法技能说明此处已选技能但无百科 -->
 
-            <!-- <div class="no_active_skill" v-if="pasv_skills_data.length<1||pasv_skills_data.indexOf(activeSkill) !== -1">
-                <span>请先选择技能后查看技能百科</span>
-            </div> -->
-            <div class="no_skill_post" v-if="pasv_skills_data.indexOf(activeSkill) == -1">
-                <i class="el-icon-s-opportunity"></i>
-                <span>暂无百科，我要</span>
-                <a class="s-link" target="_blank" :href="publish_url(`skill/${activeSkill}`)">完善百科</a>
-            </div>
+        <!-- <div class="no_active_skill" v-if="pasv_skills_data.length<1||pasv_skills_data.indexOf(activeSkill) !== -1">
+            <span>请先选择技能后查看技能百科</span>
+        </div> -->
+        <div class="no_skill_post" v-if="pasv_skills_data.indexOf(activeSkill) == -1">
+            <i class="el-icon-s-opportunity"></i>
+            <span>暂无百科，我要</span>
+            <a class="s-link" target="_blank" :href="publish_url(`skill/${activeSkill}`)">完善百科</a>
+        </div>
 
-            <div class="no_active_skill" v-else>
-                <span>请先选择技能后查看技能百科</span>
-            </div>
+        <div class="no_active_skill" v-else>
+            <span>请先选择技能后查看技能百科</span>
         </div>
     </div>
 </template>

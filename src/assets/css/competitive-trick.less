@@ -1,0 +1,105 @@
+.m-competitive-trick {
+    background: #1a2b22;
+    border-radius: 8px;
+    padding: 20px;
+    color: #fff;
+    margin-top: 20px;
+}
+.m-trick-item__content {
+    .flex;
+    gap: 20px;
+}
+.m-trick-item__title {
+    margin-bottom: 10px;
+}
+.m-trick-item__left {
+    width: 80px;
+    .m-author {
+        .flex;
+        flex-direction: column;
+        align-items: center;
+    }
+    .u-avatar {
+        .size(68px);
+        border-radius: 50%;
+    }
+    .u-name {
+        color: #fff;
+        margin-top: 5px;
+        font-size: 13px;
+        width: 100%;
+        .nobreak;
+        text-align: center;
+    }
+}
+
+.m-trick-item__right {
+    flex: 1;
+
+    .u-skills {
+        .flex;
+        gap: 30px;
+
+        .u-skill {
+            .pr;
+            .flex;
+            flex-direction: column;
+            align-items: center;
+            &:not(:last-of-type)::after {
+                content: "▲";
+                .pa;
+                right: -25px;
+                top: 12px;
+                transform: rotate(90deg);
+            }
+        }
+
+        .u-skill-name {
+            font-size: 13px;
+        }
+    }
+
+    .m-header {
+        background-color: rgb(196, 196, 196);
+        padding: 10px 20px;
+        border-radius: 4px;
+        color: #000;
+        margin-bottom: 20px;
+        line-height: 1.5;
+    }
+
+    .m-content {
+        background-color: rgb(196, 196, 196);
+        padding: 10px 20px;
+        border-radius: 4px;
+        color: #000;
+    }
+
+    .m-talent {
+        margin-bottom: 20px;
+    }
+
+    .m-skills {
+        .m-skill-item {
+            &:not(:last-of-type) {
+                margin-bottom: 10px;
+            }
+        }
+
+        .u-title {
+            margin-bottom: 10px;
+        }
+
+        .u-desc {
+            font-size: 12px;
+            color: rgb(117, 117, 117);
+            margin-top: 5px;
+        }
+
+        .u-icon {
+            .pr;
+            top: 2px;
+            margin-right: 2px;
+        }
+    }
+}

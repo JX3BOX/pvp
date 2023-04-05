@@ -161,9 +161,11 @@
         <div class="p-special-skill" v-show="isSpecialSkill">
             <SpecialSkill :key="mountid" :mountid="mountid"></SpecialSkill>
         </div>
-        <div class="skill">
-            <SkillWiki ref="skillWiki" v-model:pasv_skills_props="pasv_skills"></SkillWiki>
+        <div class="m-skill-wiki">
+            <skillWiki ref="skillWiki" v-model:pasv_skills_props="pasv_skills"></skillWiki>
         </div>
+
+        <CompetitiveTrick />
     </div>
 </template>
 
@@ -188,10 +190,12 @@ import JX3_QIXUE from "@jx3box/jx3box-talent";
 import "@jx3box/jx3box-talent/talent.css";
 
 import SkillItem from "@/components/SkillItem.vue";
+
 import SkillWiki from "@/components/skill/SkillWiki.vue";
 import ExtraPoint from "@/components/skill/ExtraPoint.vue";
-
 import SpecialSkill from "@/components/skill/SpecialSkill.vue";
+import CompetitiveTrick from "@/components/CompetitiveTrick.vue";
+
 const $store = useStore();
 
 export default {
@@ -201,8 +205,8 @@ export default {
         SkillWiki,
         ExtraPoint,
         SpecialSkill,
+        CompetitiveTrick,
     },
-    props: [],
     data() {
         return {
             loading: false,
