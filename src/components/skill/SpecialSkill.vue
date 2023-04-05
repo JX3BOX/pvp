@@ -117,37 +117,12 @@ export default {
         return {
             SpecialSkillList: [
                 {
-                    name: "tab1", // tab页名称
+                    name: "特殊技能分类1", // tab页名称
                     skills: [
                         {
                             icon: "icon1", // 技能图标
-                            name: "skill1", // 技能名称
-                            desc: "技能描述", // 技能描述
-                        },
-                        {
-                            icon: "icon12", // 技能图标
-                            name: "skill2", // 技能名称
-                            desc: "desc2", // 技能描述
-                        },
-                    ],
-                },
-                {
-                    name: "tab1", // tab页名称
-                    skills: [
-                        {
-                            icon: "icon1", // 技能图标
-                            name: "skill1", // 技能名称
-                            desc: "desc1", // 技能描述
-                        },
-                        {
-                            icon: "icon12", // 技能图标
-                            name: "skill2", // 技能名称
-                            desc: "desc2", // 技能描述
-                        },
-                        {
-                            icon: "icon12", // 技能图标
-                            name: "skill2", // 技能名称
-                            desc: "desc2", // 技能描述
+                            name: "技能示例", // 技能名称
+                            desc: "技能描述示例", // 技能描述
                         },
                     ],
                 },

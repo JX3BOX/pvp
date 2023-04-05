@@ -223,7 +223,7 @@ export default {
             selectedSkill: null,
             ExtraPointKey: "",
 
-            isSpecialSkill: true,
+            isSpecialSkill: false,
         };
     },
     computed: {
