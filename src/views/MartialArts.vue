@@ -1,6 +1,14 @@
 <template>
     <div class="p-martial-content">
-        <div class="p-martial-arts">
+        <div class="check-special-skill">
+            <div class="check-special-skill-icon" v-if="isSpecialSkill" @click="isSpecialSkill = false">
+                特殊技能<el-icon class="m-el-icon"><ArrowUpBold /></el-icon>
+            </div>
+            <div class="check-special-skill-icon" v-else @click="isSpecialSkill = true">
+                门派技能<el-icon class="m-el-icon"><ArrowDownBold /></el-icon>
+            </div>
+        </div>
+        <div class="p-martial-arts" v-show="!isSpecialSkill">
             <div class="m-martial-skills" v-loading="loading">
                 <div v-for="kungfu in kungfus" :key="kungfu" class="m-martial-skill">
                     <div class="u-title">
@@ -115,6 +123,9 @@
                         </el-popover>
                     </div>
                 </div>
+                <div>
+                    <ExtraPoint ref="ExtraPoint" :key="mountid" :mountid="mountid" />
+                </div>
             </div>
 
             <el-popover
@@ -147,6 +158,9 @@
                 </el-tooltip>
             </el-popover>
         </div>
+        <div class="p-special-skill" v-show="isSpecialSkill">
+            <SpecialSkill :key="mountid" :mountid="mountid"></SpecialSkill>
+        </div>
         <div class="m-skill-wiki">
             <skillWiki ref="skillWiki" v-model:pasv_skills_props="pasv_skills"></skillWiki>
         </div>
@@ -176,15 +190,21 @@ import JX3_QIXUE from "@jx3box/jx3box-talent";
 import "@jx3box/jx3box-talent/talent.css";
 
 import SkillItem from "@/components/SkillItem.vue";
-import skillWiki from "@/components/skill/SkillWiki.vue";
+
+import SkillWiki from "@/components/skill/SkillWiki.vue";
+import ExtraPoint from "@/components/skill/ExtraPoint.vue";
+import SpecialSkill from "@/components/skill/SpecialSkill.vue";
 import CompetitiveTrick from "@/components/CompetitiveTrick.vue";
+
 const $store = useStore();
 
 export default {
     name: "MartialArts",
     components: {
         SkillItem,
-        skillWiki,
+        SkillWiki,
+        ExtraPoint,
+        SpecialSkill,
         CompetitiveTrick,
     },
     data() {
@@ -205,6 +225,9 @@ export default {
 
             skills: [],
             selectedSkill: null,
+            ExtraPointKey: "",
+
+            isSpecialSkill: false,
         };
     },
     computed: {
@@ -308,6 +331,7 @@ export default {
         },
     },
     mounted: async function () {
+        console.log(this);
         this.talents = await getTalents();
         this.installTalent();
     },

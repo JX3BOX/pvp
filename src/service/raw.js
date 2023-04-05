@@ -18,7 +18,7 @@ async function getTalents() {
 }
 
 function getTalentVersions() {
-    return axios.get(JX3BOX.__ossRoot + "data/qixue/index.json");
+    return $oss.get("data/qixue/index.json");
 }
 
 async function getTalents2() {
@@ -93,6 +93,68 @@ function getSandboxLogs(params) {
         });
 }
 
+// 获取所有奇穴方案列表
+function getExtraPointList(params) {
+    return $cms()
+        .get("/api/cms/bps/talent-recommend", {
+            params: params,
+        })
+        .then((res) => {
+            return res.data;
+        });
+}
+
+// 创建奇穴镇派方案
+function createExtraPointItem(data) {
+    return $cms()
+        .post(`/api/cms/bps/talent-recommend`, data)
+        .then((res) => {
+            return res.data;
+        });
+}
+
+// 修改奇穴镇派方案
+function putExtraPointItem(id, data) {
+    return $cms()
+        .put(`/api/cms/bps/talent-recommend/${id}`, data)
+        .then((res) => {
+            return res.data;
+        });
+}
+// 删除奇穴镇派
+function delExtraPointItem(id) {
+    return $cms()
+        .delete(`/api/cms/bps/talent-recommend/${id}`)
+        .then((res) => {
+            return res.data;
+        });
+}
+
+// 根据name或id查询数据(包括技能 buff,npc,物品，可交互物件)
+function getAllDataToName(name, params) {
+    return $node().get(`/skill/name/${name}`, {
+        params: params,
+    });
+}
+
+// 获取所有特殊技能分类列表
+function getSpecialSkillList(mount) {
+    return $cms()
+        .get(`/api/cms/bps/pvp-special-skill/${mount}`)
+        .then((res) => {
+            return res.data;
+        });
+}
+
+// // 创建特殊技能分类
+function createSpecialSkillItem(data) {
+    return $cms()
+        .post(`/api/cms/bps/pvp-special-skill`, data)
+        .then((res) => {
+            return res.data;
+        });
+}
+
 export {
     getSkills,
     getSkill,
@@ -105,4 +167,11 @@ export {
     delRankList,
     getWikkToSkill,
     getSandboxLogs,
+    getExtraPointList,
+    createExtraPointItem,
+    putExtraPointItem,
+    delExtraPointItem,
+    getAllDataToName,
+    getSpecialSkillList,
+    createSpecialSkillItem,
 };
