@@ -1,9 +1,12 @@
+.m-wiki {
+    .mt(20px);
+}
+
 .m-skill-wiki {
     background-color: #fafbfc;
     border: 1px solid #eee;
     border-radius: 5px;
     font-size: 14px;
-    .mt(20px);
     .u-trigger {
         .pointer;
         .x;
@@ -32,6 +35,13 @@
             top: 50%;
             transform: translateY(-50%);
             font-size: 12px;
+        }
+
+        .u-txt {
+            .flex;
+            align-items: center;
+            gap: 5px;
+            color: @color;
         }
     }
     .m-wiki-meta {
@@ -109,13 +119,23 @@
     }
 }
 .m-wiki-post-empty {
-    .u-msg-yellow;
+    // .u-msg-yellow;
+    background-color: @bg-gray;
+    padding: 8px 10px;
+    .r(4px);
     .x;
     .s-link {
         .underline(@color-link);
     }
-    letter-spacing: 2px;
-    .fz(14px);
+    letter-spacing: 1px;
+    .fz(13px);
+
+    .no_skill_post {
+        .flex;
+        align-items: center;
+        justify-content: center;
+        gap: 5px;
+    }
 }
 
 .m-wiki-compatible {

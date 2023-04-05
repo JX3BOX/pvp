@@ -161,9 +161,7 @@
         <div class="p-special-skill" v-show="isSpecialSkill">
             <SpecialSkill :key="mountid" :mountid="mountid"></SpecialSkill>
         </div>
-        <div class="m-skill-wiki">
-            <skillWiki ref="skillWiki" v-model:pasv_skills_props="pasv_skills"></skillWiki>
-        </div>
+        <skillWiki ref="skillWiki" v-model:pasv_skills_props="pasv_skills"></skillWiki>
 
         <CompetitiveTrick />
     </div>
