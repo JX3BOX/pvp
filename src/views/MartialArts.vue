@@ -1,6 +1,14 @@
 <template>
     <div class="p-martial-content">
-        <div class="p-martial-arts">
+        <div class="check-special-skill">
+            <div class="check-special-skill-icon" v-if="isSpecialSkill" @click="isSpecialSkill = false">
+                特殊技能<el-icon class="m-el-icon"><ArrowUpBold /></el-icon>
+            </div>
+            <div class="check-special-skill-icon" v-else @click="isSpecialSkill = true">
+                门派技能<el-icon class="m-el-icon"><ArrowDownBold /></el-icon>
+            </div>
+        </div>
+        <div class="p-martial-arts" v-show="!isSpecialSkill">
             <div class="m-martial-skills" v-loading="loading">
                 <div v-for="kungfu in kungfus" :key="kungfu" class="m-martial-skill">
                     <div class="u-title">
@@ -150,6 +158,9 @@
                 </el-tooltip>
             </el-popover>
         </div>
+        <div class="p-special-skill" v-show="isSpecialSkill">
+            <SpecialSkill :key="mountid" :mountid="mountid"></SpecialSkill>
+        </div>
         <div class="skill">
             <SkillWiki ref="skillWiki" v-model:pasv_skills_props="pasv_skills"></SkillWiki>
         </div>
@@ -180,6 +191,7 @@ import SkillItem from "@/components/SkillItem.vue";
 import SkillWiki from "@/components/skill/SkillWiki.vue";
 import ExtraPoint from "@/components/skill/ExtraPoint.vue";
 
+import SpecialSkill from "@/components/skill/SpecialSkill.vue";
 const $store = useStore();
 
 export default {
@@ -188,6 +200,7 @@ export default {
         SkillItem,
         SkillWiki,
         ExtraPoint,
+        SpecialSkill,
     },
     props: [],
     data() {
@@ -209,6 +222,8 @@ export default {
             skills: [],
             selectedSkill: null,
             ExtraPointKey: "",
+
+            isSpecialSkill: true,
         };
     },
     computed: {
