@@ -24,54 +24,86 @@
         padding: 10px 15px;
         background-color: #f5f7fa;
         border-bottom: 1px solid #eee;
-    }
-    .m-wiki-metas {
-        color: #3d454d;
-        font-family: -apple-system, Microsoft YaHei, Trebuchet MS, Calibri, BlinkMacSystemFont, Segoe UI, Helvetica Neue,
-            Helvetica, sans-serif;
-        text-rendering: optimizelegibility;
-        letter-spacing: 0.2px;
-        line-height: 1.6em;
-        word-break: break-all;
-        outline: none;
-        margin-bottom: 5px;
-        font-size: 12px;
-        padding: 10px 15px 0px;
-        display: flex;
-        .u-meta {
-            height: 28px;
-            line-height: 28px;
-            margin-right: 10px;
-            padding: 3px 8px;
+        .pr;
 
+        .u-button {
+            position: absolute;
+            right: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 12px;
+        }
+    }
+    .m-wiki-meta {
+        .mb(5px);
+        font-size: 12px;
+
+        .u-meta,
+        .u-label,
+        .u-value {
+            .dbi;
+            vertical-align: middle;
+        }
+
+        .u-meta {
+            .mr(15px);
+
+            &:last-child {
+                .mr(0);
+            }
+
+            @media screen and (max-width: @phone) {
+                .db;
+                .mr(0);
+                .mb(5px);
+
+                &:last-child {
+                    .mb(0);
+                }
+            }
+        }
+
+        .u-label {
+            .mr(10px);
+            padding: 3px 8px;
+            background-color: #f2f2f2;
+            .r(2px);
             font-style: normal;
             color: #666;
-            display: flex;
-            align-items: center;
-            .u-creator {
-                display: inline-block;
-                *display: inline;
-                *zoom: 1;
-                width: 24px;
-                height: 24px;
-                margin-right: 5px;
-                border-radius: 50%;
-                overflow: hidden;
+        }
+
+        .el-icon-star-on {
+            color: yellowgreen;
+            font-size: 16px;
+        }
+
+        .u-creator {
+            .dbi;
+            .w(24px);
+            .h(24px);
+            .mr(5px);
+            .r(50%);
+            overflow: hidden;
+
+            &:last-child {
+                .mr(0);
             }
-            .u-label {
-                font-style: normal;
-                margin-right: 10px;
-                padding: 3px 8px;
-                background-color: #f2f2f2;
-                border-radius: 2px;
-                font-style: normal;
-                color: #666;
+
+            img {
+                .w(100%);
+                .h(auto);
             }
+        }
+
+        @media screen and (max-width: @phone) {
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
         }
     }
 
     .m-panel-body {
-        padding: 0 15px;
+        padding: 15px;
         line-height: 1.6em;
         word-break: break-all;
     }

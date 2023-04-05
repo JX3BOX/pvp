@@ -3,27 +3,35 @@
         <div class="m-wiki-post-panel" v-if="wikiData && wikiData.post">
             <div class="head-title">
                 <span class="u-txt">技能百科</span>
-            </div>
-            <div class="m-wiki-metas">
-                <div class="u-meta">
-                    <em class="u-label">参与贡献</em
-                    ><a
-                        target="_blank"
-                        :href="`/author/${item.id}`"
-                        class="u-value u-creator"
-                        v-for="(item, index) in userData"
-                        :key="index"
-                        ><img :src="item.avatar" :alt="item.nickname" :title="item.nickname"
-                    /></a>
-                </div>
-                <!---->
-                <div class="u-meta"><em class="u-label">热度</em><span class="u-value"></span></div>
-                <div class="u-meta">
-                    <em class="u-label">更新时间</em>
-                    <span class="u-value">{{ wikiData.post ? ToDate(wikiData.post.updated) : "" }}</span>
-                </div>
+                <a
+                    class="u-button el-button el-button--primary"
+                    :href="publish_url(`skill/${activeSkill}`)"
+                    target="_blank"
+                >
+                    <el-icon><Edit /></el-icon>
+                    <span>完善技能百科</span>
+                </a>
             </div>
             <div class="m-panel-body">
+                <div class="m-wiki-meta">
+                    <div class="u-meta">
+                        <em class="u-label">参与贡献</em
+                        ><a
+                            target="_blank"
+                            :href="`/author/${item.id}`"
+                            class="u-value u-creator"
+                            v-for="(item, index) in userData"
+                            :key="index"
+                            ><img :src="item.avatar" :alt="item.nickname" :title="item.nickname"
+                        /></a>
+                    </div>
+                    <!---->
+                    <div class="u-meta"><em class="u-label">热度</em><span class="u-value"></span></div>
+                    <div class="u-meta">
+                        <em class="u-label">更新时间</em>
+                        <span class="u-value">{{ wikiData.post ? ToDate(wikiData.post.updated) : "" }}</span>
+                    </div>
+                </div>
                 <div v-html="wikiData.post.content"></div>
                 <div class="m-wiki-signature">
                     <i class="el-icon-edit"></i>
@@ -37,17 +45,17 @@
         </div>
         <div class="m-wiki-post-empty" v-if="is_empty">
             <!-- 非默认心法技能说明此处已选技能但无百科 -->
-            <!-- <div class="no-active-skill" v-if="pasv_skills_data.length<1||pasv_skills_data.indexOf(active_skill) !== -1">
+
+            <!-- <div class="no_active_skill" v-if="pasv_skills_data.length<1||pasv_skills_data.indexOf(activeSkill) !== -1">
                 <span>请先选择技能后查看技能百科</span>
             </div> -->
-            <div class="no-skill-post" v-if="pasv_skills_data.indexOf(active_skill) == -1">
+            <div class="no_skill_post" v-if="pasv_skills_data.indexOf(activeSkill) == -1">
                 <i class="el-icon-s-opportunity"></i>
                 <span>暂无百科，我要</span>
-                <a class="s-link" target="_blank" :href="publish_url(`skill/${active_skill}`)">完善百科</a>
+                <a class="s-link" target="_blank" :href="publish_url(`skill/${activeSkill}`)">完善百科</a>
             </div>
 
             <div class="no_active_skill" v-else>
-
                 <span>请先选择技能后查看技能百科</span>
             </div>
         </div>
@@ -74,29 +82,25 @@ export default {
     },
     props: ["pasv_skills_props"],
     computed: {
-        active_skill() {
+        activeSkill() {
             return $store.activeSkill || 0;
         },
         is_empty: function () {
             return !this.wikiData?.post;
         },
-        that_client() {
-            return $store.client;
-        },
     },
     methods: {
         async getWikkToSkill() {
-
             let data = await getWikkToSkill({
-                source_id: this.active_skill,
-                client: this.that_client,
+                source_id: this.activeSkill,
+                client: "std",
             });
-            this.wikiData = data.data ? data.data[this.active_skill] : {};
+
+            this.wikiData = data.data ? data.data[this.activeSkill] : {};
             this.userData = this.wikiData?.users;
         },
         publish_url: publishLink,
         martialAltsToPasv_skills(data) {
-
             this.pasv_skills_data = data;
         },
         ToDate(timeStr) {
@@ -105,10 +109,9 @@ export default {
         },
     },
     watch: {
-        active_skill() {
+        activeSkill() {
             this.getWikkToSkill();
         },
-
     },
 };
 </script>
