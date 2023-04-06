@@ -35,44 +35,8 @@ function getSkill(xf, client = "std") {
     return fetch(url).then((res) => res.json());
 }
 
-// 创建热门门派排行榜
-function createRankItem(data) {
-    return $cms()
-        .post(`/api/cms/bps/pvp-jjc-rank`, data)
-        .then((res) => {
-            return res.data;
-        });
-}
-
-// 获取热门门派排行榜
-async function getRankList(params) {
-    return $cms()
-        .get(`/api/cms/bps/pvp-jjc-rank`, {
-            params: params,
-        })
-        .then((res) => {
-            return res.data;
-        });
-}
-// 更新排行榜
-async function putRankList(id, data) {
-    return $cms()
-        .put(`/api/cms/bps/pvp-jjc-rank/${id}`, data)
-        .then((res) => {
-            return res.data;
-        });
-}
-// 删除排行榜
-async function delRankList(id) {
-    return $cms()
-        .delete(`/api/cms/bps/pvp-jjc-rank/${id}`)
-        .then((res) => {
-            return res.data;
-        });
-}
-
 // 获取指定技能百科
-function getWikkToSkill(params) {
+function getWikiToSkill(params) {
     return $helper()
         .get("/api/wiki/posts/skill", {
             params: params,
@@ -161,11 +125,7 @@ export {
     getTalents,
     getTalents2,
     getTalentVersions,
-    getRankList,
-    createRankItem,
-    putRankList,
-    delRankList,
-    getWikkToSkill,
+    getWikiToSkill,
     getSandboxLogs,
     getExtraPointList,
     createExtraPointItem,

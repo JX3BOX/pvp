@@ -27,7 +27,7 @@
                         <a href="https://jq.qq.com/?_wv=1027&k=mEl1e2hL">645370207</a>
                     </strong>
                 </Side>
-                <RankList />
+                <MiniRank />
             </RightSidebar>
             <Footer></Footer>
         </Main>
@@ -39,7 +39,8 @@
 import Nav from "@/components/list/ListNav.vue";
 import Side from "@/components/list/RightSide.vue";
 import Tabs from "@/components/Tabs.vue";
-import RankList from "@/components/RankList.vue";
+// import RankList from "@/components/RankList.vue";
+import MiniRank from "@/components/MiniRank.vue";
 export default {
     name: "App",
     props: {
@@ -57,7 +58,8 @@ export default {
         Nav,
         Side,
         Tabs,
-        RankList,
+        // RankList,
+        MiniRank,
     },
 };
 </script>

@@ -66,7 +66,7 @@
 <script>
 import { useStore } from "@/store";
 const $store = useStore();
-import { getWikkToSkill } from "@/service/raw.js";
+import { getWikiToSkill } from "@/service/raw.js";
 import { publishLink } from "@jx3box/jx3box-common/js/utils";
 import dayjs from "dayjs";
 // 扩展插件
@@ -92,8 +92,8 @@ export default {
         },
     },
     methods: {
-        async getWikkToSkill() {
-            let data = await getWikkToSkill({
+        async getWikiToSkill() {
+            let data = await getWikiToSkill({
                 source_id: this.activeSkill,
                 client: "std",
             });
@@ -112,7 +112,7 @@ export default {
     },
     watch: {
         activeSkill() {
-            this.getWikkToSkill();
+            this.getWikiToSkill();
         },
     },
 };

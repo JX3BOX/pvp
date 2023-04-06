@@ -329,7 +329,6 @@ export default {
         },
     },
     mounted: async function () {
-        console.log(this);
         this.talents = await getTalents();
         this.installTalent();
     },

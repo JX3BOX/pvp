@@ -1,0 +1,333 @@
+<template>
+    <div class="m-rank-ladder-mini" v-loading="loading">
+        <div class="m-ladder-header">
+            <h3 class="m-ladder-title">
+                <span class="u-title">
+                    <img class="u-icon" svg-inline src="@/assets/img/side/rank.svg" /> 竞技场热门榜
+                </span>
+                <el-icon v-if="isEditor" class="u-edit-icon" @click="onSettingIconClick"><Setting /></el-icon>
+            </h3>
+            <el-select class="m-ladder-select" v-model="active" placeholder="请选择" size="small">
+                <el-option
+                    v-for="item in filterRankList"
+                    :key="item.id"
+                    :label="item.label"
+                    :value="item.id"
+                ></el-option>
+            </el-select>
+        </div>
+
+        <div class="m-ladder-rank">
+            <ul v-if="content?.length">
+                <li v-for="(item, index) in content" :key="item.name" class="u-link">
+                    <span class="u-order" :class="highlight(index)">{{ index + 1 }}</span>
+                    <img :src="showSchoolIcon(item.name)" alt="" class="u-img" />
+                    <span class="u-team">{{ item.name }}</span>
+                    <span class="u-server">{{ item.num }}</span>
+                </li>
+            </ul>
+        </div>
+
+        <el-dialog v-model="showDialog" title="竞技场热门榜设置" class="m-rank-pop" append-to-body width="600px">
+            <el-form :model="form" ref="form" label-position="top">
+                <el-form-item label="榜单名称">
+                    <el-select
+                        v-model="form.label"
+                        filterable
+                        allow-create
+                        placeholder="请选择现有榜单或输入新的榜单"
+                        style="width: 100%"
+                        @change="onLabelChange"
+                    >
+                        <el-option
+                            v-for="item in rankList"
+                            :key="item.id"
+                            :label="item.label"
+                            :value="item.id"
+                        ></el-option>
+                    </el-select>
+                </el-form-item>
+                <el-form-item label="客户端">
+                    <el-select v-model="form.client" placeholder="请选择客户端" style="width: 100%">
+                        <el-option
+                            v-for="item in clients"
+                            :key="item.value"
+                            :label="item.label"
+                            :value="item.value"
+                        ></el-option>
+                    </el-select>
+                </el-form-item>
+                <el-form-item label="状态" class="m-status">
+                    <template #label>
+                        <span class="u-status">状态</span>
+                        <el-tooltip content="控制榜单是否显示">
+                            <el-icon><QuestionFilled /></el-icon>
+                        </el-tooltip>
+                    </template>
+                    <el-switch v-model="form.status" :inactive-value="0" :active-value="1"></el-switch>
+                </el-form-item>
+                <el-form-item label="内容" class="m-content">
+                    <draggable v-model="form.content" item-key="index" animation="300" handle=".u-rank-icon">
+                        <template #item="{ element, index }">
+                            <div class="m-content-item">
+                                <el-icon class="u-rank-icon"><Rank /></el-icon>
+                                <el-select
+                                    v-model="element.name"
+                                    placeholder="请选择门派名称"
+                                    popper-class="u-school-select"
+                                    style="width: 300px"
+                                    filterable
+                                >
+                                    <el-option v-for="item in schoolMap" :value="item" :key="item" :label="item">
+                                        <img :src="showSchoolIcon(item)" alt="" class="u-img" />
+                                        <span>{{ item }}</span>
+                                    </el-option>
+                                </el-select>
+                                <el-input v-model="element.num" placeholder="请输入门派人数"></el-input>
+                                <div class="u-action">
+                                    <el-button
+                                        size="small"
+                                        circle
+                                        icon="Delete"
+                                        type="danger"
+                                        @click="form.content.splice(index, 1)"
+                                    ></el-button>
+                                    <el-button
+                                        v-if="!index"
+                                        class="u-add-icon"
+                                        circle
+                                        size="small"
+                                        icon="Plus"
+                                        @click="form.content.push({ ...default_content })"
+                                    ></el-button>
+                                </div>
+                            </div>
+                        </template>
+                    </draggable>
+                </el-form-item>
+            </el-form>
+
+            <template #footer>
+                <div>
+                    <el-button type="danger" class="u-del-btn" @click="onDelete" :disabled="saveLoading"
+                        >删除</el-button
+                    >
+                    <el-button @click="onCancel" :disabled="saveLoading">取消</el-button>
+                    <el-button type="primary" @click="onSave" :disabled="saveLoading">保存</el-button>
+                </div>
+            </template>
+        </el-dialog>
+    </div>
+</template>
+
+<script>
+import { markRaw } from "vue";
+import { mapState } from "pinia";
+import { useStore } from "@/store";
+import { getRankList, createRankItem, putRankList, delRankList } from "@/service/rank.js";
+import school from "@jx3box/jx3box-data/data/xf/school.json";
+import { showSchoolIcon } from "@jx3box/jx3box-common/js/utils";
+import User from "@jx3box/jx3box-common/js/user.js";
+import draggable from "vuedraggable";
+
+const default_content = {
+    name: "",
+    num: 0,
+};
+
+export default {
+    name: "MiniRank",
+    components: {
+        draggable,
+    },
+    data() {
+        return {
+            clients: markRaw([
+                { label: "重制版", value: "std" },
+                { label: "缘起", value: "origin" },
+            ]),
+
+            active: "",
+            rankList: [],
+            loading: false,
+
+            showDialog: false,
+
+            form: {
+                label: "",
+                client: "",
+                status: 0,
+                content: [
+                    {
+                        ...default_content,
+                    },
+                ],
+            },
+            saveLoading: false,
+        };
+    },
+    computed: {
+        ...mapState(useStore, ["client"]),
+        filterRankList() {
+            return this.rankList.filter((item) => item.status);
+        },
+        isEditor() {
+            return User.isEditor();
+        },
+        selectedRank() {
+            return this.rankList.find((item) => item.id == this.active) || null;
+        },
+        content() {
+            try {
+                return JSON.parse(this.selectedRank?.content);
+            } catch (error) {
+                return [];
+            }
+        },
+        schoolMap() {
+            return Object.keys(school);
+        },
+    },
+    mounted() {
+        this.loadRankList();
+    },
+    methods: {
+        loadRankList() {
+            this.loading = true;
+            getRankList({ client: this.client })
+                .then((res) => {
+                    this.rankList = res.data || [];
+                    this.active = this.active || this.rankList.filter((item) => item.status)[0]?.id;
+                })
+                .finally(() => {
+                    this.loading = false;
+                });
+        },
+        showSchoolIcon(name) {
+            const icon = school?.[name]?.school_id;
+            return showSchoolIcon(icon);
+        },
+        highlight(i) {
+            return `u-order-${i + 1}`;
+        },
+        onSettingIconClick() {
+            this.form.client = this.client;
+            this.showDialog = true;
+        },
+
+        // 弹窗  ==================
+        onLabelChange() {
+            const rank = this.rankList.find((item) => item.id == this.form.label);
+            if (rank) {
+                this.form.status = rank.status;
+                this.form.client = rank.client;
+                this.form.content = JSON.parse(rank.content);
+            } else {
+                // this.form.status = 0;
+                // this.form.content = [
+                //     {
+                //         ...default_content
+                //     }
+                // ];
+            }
+        },
+        onCancel() {
+            this.showDialog = false;
+            // 重置内容
+            this.form = {
+                label: "",
+                client: this.client,
+                status: 0,
+                content: [
+                    {
+                        ...default_content,
+                    },
+                ],
+            };
+        },
+        onSave() {
+            const item = this.rankList.find((item) => item.id == this.form.label);
+            if (item) {
+                this.put();
+            } else {
+                this.create();
+            }
+        },
+        create() {
+            this.saveLoading = true;
+            createRankItem({
+                label: this.form.label,
+                client: this.form.client,
+                status: this.form.status,
+                content: JSON.stringify(this.form.content),
+            })
+                .then(() => {
+                    this.loadRankList();
+                    this.$notify({
+                        title: "成功",
+                        message: "创建榜单成功",
+                        type: "success",
+                    });
+                    this.onCancel();
+                })
+                .catch((err) => {
+                    console.log(err);
+                })
+                .finally(() => {
+                    this.saveLoading = false;
+                });
+        },
+        put() {
+            this.saveLoading = true;
+            putRankList(this.form.label, {
+                client: this.form.client,
+                status: this.form.status,
+                content: JSON.stringify(this.form.content),
+            })
+                .then(() => {
+                    this.loadRankList();
+                    this.$notify({
+                        title: "成功",
+                        message: "更新榜单成功",
+                        type: "success",
+                    });
+                    this.onCancel();
+                })
+                .catch((err) => {
+                    console.log(err);
+                })
+                .finally(() => {
+                    this.saveLoading = false;
+                });
+        },
+        onDelete() {
+            const item = this.rankList.find((item) => item.id == this.form.label);
+            if (item) {
+                this.saveLoading = true;
+                delRankList(this.form.label)
+                    .then(() => {
+                        this.loadRankList();
+                        this.$notify({
+                            title: "成功",
+                            message: "删除榜单成功",
+                            type: "success",
+                        });
+                        this.onCancel();
+                    })
+                    .catch((err) => {
+                        console.log(err);
+                    })
+                    .finally(() => {
+                        this.saveLoading = false;
+                    });
+            } else {
+                this.onCancel();
+            }
+        },
+    },
+};
+</script>
+
+<style lang="less">
+@import "@/assets/css/rank.less";
+</style>
