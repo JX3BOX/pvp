@@ -1,5 +1,5 @@
 <template>
-    <div class="m-competitive-trick">
+    <div class="m-competitive-trick" v-if="data?.length">
         <CompetitiveTrickItemVue v-for="item in data" :key="item.id" :data="item" :subtype="subtype" />
     </div>
 </template>
@@ -22,7 +22,7 @@ export default {
     },
     computed: {
         subtype() {
-            return this.$route.params.subtype;
+            return this.$route.query?.subtype;
         },
         client() {
             return useStore().client;
@@ -51,5 +51,5 @@ export default {
 </script>
 
 <style lang="less">
-@import "@/assets/css/competitive-trick.less";
+@import "@/assets/css/competitive_trick.less";
 </style>

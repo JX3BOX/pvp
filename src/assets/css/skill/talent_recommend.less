@@ -1,0 +1,57 @@
+.m-talent-recommend {
+    .mt(20px);
+}
+
+.m-talent-recommend__header {
+    .flex;
+    justify-content: space-between;
+    align-items: center;
+
+    .u-talent-title {
+        font-size: 16px;
+        font-weight: 600;
+        color: #fff;
+
+        .flex;
+        align-items: center;
+        gap: 10px;
+    }
+
+    .u-edit-icon {
+        color: #fff;
+        .pointer;
+        &:hover {
+            color: @pink;
+        }
+    }
+}
+
+.m-talent-recommend__content {
+    margin-top: 20px;
+    .m-talent-box {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+    }
+
+    .m-talent-item {
+        .flex;
+        flex-direction: column;
+        align-items: center;
+
+        .u-name {
+            .fz(12px);
+            color: #fff;
+            .mt(5px);
+        }
+        .mb(10px);
+    }
+
+    .m-talent-desc {
+        padding: 10px;
+        font-size: 13px;
+        color: #fff;
+        max-height: 110px;
+        .scrollbar(4px, #edeaea, #3d454d, 6px);
+        overflow: auto;
+    }
+}

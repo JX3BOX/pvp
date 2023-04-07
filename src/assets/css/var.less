@@ -2,18 +2,18 @@
 GLOBAL DEFINITION 项目本地全局定义
 🚫 WARNING : 不可删除！
 ***/
-.scrollbar() {
+.scrollbar(@width: 4px, @color: #eee, @bg: #fafafa, @radius: 6px) {
     &::-webkit-scrollbar {
-        width: 4px;
+        width: @width;
     }
     &::-webkit-scrollbar-track,
     &::-webkit-scrollbar-track-piece {
-        background-color: #fafafa;
-        border-radius: 6px;
+        background-color: @bg;
+        border-radius: @radius;
     }
     &::-webkit-scrollbar-thumb {
-        background-color: #eee;
-        border-radius: 6px;
+        background-color: @color;
+        border-radius: @radius;
     }
     &::-webkit-scrollbar-button,
     &::-webkit-scrollbar-corner,

@@ -1,13 +1,5 @@
 <template>
     <div class="p-martial-content">
-        <div class="check-special-skill">
-            <div class="check-special-skill-icon" v-if="isSpecialSkill" @click="isSpecialSkill = false">
-                特殊技能<el-icon class="m-el-icon"><ArrowUpBold /></el-icon>
-            </div>
-            <div class="check-special-skill-icon" v-else @click="isSpecialSkill = true">
-                门派技能<el-icon class="m-el-icon"><ArrowDownBold /></el-icon>
-            </div>
-        </div>
         <div class="p-martial-arts" v-show="!isSpecialSkill">
             <div class="m-martial-skills" v-loading="loading">
                 <div v-for="kungfu in kungfus" :key="kungfu" class="m-martial-skill">
@@ -123,9 +115,8 @@
                         </el-popover>
                     </div>
                 </div>
-                <div>
-                    <ExtraPoint ref="ExtraPoint" :key="mountid" :mountid="mountid" />
-                </div>
+
+                <TalentRecommend />
             </div>
 
             <el-popover
@@ -158,9 +149,11 @@
                 </el-tooltip>
             </el-popover>
         </div>
-        <div class="p-special-skill" v-show="isSpecialSkill">
-            <SpecialSkill :key="mountid" :mountid="mountid"></SpecialSkill>
-        </div>
+
+        <!-- <div class="p-special-skill"> -->
+        <!-- <SpecialSkill :key="mountid" :mountid="mountid"></SpecialSkill> -->
+        <!-- </div> -->
+
         <skillWiki ref="skillWiki" v-model:pasv_skills_props="pasv_skills"></skillWiki>
 
         <CompetitiveTrick />
@@ -190,8 +183,8 @@ import "@jx3box/jx3box-talent/talent.css";
 import SkillItem from "@/components/SkillItem.vue";
 
 import SkillWiki from "@/components/skill/SkillWiki.vue";
-import ExtraPoint from "@/components/skill/ExtraPoint.vue";
-import SpecialSkill from "@/components/skill/SpecialSkill.vue";
+import TalentRecommend from "@/components/skill/TalentRecommend.vue";
+// import SpecialSkill from "@/components/skill/SpecialSkill.vue";
 import CompetitiveTrick from "@/components/CompetitiveTrick.vue";
 
 const $store = useStore();
@@ -201,8 +194,8 @@ export default {
     components: {
         SkillItem,
         SkillWiki,
-        ExtraPoint,
-        SpecialSkill,
+        TalentRecommend,
+        // SpecialSkill,
         CompetitiveTrick,
     },
     data() {

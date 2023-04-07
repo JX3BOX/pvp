@@ -21,8 +21,8 @@
             <ul v-if="content?.length">
                 <li v-for="(item, index) in content" :key="item.name" class="u-link">
                     <span class="u-order" :class="highlight(index)">{{ index + 1 }}</span>
-                    <img :src="showSchoolIcon(item.name)" alt="" class="u-img" />
-                    <span class="u-team">{{ item.name }}</span>
+                    <img :src="showSchoolIcon(item.id)" alt="" class="u-img" />
+                    <span class="u-team">{{ showSchoolName(item.id) }}</span>
                     <span class="u-server">{{ item.num }}</span>
                 </li>
             </ul>
@@ -38,6 +38,7 @@
                         placeholder="请选择现有榜单或输入新的榜单"
                         style="width: 100%"
                         @change="onLabelChange"
+                        default-first-option
                     >
                         <el-option
                             v-for="item in rankList"
@@ -72,15 +73,20 @@
                             <div class="m-content-item">
                                 <el-icon class="u-rank-icon"><Rank /></el-icon>
                                 <el-select
-                                    v-model="element.name"
+                                    v-model="element.id"
                                     placeholder="请选择门派名称"
                                     popper-class="u-school-select"
                                     style="width: 300px"
                                     filterable
                                 >
-                                    <el-option v-for="item in schoolMap" :value="item" :key="item" :label="item">
-                                        <img :src="showSchoolIcon(item)" alt="" class="u-img" />
-                                        <span>{{ item }}</span>
+                                    <el-option
+                                        v-for="item in schoolMap"
+                                        :value="item.id"
+                                        :key="item.id"
+                                        :label="item.name"
+                                    >
+                                        <img :src="showSchoolIcon(item.id)" alt="" class="u-img" />
+                                        <span>{{ item.name }}</span>
                                     </el-option>
                                 </el-select>
                                 <el-input v-model="element.num" placeholder="请输入门派人数"></el-input>
@@ -125,13 +131,13 @@ import { markRaw } from "vue";
 import { mapState } from "pinia";
 import { useStore } from "@/store";
 import { getRankList, createRankItem, putRankList, delRankList } from "@/service/rank.js";
-import school from "@jx3box/jx3box-data/data/xf/school.json";
+import schoolid from "@jx3box/jx3box-data/data/xf/schoolid.json";
 import { showSchoolIcon } from "@jx3box/jx3box-common/js/utils";
 import User from "@jx3box/jx3box-common/js/user.js";
 import draggable from "vuedraggable";
 
 const default_content = {
-    name: "",
+    id: "",
     num: 0,
 };
 
@@ -185,28 +191,40 @@ export default {
             }
         },
         schoolMap() {
-            return Object.keys(school);
+            return Object.entries(schoolid)
+                .map(([key, value]) => {
+                    return {
+                        id: key,
+                        name: value,
+                    };
+                })
+                .filter((item) => item.id != 0);
         },
     },
     mounted() {
         this.loadRankList();
     },
     methods: {
+        showSchoolName(id) {
+            return this.schoolMap.find((item) => item.id == id)?.name || "";
+        },
         loadRankList() {
             this.loading = true;
             getRankList({ client: this.client })
                 .then((res) => {
                     this.rankList = res.data || [];
-                    this.active = this.active || this.rankList.filter((item) => item.status)[0]?.id;
+                    // 如果激活的榜单不存在，就默认选中第一个
+                    if (!this.rankList?.find((item) => item.id == this.active)) {
+                        this.active = this.rankList.filter((item) => item.status)[0]?.id;
+                    } else {
+                        this.active = this.rankList[0]?.id;
+                    }
                 })
                 .finally(() => {
                     this.loading = false;
                 });
         },
-        showSchoolIcon(name) {
-            const icon = school?.[name]?.school_id;
-            return showSchoolIcon(icon);
-        },
+        showSchoolIcon,
         highlight(i) {
             return `u-order-${i + 1}`;
         },
@@ -222,13 +240,6 @@ export default {
                 this.form.status = rank.status;
                 this.form.client = rank.client;
                 this.form.content = JSON.parse(rank.content);
-            } else {
-                // this.form.status = 0;
-                // this.form.content = [
-                //     {
-                //         ...default_content
-                //     }
-                // ];
             }
         },
         onCancel() {
@@ -303,23 +314,31 @@ export default {
         onDelete() {
             const item = this.rankList.find((item) => item.id == this.form.label);
             if (item) {
-                this.saveLoading = true;
-                delRankList(this.form.label)
+                this.$confirm("此操作将永久删除该榜单, 是否继续?", "提示", {
+                    confirmButtonText: "确定",
+                    cancelButtonText: "取消",
+                    type: "warning",
+                })
                     .then(() => {
-                        this.loadRankList();
-                        this.$notify({
-                            title: "成功",
-                            message: "删除榜单成功",
-                            type: "success",
-                        });
-                        this.onCancel();
+                        this.saveLoading = true;
+                        delRankList(this.form.label)
+                            .then(() => {
+                                this.loadRankList();
+                                this.$notify({
+                                    title: "成功",
+                                    message: "删除榜单成功",
+                                    type: "success",
+                                });
+                                this.onCancel();
+                            })
+                            .catch((err) => {
+                                console.log(err);
+                            })
+                            .finally(() => {
+                                this.saveLoading = false;
+                            });
                     })
-                    .catch((err) => {
-                        console.log(err);
-                    })
-                    .finally(() => {
-                        this.saveLoading = false;
-                    });
+                    .catch(() => {});
             } else {
                 this.onCancel();
             }
