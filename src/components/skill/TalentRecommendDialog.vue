@@ -21,7 +21,12 @@
                     @change="onKeyChange"
                     default-first-option
                 >
-                    <el-option v-for="item in data" :key="item.key" :label="item.key" :value="item.id"></el-option>
+                    <el-option
+                        v-for="item in computedData"
+                        :key="item.key"
+                        :label="item.key"
+                        :value="item.id"
+                    ></el-option>
                 </el-select>
             </el-form-item>
             <el-form-item label="客户端" prop="client">
@@ -87,7 +92,7 @@ import { markRaw } from "vue";
 import { mapState } from "pinia";
 import { useStore } from "@/store";
 import { addTalentRecommend, putTalentRecommend, delTalentRecommend } from "@/service/talent_recommend";
-import { omit } from "lodash";
+import { omit, uniqBy } from "lodash";
 export default {
     name: "TalentRecommendDialog",
     props: {
@@ -150,6 +155,19 @@ export default {
         subtype() {
             return this.$route.query?.subtype;
         },
+        computedData() {
+            return uniqBy(
+                this.data.concat(
+                    ["副本", "百战", "竞技场", "绝境战场", "大小攻防", "跑酷"].map((item) => {
+                        return {
+                            key: item,
+                            id: item,
+                        };
+                    })
+                ),
+                "key"
+            );
+        },
     },
     methods: {
         init() {
@@ -165,6 +183,16 @@ export default {
             const _data = this.data.find((item) => item.id == this.active);
             if (_data) {
                 this.form = omit(_data, ["id"]);
+            } else {
+                this.form = {
+                    type: "",
+                    subtype: "",
+                    key: "",
+                    client: "",
+                    code: "",
+                    pz_code: "",
+                    desc: "",
+                };
             }
         },
         onCancel() {

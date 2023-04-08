@@ -178,7 +178,6 @@ export default {
             this.showDialog = true;
         },
         onSkillSelect(item) {
-            console.log(item);
             this.content[this.activeIndex - 1].skills.push({
                 SkillID: item.SkillID,
                 Name: item.Name,

@@ -5,7 +5,27 @@
             <el-icon class="u-icon" v-if="isEditor" @click="dialogFormVisible = true"><Setting /></el-icon>
         </div>
 
-        <SpecialSkillDrawer v-model="dialogFormVisible" :mount="mount" :client="client" />
+        <div class="m-special-skill__content">
+            <el-tabs v-model="active">
+                <el-tab-pane v-for="(item, index) in content" :label="item.name" :name="index" :key="index">
+                    <div class="m-skill" v-for="skill in item.skills" :key="skill.SkillID">
+                        <div class="u-skill">
+                            <img class="u-skill-icon" :src="iconLink(skill.IconID)" :alt="skill.IconID" />
+                            <span class="u-name" :title="skill.Name">{{ skill.Name }}</span>
+                        </div>
+                        <div class="u-desc" v-html="nl2br(skill.desc)"></div>
+                    </div>
+                </el-tab-pane>
+            </el-tabs>
+        </div>
+
+        <SpecialSkillDrawer
+            v-model="dialogFormVisible"
+            :mount="mount"
+            :client="client"
+            :data="content"
+            @update="onUpdate"
+        />
     </div>
 </template>
 
@@ -13,6 +33,7 @@
 import { useStore } from "@/store";
 import User from "@jx3box/jx3box-common/js/user.js";
 import { getSpecialSkillList } from "@/service/raw";
+import { iconLink } from "@jx3box/jx3box-common/js/utils";
 
 import SpecialSkillDrawer from "./SpecialSkillDrawer.vue";
 export default {
@@ -30,6 +51,7 @@ export default {
         return {
             dialogFormVisible: false,
             data: {},
+            active: 0,
         };
     },
     computed: {
@@ -38,6 +60,14 @@ export default {
         },
         client() {
             return useStore().client;
+        },
+        content() {
+            try {
+                const content = JSON.parse(this.data.content);
+                return content;
+            } catch (e) {
+                return [];
+            }
         },
     },
     watch: {
@@ -49,10 +79,19 @@ export default {
         },
     },
     methods: {
+        iconLink(id) {
+            return iconLink(id);
+        },
         loadSkill() {
             getSpecialSkillList(this.mount, this.client).then((res) => {
                 this.data = res.data.data;
             });
+        },
+        nl2br(str) {
+            return str && str.replace(/\n/g, "<br />");
+        },
+        onUpdate() {
+            this.loadSkill();
         },
     },
 };
