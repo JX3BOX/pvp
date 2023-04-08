@@ -101,6 +101,7 @@
                                         icon="Delete"
                                         type="danger"
                                         @click="form.content.splice(index, 1)"
+                                        :disabled="form.content.length === 1"
                                     ></el-button>
                                     <el-button
                                         v-if="!index"
