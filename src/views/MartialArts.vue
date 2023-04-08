@@ -150,13 +150,11 @@
             </el-popover>
         </div>
 
-        <!-- <div class="p-special-skill"> -->
-        <!-- <SpecialSkill :key="mountid" :mountid="mountid"></SpecialSkill> -->
-        <!-- </div> -->
-
         <skillWiki ref="skillWiki" v-model:pasv_skills_props="pasv_skills"></skillWiki>
 
         <CompetitiveTrick />
+
+        <SpecialSkill :mount="mountid"></SpecialSkill>
     </div>
 </template>
 
@@ -184,7 +182,7 @@ import SkillItem from "@/components/SkillItem.vue";
 
 import SkillWiki from "@/components/skill/SkillWiki.vue";
 import TalentRecommend from "@/components/skill/TalentRecommend.vue";
-// import SpecialSkill from "@/components/skill/SpecialSkill.vue";
+import SpecialSkill from "@/components/skill/SpecialSkills.vue";
 import CompetitiveTrick from "@/components/CompetitiveTrick.vue";
 
 const $store = useStore();
@@ -195,7 +193,7 @@ export default {
         SkillItem,
         SkillWiki,
         TalentRecommend,
-        // SpecialSkill,
+        SpecialSkill,
         CompetitiveTrick,
     },
     data() {

@@ -57,7 +57,8 @@ export default {
     methods: {
         loadData() {
             this.loading = true;
-            const key = "pvp_sandbox_intro,pvp_sandbox_rule,pvp_sandbox_background";
+            const key =
+                "pvp_sandbox_intro,pvp_sandbox_rule,pvp_sandbox_base,pvp_sandbox_gameplay,pvp_sandbox_tree,pvp_sandbox_model";
             getSandboxIntro({ names: key })
                 .then((res) => {
                     this.data = res.data.data.list || [];
