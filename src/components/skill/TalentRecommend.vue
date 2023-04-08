@@ -50,7 +50,7 @@ export default {
             return User.isEditor();
         },
         subtype() {
-            return this.$route.query?.subtype;
+            return this.$route.query?.subtype || "冰心诀";
         },
         mount() {
             return xf[this.subtype]?.id || 0;

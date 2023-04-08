@@ -31,22 +31,26 @@
         <el-dialog v-model="showDialog" title="竞技场热门榜设置" class="m-rank-pop" append-to-body width="600px">
             <el-form :model="form" ref="form" label-position="top">
                 <el-form-item label="榜单名称">
-                    <el-select
-                        v-model="form.label"
-                        filterable
-                        allow-create
-                        placeholder="请选择现有榜单或输入新的榜单"
-                        style="width: 100%"
-                        @change="onLabelChange"
-                        default-first-option
-                    >
-                        <el-option
-                            v-for="item in rankList"
-                            :key="item.id"
-                            :label="item.label"
-                            :value="item.id"
-                        ></el-option>
-                    </el-select>
+                    <div class="m-rank-name">
+                        <el-select
+                            v-model="activeName"
+                            filterable
+                            allow-create
+                            placeholder="请选择现有榜单或输入新的榜单"
+                            style=""
+                            @change="onLabelChange"
+                            default-first-option
+                        >
+                            <el-option
+                                v-for="item in rankList"
+                                :key="item.id"
+                                :label="item.label"
+                                :value="item.id"
+                            ></el-option>
+                        </el-select>
+                        <el-icon @click="onEdit" v-if="activeName && !isNaN(activeName)"><Setting></Setting></el-icon>
+                    </div>
+                    <div v-if="tmpName" class="u-tmp-name"><em>修改后：</em>{{ tmpName }}</div>
                 </el-form-item>
                 <el-form-item label="客户端">
                     <el-select v-model="form.client" placeholder="请选择客户端" style="width: 100%">
@@ -97,6 +101,7 @@
                                         icon="Delete"
                                         type="danger"
                                         @click="form.content.splice(index, 1)"
+                                        :disabled="form.content.length === 1"
                                     ></el-button>
                                     <el-button
                                         v-if="!index"
@@ -170,6 +175,8 @@ export default {
                 ],
             },
             saveLoading: false,
+            activeName: "",
+            tmpName: "",
         };
     },
     computed: {
@@ -235,10 +242,11 @@ export default {
 
         // 弹窗  ==================
         onLabelChange() {
-            const rank = this.rankList.find((item) => item.id == this.form.label);
+            const rank = this.rankList.find((item) => item.id == this.activeName);
             if (rank) {
                 this.form.status = rank.status;
                 this.form.client = rank.client;
+                this.form.label = rank.label;
                 this.form.content = JSON.parse(rank.content);
             }
         },
@@ -255,9 +263,11 @@ export default {
                     },
                 ],
             };
+            this.activeName = "";
+            this.tmpName = "";
         },
         onSave() {
-            const item = this.rankList.find((item) => item.id == this.form.label);
+            const item = this.rankList.find((item) => item.id == this.activeName);
             if (item) {
                 this.put();
             } else {
@@ -267,7 +277,7 @@ export default {
         create() {
             this.saveLoading = true;
             createRankItem({
-                label: this.form.label,
+                label: this.activeName,
                 client: this.form.client,
                 status: this.form.status,
                 content: JSON.stringify(this.form.content),
@@ -290,7 +300,8 @@ export default {
         },
         put() {
             this.saveLoading = true;
-            putRankList(this.form.label, {
+            putRankList(this.activeName, {
+                label: this.tmpName || this.form.label,
                 client: this.form.client,
                 status: this.form.status,
                 content: JSON.stringify(this.form.content),
@@ -342,6 +353,18 @@ export default {
             } else {
                 this.onCancel();
             }
+        },
+        onEdit() {
+            const name = this.form.label;
+            this.$prompt("请输入榜单名称", "提示", {
+                confirmButtonText: "确定",
+                cancelButtonText: "取消",
+                inputValue: name,
+            })
+                .then(({ value }) => {
+                    this.tmpName = value;
+                })
+                .catch(() => {});
         },
     },
 };
