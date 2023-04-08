@@ -1,15 +1,18 @@
 .m-special-skill {
     // background: #1a2b22;
-    padding: 20px;
     border-radius: 8px;
     // color: #fff;
     margin-top: 20px;
-    background-color: #f6f8fa;
+
+    background-color: #fafbfc;
+    border: 1px solid #eee;
+    border-radius: 5px;
+    font-size: 14px;
 
     .m-skill {
         display: flex;
         font-size: 12px;
-        gap: 20px;
+        gap: 15px;
         margin-top: 20px;
         align-items: flex-start;
 
@@ -38,13 +41,30 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-bottom: 20px;
+
+    font-size: 17px;
+    font-weight: 300;
+    padding: 10px 0;
+    color: #6c645c;
+    margin: 0;
+    font-weight: 500;
+    padding: 10px 15px;
+    background-color: #f5f7fa;
+    border-bottom: 1px solid #eee;
+    position: relative;
 
     .u-icon {
         .pointer;
         &:hover {
             color: @pink;
         }
+    }
+
+    .u-special-title {
+        display: flex;
+        align-items: center;
+        gap: 5px;
+        color: #3d454d;
     }
 }
 
@@ -98,5 +118,12 @@
                 .scrollbar();
             }
         }
+    }
+}
+
+.m-special-skill__content {
+    padding: 10px 20px 20px 20px;
+    .el-tabs__header {
+        margin-bottom: 0;
     }
 }
