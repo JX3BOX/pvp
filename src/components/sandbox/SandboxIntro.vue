@@ -29,6 +29,10 @@ export default {
                 pvp_sandbox_intro: "Compass",
                 pvp_sandbox_rule: "DataBoard",
                 pvp_sandbox_background: "Monitor",
+                pvp_sandbox_base: "LocationInformation",
+                pvp_sandbox_gameplay: "Cpu",
+                pvp_sandbox_tree: "Grape",
+                pvp_sandbox_model: "Apple",
             }),
         };
     },
