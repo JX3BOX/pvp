@@ -20,7 +20,7 @@
             <div class="m-talent-desc" v-html="nl2br(activeData?.desc)"></div>
         </div>
 
-        <TalentRecommendDialog v-model="showDialog" :data="list" :mount="mount" @update="loadRecommend" />
+        <TalentRecommendDrawer v-model="showDialog" :data="list" :mount="mount" @update="loadRecommend" />
     </div>
 </template>
 
@@ -31,11 +31,11 @@ import { getTalentRecommendList } from "@/service/talent_recommend";
 import xf from "@jx3box/jx3box-data/data/xf/xf.json";
 import { iconLink } from "@jx3box/jx3box-common/js/utils";
 // components
-import TalentRecommendDialog from "./TalentRecommendDialog.vue";
+import TalentRecommendDrawer from "./TalentRecommendDrawer.vue";
 export default {
     name: "TalentRecommend",
     components: {
-        TalentRecommendDialog,
+        TalentRecommendDrawer,
     },
     data() {
         return {

@@ -28,7 +28,14 @@
             </ul>
         </div>
 
-        <el-dialog v-model="showDialog" title="竞技场热门榜设置" class="m-rank-pop" append-to-body width="600px">
+        <el-drawer
+            v-model="showDialog"
+            title="竞技场热门榜设置"
+            class="m-rank-pop"
+            append-to-body
+            width="600px"
+            @close="onCancel"
+        >
             <el-form :model="form" ref="form" label-position="top">
                 <el-form-item label="榜单名称">
                     <div class="m-rank-name">
@@ -127,7 +134,7 @@
                     <el-button type="primary" @click="onSave" :disabled="saveLoading">保存</el-button>
                 </div>
             </template>
-        </el-dialog>
+        </el-drawer>
     </div>
 </template>
 
@@ -355,7 +362,7 @@ export default {
             }
         },
         onEdit() {
-            const name = this.form.label;
+            const name = this.tmpName || this.form.label;
             this.$prompt("请输入榜单名称", "提示", {
                 confirmButtonText: "确定",
                 cancelButtonText: "取消",

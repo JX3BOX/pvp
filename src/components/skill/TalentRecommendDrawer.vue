@@ -1,5 +1,5 @@
 <template>
-    <el-dialog
+    <el-drawer
         :model-value="modelValue"
         :title="title"
         @close="onCancel"
@@ -84,7 +84,7 @@
                 <el-button type="primary" @click="onSave" :disabled="saveLoading">保存</el-button>
             </div>
         </template>
-    </el-dialog>
+    </el-drawer>
 </template>
 
 <script>
@@ -153,7 +153,7 @@ export default {
             return this.form.type === "talent" ? "/macro/talent" : "/macro/talent2";
         },
         subtype() {
-            return this.$route.query?.subtype;
+            return this.$route.query?.subtype || "冰心诀";
         },
         computedData() {
             return uniqBy(
