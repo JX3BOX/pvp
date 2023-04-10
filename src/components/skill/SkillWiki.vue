@@ -4,8 +4,10 @@
             <div class="m-wiki-post-panel">
                 <div class="head-title">
                     <span class="u-txt"
-                        ><el-icon><Reading /></el-icon>技能百科</span
-                    >
+                        ><el-icon><Reading /></el-icon>
+                        技能百科
+                        <em class="u-skill-ID">(技能ID: {{ activeSkill }})</em>
+                    </span>
                     <a
                         class="u-button el-button el-button--primary"
                         :href="publish_url(`skill/${activeSkill}`)"
@@ -34,14 +36,9 @@
                         </div>
                     </div>
                     <div v-html="wikiData.post.content"></div>
-                    <div class="m-wiki-signature">
-                        <i class="el-icon-edit"></i>
-                        <span>
-                            本次修订由 <b>{{ wikiData.post ? wikiData.post.user_nickname : "" }}</b> 提交于{{
-                                wikiData.post ? ToDate(wikiData.post.updated) : ""
-                            }}
-                        </span>
-                    </div>
+                </div>
+                <div class="m-wiki-signature">
+                    <el-button type="primary" class="u-btn" @click="onViewHistory">查看历史版本</el-button>
                 </div>
             </div>
         </div>
@@ -61,14 +58,48 @@
                 <span>请先选择技能后查看技能百科</span>
             </div>
         </div>
+
+        <el-drawer v-model="showDrawer" title="历史版本" class="c-wiki-revisions">
+            <div class="m-revisions-panel">
+                <div class="u-empty" v-if="!versions || !versions.length">
+                    <span v-if="versions === null">🎉 数据加载中...</span>
+                    <span v-if="versions === false">⚠️ 数据加载异常</span>
+                    <span v-if="versions && !versions.length">💧 暂无数据</span>
+                </div>
+                <table v-if="versions && versions.length" class="m-histories">
+                    <tr>
+                        <th>版本</th>
+                        <th>更新时间</th>
+                        <th>贡献者</th>
+                        <th>修订说明</th>
+                    </tr>
+                    <tr class="history" v-for="(ver, key) in versions" :key="key">
+                        <td>
+                            <a
+                                class="u-version-link"
+                                v-text="'v' + (versions.length - key)"
+                                @click="onVersionClick(ver)"
+                            ></a>
+                        </td>
+                        <td v-text="ts2str(ver.updated)"></td>
+                        <td>
+                            <a :href="ver.user_id ? author_url(ver.user_id) : null" v-text="ver.user_nickname"></a>
+                        </td>
+                        <td v-text="ver.remark"></td>
+                    </tr>
+                </table>
+            </div>
+        </el-drawer>
     </div>
 </template>
 <script>
 import { useStore } from "@/store";
 const $store = useStore();
-import { getWikiToSkill } from "@/service/raw.js";
-import { publishLink } from "@jx3box/jx3box-common/js/utils";
+import { getWikiToSkill, getVersions, getWikiById } from "@/service/raw.js";
+import { publishLink, getLink, authorLink, ts2str } from "@jx3box/jx3box-common/js/utils";
 import dayjs from "dayjs";
+import { __Root, __OriginRoot } from "@jx3box/jx3box-common/data/jx3box.json";
+
 // 扩展插件
 import isSameOrBefore from "dayjs/plugin/isSameOrBefore";
 import isSameOrAfter from "dayjs/plugin/isSameOrAfter";
@@ -80,6 +111,9 @@ export default {
             wikiData: {},
             pasv_skills_data: [],
             userData: [],
+            showDrawer: false,
+
+            versions: [],
         };
     },
     props: ["pasv_skills_props"],
@@ -90,15 +124,23 @@ export default {
         is_empty: function () {
             return !this.wikiData?.post;
         },
+        client: function () {
+            return location.href.includes("classic") || location.href.includes("origin") ? "origin" : "std";
+        },
+        baseUrl: function () {
+            return this.client == "origin" ? __OriginRoot : __Root;
+        },
     },
     methods: {
         async getWikiToSkill() {
             let data = await getWikiToSkill({
                 source_id: this.activeSkill,
-                client: "std",
+                client: this.client,
+                type: "skill",
+                supply: 1,
             });
 
-            this.wikiData = data.data ? data.data[this.activeSkill] : {};
+            this.wikiData = data.data;
             this.userData = this.wikiData?.users;
         },
         publish_url: publishLink,
@@ -106,13 +148,46 @@ export default {
             this.pasv_skills_data = data;
         },
         ToDate(timeStr) {
-            let tiem = new Date(Number(timeStr + "000"));
-            return dayjs(tiem).format("YYYY-MM-DD");
+            let time = new Date(Number(timeStr + "000"));
+            return dayjs(time).format("YYYY-MM-DD");
+        },
+        loadWikiVersion() {
+            getVersions({ type: "skill", id: this.activeSkill }, { client: this.client }).then(
+                (res) => {
+                    res = res.data;
+                    this.versions = res.code === 200 ? res.data.versions : false;
+                },
+                () => {
+                    this.versions = false;
+                }
+            );
+        },
+        link: function (type, id) {
+            return getLink(type, id);
+        },
+        author_url: function (uid) {
+            return authorLink(uid);
+        },
+        ts2str,
+        onViewHistory() {
+            this.showDrawer = true;
+        },
+        loadWikiById({ id }) {
+            getWikiById(id, { type: "skill" }).then((res) => {
+                this.wikiData = res.data.data || {};
+                this.userData = this.wikiData?.users;
+            });
+        },
+        onVersionClick(ver) {
+            this.loadWikiById(ver);
         },
     },
     watch: {
         activeSkill() {
             this.getWikiToSkill();
+        },
+        showDrawer(val) {
+            if (val) this.loadWikiVersion();
         },
     },
 };

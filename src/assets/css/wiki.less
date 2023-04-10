@@ -43,6 +43,12 @@
             gap: 5px;
             color: @color;
         }
+        .u-skill-ID {
+            font-style: normal;
+            color: #999;
+            font-size: 12px;
+            font-weight: normal;
+        }
     }
     .m-wiki-meta {
         .mb(5px);
@@ -151,8 +157,12 @@
     .x(right);
     color: #999;
     .fz(12px,2);
-    border-top: 1px dashed #ddd;
-    padding: 5px 0;
+    border-top: 1px solid #ddd;
+    padding: 10px 15px;
+
+    .u-btn {
+        font-size: 12px;
+    }
 }
 
 .u-wiki__title {
@@ -165,5 +175,69 @@
     .pr;
     i {
         margin-right: 5px;
+    }
+}
+
+.c-wiki-revisions {
+    .u-empty {
+        padding: 5px 0;
+        text-align: center;
+    }
+
+    .m-histories {
+        width: 100%;
+        margin: -5px 0;
+        opacity: 0.8;
+        font-size: 14px;
+        text-align: left;
+        border-collapse: collapse;
+        border-spacing: 0;
+
+        th,
+        td {
+            min-width: 100px;
+            padding: 8px 10px;
+            font-weight: normal;
+            line-height: 1.6;
+
+            &:first-child {
+                min-width: 35px;
+            }
+
+            @media screen and (max-width: @phone) {
+                min-width: 35px;
+                padding: 3px;
+                font-size: 12px;
+
+                &:first-child {
+                    min-width: 15px;
+                }
+            }
+        }
+
+        .u-version-link {
+            color: @color-link;
+            .pointer;
+
+            &:hover {
+                box-shadow: 0 1px 0 @color-link;
+            }
+        }
+
+        a {
+            color: @color;
+        }
+
+        th {
+            border-bottom: 2px solid #dddddd;
+        }
+
+        td {
+            border-bottom: 1px solid #dddddd;
+        }
+
+        tr:last-child td {
+            border-bottom: none;
+        }
     }
 }

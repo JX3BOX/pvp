@@ -38,6 +38,7 @@
         .flex;
         flex-direction: column;
         align-items: center;
+        .pointer;
 
         .u-name {
             .fz(12px);
@@ -45,6 +46,24 @@
             .mt(5px);
         }
         .mb(10px);
+
+        .u-skill-icon {
+            border: 2px solid #1a2b22;
+            box-sizing: border-box;
+        }
+
+        &.active {
+            .u-name {
+                color: #a5ffd0;
+                text-shadow: 0 0 3px #2ffbb2;
+            }
+            .u-skill-icon {
+                border: 2px solid #a5ffd0;
+                box-shadow: 0 0 5px rgb(47, 251, 178, 0.8);
+                border-radius: 6px;
+                transition: all 0.3s;
+            }
+        }
     }
 
     .m-talent-desc {

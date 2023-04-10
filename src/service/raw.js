@@ -38,7 +38,7 @@ function getSkill(xf, client = "std") {
 // 获取指定技能百科
 function getWikiToSkill(params) {
     return $helper()
-        .get("/api/wiki/posts/skill", {
+        .get("/api/wiki/post", {
             params: params,
         })
         .then((res) => {
@@ -67,6 +67,23 @@ function createSpecialSkillItem(data) {
     return $cms().post(`/api/cms/bps/pvp-special-skill`, data);
 }
 
+// 获取历史版本
+function getVersions({ type, id }, params) {
+    return $helper().get(`/api/wiki/post/versions`, {
+        params: {
+            ...params,
+            type,
+            source_id: id,
+        },
+    });
+}
+
+function getWikiById(post_id, params) {
+    return $helper().get(`/api/wiki/post/${post_id}`, {
+        params,
+    });
+}
+
 export {
     getSkills,
     getSkill,
@@ -77,4 +94,6 @@ export {
     getSandboxLogs,
     getSpecialSkillList,
     createSpecialSkillItem,
+    getVersions,
+    getWikiById,
 };

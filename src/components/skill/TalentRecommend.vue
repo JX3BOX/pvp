@@ -12,7 +12,13 @@
 
         <div class="m-talent-recommend__content">
             <div class="m-talent-box">
-                <div class="m-talent-item" v-for="(item, index) in pzCode" :key="index">
+                <div
+                    class="m-talent-item"
+                    v-for="(item, index) in pzCode"
+                    :key="index"
+                    @click.stop="onSkillClick(item)"
+                    :class="{ active: item.id == activeSkill }"
+                >
                     <img class="u-skill-icon" :src="iconLink(item.icon)" :alt="item.icon" />
                     <span class="u-name" :title="item.name">{{ item.name }}</span>
                 </div>
@@ -32,6 +38,9 @@ import xf from "@jx3box/jx3box-data/data/xf/xf.json";
 import { iconLink } from "@jx3box/jx3box-common/js/utils";
 // components
 import TalentRecommendDrawer from "./TalentRecommendDrawer.vue";
+
+const $store = useStore();
+
 export default {
     name: "TalentRecommend",
     components: {
@@ -68,6 +77,9 @@ export default {
                 return [];
             }
         },
+        activeSkill() {
+            return $store.activeSkill;
+        },
     },
     watch: {
         mount: {
@@ -95,6 +107,9 @@ export default {
         },
         nl2br(str) {
             return (str && str.replace(/\n/g, "<br/>")) || "";
+        },
+        onSkillClick(item) {
+            $store.setActiveSkill(item?.id);
         },
     },
 };
