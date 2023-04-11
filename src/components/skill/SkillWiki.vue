@@ -38,6 +38,14 @@
                     <div v-html="wikiData.post.content"></div>
                 </div>
                 <div class="m-wiki-signature">
+                    <SimpleThx
+                        postType="skill"
+                        :postTitle="wikiData?.post?.title"
+                        :userId="wikiData?.post?.user_id"
+                        :adminBoxcoinEnable="true"
+                        :userBoxcoinEnable="true"
+                        :postId="wikiData?.post?.id"
+                    ></SimpleThx>
                     <el-button type="primary" class="u-btn" @click="onViewHistory">查看历史版本</el-button>
                 </div>
             </div>
@@ -99,6 +107,8 @@ import { getWikiToSkill, getVersions, getWikiById } from "@/service/raw.js";
 import { publishLink, getLink, authorLink, ts2str } from "@jx3box/jx3box-common/js/utils";
 import dayjs from "dayjs";
 import { __Root, __OriginRoot } from "@jx3box/jx3box-common/data/jx3box.json";
+import User from "@jx3box/jx3box-common/js/user.js";
+import SimpleThx from "@jx3box/jx3box-vue3-ui/src/single/SimpleThx.vue";
 
 // 扩展插件
 import isSameOrBefore from "dayjs/plugin/isSameOrBefore";
@@ -106,6 +116,9 @@ import isSameOrAfter from "dayjs/plugin/isSameOrAfter";
 dayjs.extend(isSameOrBefore);
 dayjs.extend(isSameOrAfter);
 export default {
+    components: {
+        SimpleThx,
+    },
     data() {
         return {
             wikiData: {},
@@ -129,6 +142,9 @@ export default {
         },
         baseUrl: function () {
             return this.client == "origin" ? __OriginRoot : __Root;
+        },
+        userId() {
+            return User.getInfo()?.uid;
         },
     },
     methods: {

@@ -154,11 +154,13 @@
 }
 
 .m-wiki-signature {
-    .x(right);
     color: #999;
     .fz(12px,2);
     border-top: 1px solid #ddd;
     padding: 10px 15px;
+    .flex;
+    align-items: center;
+    justify-content: space-between;
 
     .u-btn {
         font-size: 12px;
@@ -239,5 +241,14 @@
         tr:last-child td {
             border-bottom: none;
         }
+    }
+}
+
+.w-thx {
+    .u-record-icon {
+        top: 6px !important;
+    }
+    .w-thx-panel {
+        margin-bottom: 0;
     }
 }
