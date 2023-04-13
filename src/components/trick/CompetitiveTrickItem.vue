@@ -1,6 +1,16 @@
 <template>
     <div class="m-trick-item" v-if="hasData">
-        <div class="m-trick-item__title">{{ data.post_title }}</div>
+        <div class="m-trick-item__title">
+            <span>{{ data.post_title }}</span>
+            <SimpleThx
+                postType="pvp"
+                :postTitle="data?.post_title"
+                :userId="data?.post_author"
+                :adminBoxcoinEnable="true"
+                :userBoxcoinEnable="true"
+                :postId="data?.ID"
+            />
+        </div>
         <div class="m-trick-item__content">
             <div class="m-trick-item__left">
                 <a class="m-author" :href="authorLink(data?.post_author)">
@@ -14,7 +24,10 @@
                 </div>
                 <div class="m-content">
                     <div class="m-talent">
-                        <div class="m-talent__title">奇穴</div>
+                        <div class="m-talent__title">
+                            <img class="u-icon" :src="getAppIcon('macro')" alt="" />
+                            奇穴
+                        </div>
                         <div class="m-talent-box" :class="`m-qx-container-${data?.ID}`"></div>
                     </div>
                     <div class="m-skills">
@@ -45,12 +58,17 @@
 </template>
 
 <script>
-import { showAvatar, authorLink, iconLink } from "@jx3box/jx3box-common/js/utils";
+import { showAvatar, authorLink, iconLink, getAppIcon } from "@jx3box/jx3box-common/js/utils";
 
 // 奇穴
 import JX3_QIXUE from "@jx3box/jx3box-talent";
 import "@jx3box/jx3box-talent/talent.css";
+import SimpleThx from "@jx3box/jx3box-vue3-ui/src/single/SimpleThx.vue";
 export default {
+    name: "CompetitiveTrickItem",
+    components: {
+        SimpleThx,
+    },
     props: {
         data: {
             type: Object,
@@ -104,6 +122,7 @@ export default {
         },
         authorLink,
         iconLink,
+        getAppIcon,
         // 初始化奇穴模拟器（此时渲染使用空奇穴模板）
         installTalent() {
             console.log(document.querySelector(`.m-qx-container-${this.data?.ID}`));

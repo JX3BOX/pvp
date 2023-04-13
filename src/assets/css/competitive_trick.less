@@ -31,11 +31,16 @@
     gap: 20px;
 }
 .m-trick-item__title {
-    margin-bottom: 10px;
+    margin-bottom: 20px;
     .bold;
+    .flex;
+    gap: 20px;
+    align-items: center;
+    justify-content: space-between;
 }
 .m-trick-item__left {
     width: 80px;
+    flex-shrink: 0;
     .m-author {
         .flex;
         flex-direction: column;
@@ -99,6 +104,17 @@
 
     .m-talent {
         margin-bottom: 20px;
+
+        .u-icon {
+            width: 24px;
+            height: 24px;
+        }
+        .m-talent__title {
+            .flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 5px;
+        }
     }
 
     .m-talent__title {
@@ -130,5 +146,22 @@
             top: 2px;
             margin-right: 2px;
         }
+    }
+}
+
+@media screen and (max-width: @smallpc) {
+    .m-competitive-trick {
+        max-width: 1560px;
+        overflow-x: auto;
+    }
+    .m-trick-item__content {
+        flex-direction: column;
+    }
+    .m-trick-item__left {
+        .x;
+        width: 100%;
+    }
+    .m-trick-item__title {
+        flex-direction: column;
     }
 }
