@@ -46,7 +46,9 @@
                         :userBoxcoinEnable="true"
                         :postId="wikiData?.post?.id"
                     ></SimpleThx>
-                    <el-button type="primary" class="u-btn" @click="onViewHistory">查看历史版本</el-button>
+                    <el-button type="primary" class="u-btn" @click="onViewHistory"
+                        ><el-icon class="u-icon"><RefreshLeft /></el-icon>查看历史版本</el-button
+                    >
                 </div>
             </div>
         </div>
