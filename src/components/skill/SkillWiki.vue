@@ -61,7 +61,12 @@
             <div class="no_skill_post" v-if="pasv_skills_data.indexOf(activeSkill) == -1">
                 <el-icon><Warning /></el-icon>
                 <span>当前技能暂无百科，我要</span
-                ><a class="s-link" target="_blank" :href="publish_url(`skill/${activeSkill}`)">完善百科</a>
+                ><a
+                    class="s-link el-button el-button--small is-round el-button--primary"
+                    target="_blank"
+                    :href="publish_url(`skill/${activeSkill}`)"
+                    >完善百科</a
+                >
             </div>
 
             <div class="no_active_skill" v-else>

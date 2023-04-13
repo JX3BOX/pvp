@@ -152,9 +152,9 @@
 
         <skillWiki ref="skillWiki" v-model:pasv_skills_props="pasv_skills"></skillWiki>
 
-        <CompetitiveTrick />
-
         <SpecialSkill :mount="mountid"></SpecialSkill>
+
+        <CompetitiveTrick />
     </div>
 </template>
 

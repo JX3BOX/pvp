@@ -4,8 +4,13 @@
     </div>
     <div class="u-competitive-trick-null" v-else>
         <el-icon :size="13"><Warning /></el-icon>
-        <span>当前竞技分享，我要</span>
-        <a class="s-link" target="_blank" :href="publishLink(`pvp`)">分享</a>
+        <span>当前暂无竞技技巧分享，我要</span>
+        <a
+            class="s-link el-button el-button--small is-round el-button--primary"
+            target="_blank"
+            :href="publishLink(`pvp`)"
+            >分享技巧</a
+        >
     </div>
 </template>
 
