@@ -2,6 +2,11 @@
     <div class="m-competitive-trick" v-if="data?.length">
         <CompetitiveTrickItemVue v-for="item in data" :key="item.id" :data="item" :subtype="subtype" />
     </div>
+    <div class="u-competitive-trick-null" v-else>
+        <el-icon :size="13"><Warning /></el-icon>
+        <span>当前竞技分享，我要</span>
+        <a class="s-link" target="_blank" :href="publishLink(`pvp`)">分享</a>
+    </div>
 </template>
 
 <script>
@@ -9,6 +14,7 @@ import { useStore } from "@/store";
 import { getPosts } from "@/service/post";
 
 import CompetitiveTrickItemVue from "./trick/CompetitiveTrickItem.vue";
+import { publishLink } from "@jx3box/jx3box-common/js/utils";
 
 export default {
     name: "CompetitiveTrick",
@@ -37,6 +43,7 @@ export default {
         },
     },
     methods: {
+        publishLink,
         loadData() {
             getPosts({ type: "pvp", subtype: this.subtype, client: this.client })
                 .then((res) => {
