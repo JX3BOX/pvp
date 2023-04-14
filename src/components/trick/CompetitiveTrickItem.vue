@@ -2,14 +2,19 @@
     <div class="m-trick-item" v-if="hasData">
         <div class="m-trick-item__title">
             <span>{{ data.post_title }}</span>
-            <SimpleThx
-                postType="pvp"
-                :postTitle="data?.post_title"
-                :userId="data?.post_author"
-                :adminBoxcoinEnable="true"
-                :userBoxcoinEnable="true"
-                :postId="data?.ID"
-            />
+            <div class="u-icons">
+                <SimpleThx
+                    postType="pvp"
+                    :postTitle="data?.post_title"
+                    :userId="data?.post_author"
+                    :adminBoxcoinEnable="true"
+                    :userBoxcoinEnable="true"
+                    :postId="data?.ID"
+                />
+                <el-tooltip content="评论" placement="top-start">
+                    <img src="@/assets/img/comment.svg" class="u-icon" svg-inline alt="" @click="showComment = true" />
+                </el-tooltip>
+            </div>
         </div>
         <div class="m-trick-item__content">
             <div class="m-trick-item__left">
@@ -54,6 +59,10 @@
                 </div>
             </div>
         </div>
+
+        <el-drawer title="评论" v-model="showComment" destroy-on-close class="m-trick-drawer">
+            <Comment category="post" id="19382"></Comment>
+        </el-drawer>
     </div>
 </template>
 
@@ -64,10 +73,12 @@ import { showAvatar, authorLink, iconLink, getAppIcon } from "@jx3box/jx3box-com
 import JX3_QIXUE from "@jx3box/jx3box-talent";
 import "@jx3box/jx3box-talent/talent.css";
 import SimpleThx from "@jx3box/jx3box-vue3-ui/src/single/SimpleThx.vue";
+import Comment from "@jx3box/jx3box-vue3-ui/src/single/Comment.vue";
 export default {
     name: "CompetitiveTrickItem",
     components: {
         SimpleThx,
+        Comment,
     },
     props: {
         data: {
@@ -82,6 +93,7 @@ export default {
     data() {
         return {
             talentDriver: null,
+            showComment: false,
         };
     },
     computed: {

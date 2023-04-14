@@ -3,9 +3,8 @@
         :model-value="modelValue"
         :title="title"
         @close="onCancel"
-        class="m-talent-recommend__dialog m-rank-pop"
+        class="m-talent-recommend__drawer m-rank-pop"
         append-to-body
-        width="600px"
     >
         <el-form :model="form" label-width="80px" label-position="left">
             <el-form-item label="心法">
@@ -295,7 +294,7 @@ export default {
 <style lang="less">
 @import "@/assets/css/rank.less";
 
-.m-talent-recommend__dialog {
+.m-talent-recommend__drawer {
     .u-get {
         .el-icon {
             .pr;

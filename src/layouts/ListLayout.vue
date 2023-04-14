@@ -71,5 +71,6 @@ export default {
 <style lang="less" scoped>
 .c-main {
     .mt(48px);
+    padding: 0;
 }
 </style>

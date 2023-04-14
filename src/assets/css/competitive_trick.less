@@ -1,9 +1,11 @@
 .m-competitive-trick {
-    background: #333;
-    border-radius: 8px;
-    padding: 20px;
-    color: #fff;
-    margin-top: 20px;
+    .m-trick-item {
+        background: #333;
+        border-radius: 8px;
+        padding: 20px;
+        color: #fff;
+        margin-top: 20px;
+    }
 }
 .u-competitive-trick-null {
     background-color: #f6f8fa;
@@ -37,6 +39,17 @@
     gap: 20px;
     align-items: center;
     justify-content: space-between;
+
+    .u-icons {
+        .flex;
+        align-items: center;
+        gap: 20px;
+    }
+
+    .u-icon {
+        .size(26px);
+        .pointer;
+    }
 }
 .m-trick-item__left {
     width: 80px;
@@ -65,7 +78,8 @@
 
     .u-skills {
         .flex;
-        gap: 30px;
+        gap: 20px;
+        flex-wrap: wrap;
 
         .u-skill {
             .pr;
@@ -75,7 +89,7 @@
             &:not(:last-of-type)::after {
                 content: "▲";
                 .pa;
-                right: -25px;
+                right: -20px;
                 top: 12px;
                 transform: rotate(90deg);
             }
@@ -147,6 +161,14 @@
             margin-right: 2px;
         }
     }
+}
+
+.m-trick-drawer {
+    .el-drawer__body {
+        padding: 0 20px;
+        .scrollbar();
+    }
+    color: #333;
 }
 
 @media screen and (max-width: @smallpc) {

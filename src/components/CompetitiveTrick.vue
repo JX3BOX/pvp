@@ -33,7 +33,7 @@ export default {
     },
     computed: {
         subtype() {
-            return this.$route.query?.subtype;
+            return this.$route.query?.subtype || "冰心诀";
         },
         client() {
             return useStore().client;
