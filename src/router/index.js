@@ -9,6 +9,7 @@ const Sandbox = () => import("@/views/Sandbox.vue");
 const routes = [
     { path: "/", name: "index", component: Index },
     { path: "/sandbox", name: "sandbox", component: Sandbox },
+    { name: "post", path: "/:id(\\d+)", component: () => import("@/views/Single.vue") },
 ];
 
 // 4.Build An Instance

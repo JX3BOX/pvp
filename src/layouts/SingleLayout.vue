@@ -25,7 +25,7 @@
 </template>
 
 <script>
-// import Nav from "@/components/single/single_nav.vue";
+import Nav from "@/components/single/SingleNav.vue";
 // import Side from "@/components/single/single_side.vue";
 import { getAppID } from "@jx3box/jx3box-common/js/utils";
 export default {
@@ -41,14 +41,10 @@ export default {
             id: getAppID(),
         };
     },
-    computed: {
-        user_id: function () {
-            return this.$store.state.user_id;
-        },
-    },
+    computed: {},
     methods: {},
     components: {
-        // Nav,
+        Nav,
         // Side,
     },
 };

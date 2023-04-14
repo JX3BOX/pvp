@@ -5,6 +5,8 @@ export const useStore = defineStore({
     state: () => ({
         client: location.href.includes("origin") ? "origin" : "std",
         activeSkill: "",
+
+        userId: 0,
     }),
     actions: {
         setActiveSkill(skill) {

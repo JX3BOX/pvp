@@ -61,7 +61,7 @@
         </div>
 
         <el-drawer title="评论" v-model="showComment" destroy-on-close class="m-trick-drawer">
-            <Comment category="post" id="19382"></Comment>
+            <Comment category="post" :id="data?.ID"></Comment>
         </el-drawer>
     </div>
 </template>
