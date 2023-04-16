@@ -1,5 +1,5 @@
 <template>
-    <el-drawer :model-value="modelValue" @close="onCancel" title="特殊技能设置" class="m-special-skill__drawer">
+    <el-drawer :model-value="modelValue" @close="onCancel" title="设置技能分类" class="m-special-skill__drawer">
         <div class="m-dialog-tab">
             <el-button @click="onAddTab">新增合集</el-button>
             <el-tabs v-model="activeIndex" type="card" closable class="m-tabs-sort" @tab-remove="onTabRemove">

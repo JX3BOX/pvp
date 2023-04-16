@@ -2,7 +2,7 @@
     <div class="m-special-skill">
         <div class="m-special-skill__header">
             <div class="u-special-title">
-                <el-icon><Filter /></el-icon>特殊技能
+                <el-icon><Filter /></el-icon>技能分类
             </div>
             <el-icon class="u-icon" v-if="isEditor" @click="dialogFormVisible = true"><Setting /></el-icon>
         </div>

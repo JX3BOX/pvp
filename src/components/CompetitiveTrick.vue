@@ -1,16 +1,21 @@
 <template>
-    <div class="m-competitive-trick" v-if="data?.length">
-        <CompetitiveTrickItemVue v-for="item in data" :key="item.id" :data="item" :subtype="subtype" />
-    </div>
-    <div class="u-competitive-trick-null" v-else>
-        <el-icon :size="13"><Warning /></el-icon>
-        <span>当前暂无竞技技巧分享，我要</span>
+    <div class="u-competitive-trick-null">
+        <template v-if="data?.length"
+            ><el-icon><Promotion /></el-icon>一起分享竞技连招，前往</template
+        >
+        <template v-else>
+            <el-icon :size="13"><Warning /></el-icon>
+            <span>当前暂无分享记录，我要</span>
+        </template>
         <a
             class="s-link el-button el-button--small is-round el-button--primary"
             target="_blank"
             :href="publishLink(`pvp`)"
             >分享技巧</a
         >
+    </div>
+    <div class="m-competitive-trick" v-if="data?.length">
+        <CompetitiveTrickItemVue v-for="item in data" :key="item.id" :data="item" :subtype="subtype" />
     </div>
 </template>
 

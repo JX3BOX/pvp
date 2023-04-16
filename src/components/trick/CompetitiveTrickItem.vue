@@ -30,7 +30,7 @@
                 <div class="m-content">
                     <div class="m-talent">
                         <div class="m-talent__title">
-                            <img class="u-icon" :src="getAppIcon('macro')" alt="" />
+                            <img class="u-icon" :src="getAppIcon('talent')" alt="" />
                             奇穴
                         </div>
                         <div class="m-talent-box" :class="`m-qx-container-${data?.ID}`"></div>
