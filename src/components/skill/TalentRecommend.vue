@@ -12,15 +12,31 @@
 
         <div class="m-talent-recommend__content">
             <div class="m-talent-box">
-                <div
-                    class="m-talent-item"
-                    v-for="(item, index) in pzCode"
-                    :key="index"
-                    @click.stop="onSkillClick(item)"
-                    :class="{ active: item.id == activeSkill }"
-                >
-                    <img class="u-skill-icon" :src="iconLink(item.icon)" :alt="item.icon" />
-                    <span class="u-name" :title="item.name">{{ item.name }}</span>
+                <div v-for="(item, index) in pzCode" :key="index" @click.stop="onSkillClick(item)">
+                    <el-popover
+                        width="400px"
+                        :show-after="100"
+                        :hide-after="0"
+                        popper-class="m-skill-pop"
+                        :show-arrow="false"
+                        placement="bottom-start"
+                        :offset="0"
+                    >
+                        <div class="m-talent-skill-item">
+                            <div class="u-name u-block">
+                                <span>{{ item.name }}</span>
+                            </div>
+                            <div class="u-descbox">
+                                <div class="u-desc" v-html="format(popSkill(item.id)?.desc)"></div>
+                            </div>
+                        </div>
+                        <template #reference>
+                            <div class="m-talent-item" :class="{ active: item.id == activeSkill }">
+                                <img class="u-skill-icon" :src="iconLink(item.icon)" :alt="item.icon" />
+                                <span class="u-name" :title="item.name">{{ item.name }}</span>
+                            </div>
+                        </template>
+                    </el-popover>
                 </div>
             </div>
             <div class="m-talent-desc" v-html="nl2br(activeData?.desc)"></div>
@@ -80,17 +96,33 @@ export default {
         activeSkill() {
             return $store.activeSkill;
         },
+        qixueData() {
+            const data = $store.qixueData[this.subtype] || {};
+            if (Object.keys(data).length) {
+                const _data = [];
+                Object.values(data).forEach((item) => {
+                    const _item = Object.values(item);
+                    _data.push(..._item);
+                });
+                return _data;
+            }
+            return [];
+        },
     },
     watch: {
         mount: {
             immediate: true,
             handler() {
                 this.loadRecommend();
+                this.refMap = [];
             },
         },
     },
     methods: {
         iconLink,
+        format: function (txt) {
+            return txt?.replace(/\\n/g, "\n");
+        },
         onSettingIconClick() {
             this.showDialog = true;
         },
@@ -110,6 +142,9 @@ export default {
         },
         onSkillClick(item) {
             $store.setActiveSkill(item?.id);
+        },
+        popSkill(id) {
+            return this.qixueData?.find((item) => item.id == id) || null;
         },
     },
 };

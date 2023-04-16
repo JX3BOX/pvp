@@ -3,11 +3,18 @@
         <div class="m-special-skill__header">
             <div class="u-special-title">
                 <el-icon><Filter /></el-icon>技能分类
+
+                <el-icon
+                    class="u-collapse-icon"
+                    @click="isCollapse = !isCollapse"
+                    :title="!isCollapse ? '展开' : '折叠'"
+                    ><ArrowUp v-if="isCollapse" /><ArrowDown v-else
+                /></el-icon>
             </div>
             <el-icon class="u-icon" v-if="isEditor" @click="dialogFormVisible = true"><Setting /></el-icon>
         </div>
 
-        <div class="m-special-skill__content">
+        <div class="m-special-skill__content" v-if="isCollapse">
             <el-tabs v-model="active">
                 <el-tab-pane v-for="(item, index) in content" :label="item.name" :name="index" :key="index">
                     <div class="m-skill" v-for="skill in item.skills" :key="skill.SkillID">
@@ -54,6 +61,8 @@ export default {
             dialogFormVisible: false,
             data: {},
             active: 0,
+
+            isCollapse: false,
         };
     },
     computed: {

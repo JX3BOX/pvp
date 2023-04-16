@@ -15,13 +15,20 @@
         >
     </div>
     <div class="m-competitive-trick" v-if="data?.length">
-        <CompetitiveTrickItemVue v-for="item in data" :key="item.id" :data="item" :subtype="subtype" />
+        <CompetitiveTrickItemVue
+            v-for="item in data"
+            :key="item.id"
+            :data="item"
+            :subtype="subtype"
+            :preset="presetConfig"
+        />
     </div>
 </template>
 
 <script>
 import { useStore } from "@/store";
-import { getPosts } from "@/service/post";
+import { getPosts, getBoxcoinStatus, getPostBoxcoinConfig } from "@/service/post";
+import User from "@jx3box/jx3box-common/js/user.js";
 
 import CompetitiveTrickItemVue from "./trick/CompetitiveTrickItem.vue";
 import { publishLink } from "@jx3box/jx3box-common/js/utils";
@@ -34,6 +41,8 @@ export default {
     data() {
         return {
             data: [],
+
+            presetConfig: {},
         };
     },
     computed: {
@@ -62,6 +71,35 @@ export default {
                 .finally(() => {
                     this.loading = false;
                 });
+        },
+        async init() {
+            if (!User.isLogin()) return;
+            await getBoxcoinStatus().then((res) => {
+                this.presetConfig.boxcoin_enable = !!~~res.data.data.val;
+            });
+            await getPostBoxcoinConfig(this.postType).then((res) => {
+                this.presetConfig.admin_max = res.data.data.limit.admin_max || 0;
+                this.presetConfig.admin_min = res.data.data.limit.admin_min || 0;
+                this.presetConfig.admin_points = res.data.data.limit.admin_points || [10, 1000];
+                this.presetConfig.admin_left = res.data.data.asManagerBoxCoinRemain || 0;
+                this.presetConfig.admin_total = res.data.data.asManagerBoxCoinTotal || 0;
+
+                this.presetConfig.user_points = res.data.data.limit.user_points || [10, 1000];
+                // 根据多端展示剩余币
+                // 作品是n端，接受n端币+all币
+                if (this.client == "origin") {
+                    this.presetConfig.user_left =
+                        res.data.data.asUserBoxCoinRemainOrigin + res.data.data.asUserBoxCoinRemainAll;
+                } else if (this.client == "std") {
+                    this.presetConfig.user_left =
+                        res.data.data.asUserBoxCoinRemainStd + res.data.data.asUserBoxCoinRemainAll;
+                } else {
+                    this.presetConfig.user_left =
+                        res.data.data.asUserBoxCoinRemainAll +
+                        res.data.data.asUserBoxCoinRemainStd +
+                        res.data.data.asUserBoxCoinRemainOrigin;
+                }
+            });
         },
     },
 };

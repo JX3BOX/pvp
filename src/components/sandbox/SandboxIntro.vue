@@ -13,7 +13,7 @@
 </template>
 
 <script>
-import { getSandboxIntro } from "@/service/sandbox";
+import { getBread } from "@/service/raw";
 import { markRaw } from "vue";
 export default {
     name: "SandboxIntro",
@@ -63,9 +63,9 @@ export default {
             this.loading = true;
             const key =
                 "pvp_sandbox_intro,pvp_sandbox_rule,pvp_sandbox_base,pvp_sandbox_gameplay,pvp_sandbox_tree,pvp_sandbox_model";
-            getSandboxIntro({ names: key })
+            getBread({ key })
                 .then((res) => {
-                    this.data = res.data.data.list || [];
+                    this.data = res.data.data || [];
                 })
                 .finally(() => {
                     this.loading = false;

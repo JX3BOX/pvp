@@ -159,10 +159,10 @@
 </template>
 
 <script>
-import { ref } from "vue";
+import { markRaw, ref } from "vue";
 import { useStore } from "@/store";
 import xfmap from "@jx3box/jx3box-data/data/xf/xf.json";
-import { getSkills, getTalents, getTalentVersions, getSkill } from "../service/raw";
+import { getSkills, getTalents, getTalentVersions, getSkill, getBread } from "../service/raw";
 import { iconLink, showMountIcon } from "@jx3box/jx3box-common/js/utils";
 import { getRecipe } from "@/service/node";
 import relation from "@jx3box/jx3box-data/data/xf/relation.json";
@@ -239,7 +239,7 @@ export default {
         },
         // 门派技能套路id
         kungfus: function () {
-            return this.kungfumap[this.mountid]["kungfus"];
+            return markRaw(this.kungfumap[this.mountid]["kungfus"]);
         },
         // 门派技能数据
         kungfusSkills: function () {
@@ -297,7 +297,8 @@ export default {
             };
         },
         kungfumap: function () {
-            return this.client == "origin" ? kungfumap_origin : kungfumap_std;
+            const data = this.client == "origin" ? kungfumap_origin : kungfumap_std;
+            return markRaw(data);
         },
     },
     watch: {
@@ -422,9 +423,12 @@ export default {
             return kungfus[val];
         },
         // 初始化奇穴模拟器（此时渲染使用空奇穴模板）
-        installTalent: function () {
-            getTalentVersions().then((res) => {
-                this.version = res.data?.[0]?.version;
+        installTalent: async function () {
+            await getBread({ key: "pvp_talent_version" }).then((res) => {
+                this.version = res.data?.data?.[0]?.html;
+            });
+            await getTalentVersions().then((res) => {
+                this.version = this.version || res.data?.[0]?.version;
                 this.talentDriver = new JX3_QIXUE();
                 this.reloadTalent();
             });
@@ -434,6 +438,7 @@ export default {
             this.$nextTick(() => {
                 if (!this.talentDriver) return;
                 this.talentDriver?.then((talent) => {
+                    $store.qixueData = talent?._data;
                     talent.load({
                         version: this.version,
                         xf: this.subtype,

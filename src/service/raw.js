@@ -84,6 +84,12 @@ function getWikiById(post_id, params) {
     });
 }
 
+function getBread(params) {
+    return $cms().get(`/api/cms/helper/breadcrumb`, {
+        params,
+    });
+}
+
 export {
     getSkills,
     getSkill,
@@ -96,4 +102,5 @@ export {
     createSpecialSkillItem,
     getVersions,
     getWikiById,
+    getBread,
 };

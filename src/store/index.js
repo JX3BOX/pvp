@@ -7,6 +7,8 @@ export const useStore = defineStore({
         activeSkill: "",
 
         userId: 0,
+
+        qixueData: {},
     }),
     actions: {
         setActiveSkill(skill) {

@@ -10,6 +10,7 @@
                     :adminBoxcoinEnable="true"
                     :userBoxcoinEnable="true"
                     :postId="data?.ID"
+                    :presetConfig="preset"
                 />
                 <el-tooltip content="评论" placement="top-start">
                     <img src="@/assets/img/comment.svg" class="u-icon" svg-inline alt="" @click="showComment = true" />
@@ -81,6 +82,10 @@ export default {
         Comment,
     },
     props: {
+        preset: {
+            type: Object,
+            default: () => {},
+        },
         data: {
             type: Object,
             default: () => {},

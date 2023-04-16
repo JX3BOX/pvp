@@ -40,11 +40,4 @@ function getHandbookLogs(params) {
         });
 }
 
-// 沙盘玩法简介
-function getSandboxIntro(params) {
-    return $cms().get(`/api/cms/helper/breadcrumbs`, {
-        params,
-    });
-}
-
-export { getCamplist, getCampServers, getCampLog, getCampDetail, getHandbookLogs, getSandboxIntro };
+export { getCamplist, getCampServers, getCampLog, getCampDetail, getHandbookLogs };
