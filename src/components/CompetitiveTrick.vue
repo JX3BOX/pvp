@@ -58,7 +58,7 @@ export default {
     methods: {
         publishLink,
         loadData() {
-            getPosts({ type: "pvp", subtype: this.subtype, client: this.client })
+            getPosts({ type: "pvp", subtype: this.subtype, client: this.client, sticky: 1 })
                 .then((res) => {
                     this.data = res.data.data.list || [];
                 })
