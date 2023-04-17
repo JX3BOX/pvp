@@ -1,7 +1,13 @@
 <template>
     <div class="m-trick-item" v-if="hasData">
         <div class="m-trick-item__title">
-            <a class="u-link" :href="`/pvp/${data?.ID}`" target="_blank">{{ data.post_title }}</a>
+            <div>
+                <span class="u-label u-zlp" v-if="data.zlp">{{ data.zlp }}</span>
+                <a class="u-link" :href="`/pvp/${data?.ID}`" target="_blank">{{ data.post_title }}</a>
+                <span class="u-marks" v-if="data.mark && data.mark.length">
+                    <i v-for="mark in data.mark" class="u-mark" :key="mark">{{ showMark(mark) }}</i>
+                </span>
+            </div>
             <div class="u-icons">
                 <SimpleThx
                     postType="pvp"
@@ -84,6 +90,7 @@ import "@jx3box/jx3box-talent/talent.css";
 import SimpleThx from "@jx3box/jx3box-vue3-ui/src/single/SimpleThx.vue";
 import Comment from "@jx3box/jx3box-vue3-ui/src/single/Comment.vue";
 import Avatar from "@jx3box/jx3box-vue3-ui/src/author/Avatar.vue";
+import { cms as mark_map } from "@jx3box/jx3box-common/data/mark.json";
 export default {
     name: "CompetitiveTrickItem",
     components: {
@@ -145,7 +152,6 @@ export default {
         getAppIcon,
         // 初始化奇穴模拟器（此时渲染使用空奇穴模板）
         installTalent() {
-            console.log(document.querySelector(`.m-qx-container-${this.data?.ID}`));
             this.talentDriver = new JX3_QIXUE({
                 container: `.m-qx-container-${this.data?.ID}`,
                 version: this.talent.version,
@@ -157,6 +163,9 @@ export default {
         },
         nl2br(str) {
             return str.replace(/\n/g, "<br/>");
+        },
+        showMark: function (val) {
+            return mark_map[val] || val;
         },
     },
 };
