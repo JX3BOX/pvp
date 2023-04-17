@@ -1,0 +1,114 @@
+.p-pvp-single {
+    .m-trick-item__right {
+        flex: 1;
+
+        .u-skills {
+            .flex;
+            gap: 20px;
+            flex-wrap: wrap;
+
+            .u-skill {
+                .pr;
+                .flex;
+                flex-direction: column;
+                align-items: center;
+                &:not(:last-of-type)::after {
+                    content: "▲";
+                    .pa;
+                    right: -20px;
+                    top: 12px;
+                    transform: rotate(90deg);
+                }
+            }
+
+            .u-skill-name {
+                font-size: 13px;
+            }
+        }
+
+        .m-header {
+            background-color: #eee;
+            padding: 10px 20px;
+            border-radius: 4px;
+            color: #000;
+            margin-bottom: 20px;
+            line-height: 1.5;
+        }
+
+        .m-content {
+            background-color: #eee;
+            padding: 10px 20px;
+            border-radius: 4px;
+            color: #000;
+        }
+
+        .m-talent {
+            margin-bottom: 20px;
+
+            .u-icon {
+                width: 24px;
+                height: 24px;
+            }
+            .m-talent__title {
+                .flex;
+                align-items: center;
+                gap: 8px;
+                margin-bottom: 5px;
+            }
+        }
+
+        .m-talent__title {
+            .bold;
+            .fz(16px,2);
+        }
+
+        .m-skills {
+            .m-skill-item {
+                &:not(:last-of-type) {
+                    margin-bottom: 10px;
+                }
+            }
+
+            .u-title {
+                margin-bottom: 10px;
+                .bold;
+                .fz(16px,2);
+            }
+
+            .u-desc {
+                font-size: 12px;
+                color: rgb(117, 117, 117);
+                margin-top: 5px;
+            }
+
+            .u-icon {
+                .pr;
+                top: 2px;
+                margin-right: 2px;
+            }
+        }
+    }
+}
+.m-single-info {
+    .u-icon-xf {
+        .size(20px);
+        .y;
+    }
+    .u-sub-block {
+        .flex;
+        align-items: center;
+    }
+    .u-value {
+        .flex;
+        align-items: center;
+        gap: 4px;
+    }
+}
+
+.m-single-null {
+    padding: 20px 0;
+}
+
+.m-single-thx {
+    .mt(40px);
+}

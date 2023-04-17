@@ -1,7 +1,7 @@
 <template>
     <div class="m-trick-item" v-if="hasData">
         <div class="m-trick-item__title">
-            <span>{{ data.post_title }}</span>
+            <a class="u-link" :href="`/pvp/${data?.ID}`" target="_blank">{{ data.post_title }}</a>
             <div class="u-icons">
                 <SimpleThx
                     postType="pvp"
@@ -89,10 +89,6 @@ export default {
         data: {
             type: Object,
             default: () => {},
-        },
-        subtype: {
-            type: String,
-            default: "通用",
         },
     },
     data() {

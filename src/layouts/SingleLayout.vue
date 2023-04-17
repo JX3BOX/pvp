@@ -18,6 +18,7 @@
             <slot></slot>
             <RightSidebar>
                 <!-- <Side :id="id" class="m-extend" /> -->
+                <PostTopic type="pvp" :id="postId"></PostTopic>
             </RightSidebar>
             <Footer></Footer>
         </Main>
@@ -25,9 +26,12 @@
 </template>
 
 <script>
-import Nav from "@/components/single/SingleNav.vue";
+import { useStore } from "@/store";
 // import Side from "@/components/single/single_side.vue";
 import { getAppID } from "@jx3box/jx3box-common/js/utils";
+
+import Nav from "@/components/single/SingleNav.vue";
+import PostTopic from "@jx3box/jx3box-vue3-ui/src/single/PostTopic.vue";
 export default {
     name: "SingleLayout",
     props: {
@@ -41,11 +45,18 @@ export default {
             id: getAppID(),
         };
     },
-    computed: {},
+    computed: {
+        user_id() {
+            return useStore().userId;
+        },
+        postId() {
+            return useStore().postId;
+        },
+    },
     methods: {},
     components: {
         Nav,
-        // Side,
+        PostTopic,
     },
 };
 </script>

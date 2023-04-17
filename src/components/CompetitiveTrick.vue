@@ -15,13 +15,7 @@
         >
     </div>
     <div class="m-competitive-trick" v-if="data?.length">
-        <CompetitiveTrickItemVue
-            v-for="item in data"
-            :key="item.id"
-            :data="item"
-            :subtype="subtype"
-            :preset="presetConfig"
-        />
+        <CompetitiveTrickItemVue v-for="item in data" :key="item.id" :data="item" :preset="presetConfig" />
     </div>
 </template>
 

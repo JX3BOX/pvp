@@ -7,6 +7,7 @@ export const useStore = defineStore({
         activeSkill: "",
 
         userId: 0,
+        postId: 0,
 
         qixueData: {},
     }),
