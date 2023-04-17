@@ -20,7 +20,13 @@
         <div class="m-trick-item__content">
             <div class="m-trick-item__left">
                 <a class="m-author" :href="authorLink(data?.post_author)">
-                    <img class="u-avatar" :src="showAvatar(data.author_info?.user_avatar)" alt="" />
+                    <Avatar
+                        class="u-avatar"
+                        :uid="data?.post_author"
+                        size="s"
+                        :url="data.author_info?.user_avatar"
+                        :frame="data.author_info?.user_avatar_frame"
+                    ></Avatar>
                     <span class="u-name">{{ data.author_info?.display_name }}</span>
                 </a>
             </div>
@@ -68,18 +74,20 @@
 </template>
 
 <script>
-import { showAvatar, authorLink, iconLink, getAppIcon } from "@jx3box/jx3box-common/js/utils";
+import { authorLink, iconLink, getAppIcon } from "@jx3box/jx3box-common/js/utils";
 
 // 奇穴
 import JX3_QIXUE from "@jx3box/jx3box-talent";
 import "@jx3box/jx3box-talent/talent.css";
 import SimpleThx from "@jx3box/jx3box-vue3-ui/src/single/SimpleThx.vue";
 import Comment from "@jx3box/jx3box-vue3-ui/src/single/Comment.vue";
+import Avatar from "@jx3box/jx3box-vue3-ui/src/author/Avatar.vue";
 export default {
     name: "CompetitiveTrickItem",
     components: {
         SimpleThx,
         Comment,
+        Avatar,
     },
     props: {
         preset: {
@@ -130,9 +138,6 @@ export default {
         },
     },
     methods: {
-        showAvatar(val) {
-            return showAvatar(val, 88 * 3);
-        },
         authorLink,
         iconLink,
         getAppIcon,

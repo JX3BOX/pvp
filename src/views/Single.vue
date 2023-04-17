@@ -101,6 +101,10 @@ import { __visibleMap } from "@jx3box/jx3box-common/data/jx3box.json";
 import SETTING from "@/../setting.json";
 const appKey = SETTING.appKey;
 
+// 奇穴
+import JX3_QIXUE from "@jx3box/jx3box-talent";
+import "@jx3box/jx3box-talent/talent.css";
+
 import SingleLayout from "@/layouts/SingleLayout.vue";
 import PostHeader from "@jx3box/jx3box-vue3-ui/src/single/PostHeader.vue";
 import Thx from "@jx3box/jx3box-vue3-ui/src/single/Thx.vue";
@@ -118,6 +122,7 @@ export default {
             post: {},
             stat: {},
             loading: false,
+            talentDriver: null,
         };
     },
     computed: {
@@ -202,6 +207,10 @@ export default {
                     useStore().postId = this.post?.ID;
 
                     document.title = this.post?.post_title;
+
+                    this.$nextTick(() => {
+                        this.installTalent();
+                    });
                 })
                 .finally(() => {
                     this.loading = false;
@@ -214,6 +223,16 @@ export default {
         },
         xficon: function (val) {
             return JX3BOX.__imgPath + "image/xf/" + val + ".png";
+        },
+        installTalent() {
+            console.log(document.querySelector(`.m-qx-container-${this.data?.ID}`));
+            this.talentDriver = new JX3_QIXUE({
+                container: `.m-qx-container-${this.data?.ID}`,
+                version: this.talent.version,
+                xf: this.talent.xf,
+                editable: false,
+                sq: this.talent.sq,
+            });
         },
     },
 };
