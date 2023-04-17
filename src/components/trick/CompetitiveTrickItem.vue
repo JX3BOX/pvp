@@ -3,7 +3,7 @@
         <div class="m-trick-item__header">
             <div class="m-trick-item__title">
                 <span class="u-label u-zlp" v-if="data.zlp">{{ data.zlp }}</span>
-                <a class="u-link" :href="`/pvp/${data?.ID}`" target="_blank">{{ data.post_title }}</a>
+                <a class="u-link" :href="`/pvp/${data?.ID}`" target="_blank">{{ data.post_title || "未知流派" }}</a>
                 <span class="u-marks" v-if="data.mark && data.mark.length">
                     <i v-for="mark in data.mark" class="u-mark" :key="mark">{{ showMark(mark) }}</i>
                 </span>
@@ -66,6 +66,9 @@
                                         :title="skill.Name"
                                     />
                                     <span class="u-skill-name">{{ skill.Name }}</span>
+                                    <i class="u-gcd-icon" v-show="skill.WithoutGcd" title="无GCD技能">
+                                        <el-icon><Clock /></el-icon>
+                                    </i>
                                 </span>
                             </div>
                             <div class="u-desc" v-if="item.desc">连招说明：{{ item.desc }}</div>
@@ -138,11 +141,13 @@ export default {
                     this.$nextTick(() => {
                         this.installTalent();
                     });
-                } else {
-                    this.$nextTick(() => {
-                        // this.reloadTalent();
-                    });
                 }
+            },
+        },
+        talent: {
+            deep: true,
+            handler() {
+                this.reloadTalent();
             },
         },
     },
@@ -160,6 +165,19 @@ export default {
                 sq: this.talent.sq,
             });
             // this.reloadTalent();
+        },
+        reloadTalent() {
+            this.$nextTick(() => {
+                if (!this.talentDriver) return;
+                this.talentDriver?.then((talent) => {
+                    talent.load({
+                        version: this.talent.version,
+                        xf: this.talent.xf,
+                        editable: false,
+                        sq: this.talent.sq,
+                    });
+                });
+            });
         },
         nl2br(str) {
             return str.replace(/\n/g, "<br/>");
