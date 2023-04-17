@@ -30,6 +30,10 @@
                                         奇穴
                                     </div>
                                     <div class="m-talent-box" :class="`m-qx-container-${data?.ID}`"></div>
+
+                                    <div class="u-desc" v-if="data?.post_meta?.talent_desc">
+                                        奇穴讲解：<span v-html="nl2br(data?.post_meta?.talent_desc)"></span>
+                                    </div>
                                 </div>
                                 <div class="m-skills">
                                     <div class="m-skill-item" v-for="(item, i) in skills" :key="i">
@@ -49,6 +53,9 @@
                                                     :title="skill.Name"
                                                 />
                                                 <span class="u-skill-name">{{ skill.Name }}</span>
+                                                <i class="u-gcd-icon" v-show="skill.WithoutGcd" title="无GCD技能">
+                                                    <el-icon><Clock /></el-icon>
+                                                </i>
                                             </span>
                                         </div>
                                         <div class="u-desc" v-if="item.desc">连招说明：{{ item.desc }}</div>
