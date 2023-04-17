@@ -60,31 +60,31 @@
             <div class="m-single-null" v-else>
                 <el-alert :title="null_tip" type="warning" show-icon></el-alert>
             </div>
-        </div>
 
-        <!-- 文章后 -->
-        <div class="m-single-append">
-            <slot name="single-append"></slot>
+            <!-- 文章后 -->
+            <div class="m-single-append">
+                <slot name="single-append"></slot>
 
-            <!-- 打赏 -->
-            <Thx
-                class="m-single-thx"
-                :postId="id"
-                :postType="post_type"
-                :postTitle="post_title"
-                :userId="author_id"
-                :adminBoxcoinEnable="true"
-                :userBoxcoinEnable="true"
-                :authors="authors"
-                :client="post_client"
-                :allowGift="allow_gift"
-            />
+                <!-- 打赏 -->
+                <Thx
+                    class="m-single-thx"
+                    :postId="id"
+                    :postType="post_type"
+                    :postTitle="post_title"
+                    :userId="author_id"
+                    :adminBoxcoinEnable="true"
+                    :userBoxcoinEnable="true"
+                    :authors="authors"
+                    :client="post_client"
+                    :allowGift="allow_gift"
+                />
 
-            <!-- 评论 -->
-            <div ref="commentView" class="m-single-comment">
-                <el-divider content-position="left">评论</el-divider>
-                <Comment :id="id" category="post" v-if="id && allow_comment" />
-                <el-alert title="作者没有开启评论功能" type="warning" show-icon v-else></el-alert>
+                <!-- 评论 -->
+                <div ref="commentView" class="m-single-comment">
+                    <el-divider content-position="left">评论</el-divider>
+                    <Comment :id="id" category="post" v-if="id && allow_comment" />
+                    <el-alert title="作者没有开启评论功能" type="warning" show-icon v-else></el-alert>
+                </div>
             </div>
         </div>
     </SingleLayout>

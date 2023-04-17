@@ -63,4 +63,8 @@ export default {
 
 <style lang="less">
 @import "~@/assets/css/list.less";
+.c-main {
+    .mt(48px);
+    padding: 0;
+}
 </style>
