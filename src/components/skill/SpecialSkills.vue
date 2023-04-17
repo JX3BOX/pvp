@@ -1,17 +1,14 @@
 <template>
     <div class="m-special-skill">
-        <div class="m-special-skill__header">
+        <div class="m-special-skill__header" @click="isCollapse = !isCollapse">
             <div class="u-special-title">
                 <el-icon><Filter /></el-icon>技能分类
 
-                <el-icon
-                    class="u-collapse-icon"
-                    @click="isCollapse = !isCollapse"
-                    :title="!isCollapse ? '展开' : '折叠'"
+                <el-icon class="u-collapse-icon" :title="!isCollapse ? '展开' : '折叠'"
                     ><ArrowUp v-if="isCollapse" /><ArrowDown v-else
                 /></el-icon>
             </div>
-            <el-icon class="u-icon" v-if="isEditor" @click="dialogFormVisible = true"><Setting /></el-icon>
+            <el-icon class="u-icon" v-if="isEditor" @click.stop="dialogFormVisible = true"><Setting /></el-icon>
         </div>
 
         <div class="m-special-skill__content" v-if="isCollapse">
