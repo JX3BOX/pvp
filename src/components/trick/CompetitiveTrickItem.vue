@@ -38,7 +38,9 @@
                     </div>
                     <div class="m-skills">
                         <div class="m-skill-item" v-for="(item, i) in skills" :key="i">
-                            <div class="u-title">连招：{{ item.name }}</div>
+                            <div class="u-title">
+                                <img class="u-icon" :src="getAppIcon('pvp')" alt="" /> 连招：{{ item.name }}
+                            </div>
                             <div class="u-skills" v-if="item.sq">
                                 <span
                                     v-for="(skill, index) in item.sq"
