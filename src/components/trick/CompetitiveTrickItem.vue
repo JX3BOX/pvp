@@ -37,7 +37,7 @@
                 </a>
             </div>
             <div class="m-trick-item__right">
-                <div class="m-header">
+                <div class="m-header" v-if="data?.post_meta?.content">
                     <div v-html="nl2br(data?.post_meta?.content)"></div>
                 </div>
                 <div class="m-content">
@@ -47,6 +47,10 @@
                             奇穴
                         </div>
                         <div class="m-talent-box" :class="`m-qx-container-${data?.ID}`"></div>
+
+                        <div class="u-desc" v-if="data?.post_meta?.talent_desc">
+                            奇穴讲解：<span v-html="nl2br(data?.post_meta?.talent_desc)"></span>
+                        </div>
                     </div>
                     <div class="m-skills">
                         <div class="m-skill-item" v-for="(item, i) in skills" :key="i">
