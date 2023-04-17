@@ -1,14 +1,14 @@
 <template>
     <div class="m-trick-item" v-if="hasData">
-        <div class="m-trick-item__title">
-            <div>
+        <div class="m-trick-item__header">
+            <div class="m-trick-item__title">
                 <span class="u-label u-zlp" v-if="data.zlp">{{ data.zlp }}</span>
                 <a class="u-link" :href="`/pvp/${data?.ID}`" target="_blank">{{ data.post_title }}</a>
                 <span class="u-marks" v-if="data.mark && data.mark.length">
                     <i v-for="mark in data.mark" class="u-mark" :key="mark">{{ showMark(mark) }}</i>
                 </span>
             </div>
-            <div class="u-icons">
+            <div class="m-trick-item__thx">
                 <SimpleThx
                     postType="pvp"
                     :postTitle="data?.post_title"

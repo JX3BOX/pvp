@@ -42,41 +42,28 @@
     .flex;
     gap: 10px;
 }
+.m-trick-item__header {
+    .flex;
+    align-items: center;
+    justify-content: space-between;
+}
 .m-trick-item__title {
     margin-bottom: 20px;
     .bold;
     .flex;
-    gap: 20px;
     align-items: center;
-    justify-content: space-between;
-
-    .u-icons {
+    gap: 5px;
+    .pr;
+    flex-wrap: nowrap;
+    .u-marks {
         .flex;
-        align-items: center;
-        gap: 20px;
-        transform: scale(0.8);
-        transform-origin: right top;
     }
 
-    .u-icon {
-        .size(26px);
-        .pointer;
-        .pr;
-        top: 1px;
-    }
     .u-link {
         color: @color;
 
         &:hover {
             color: @color-link;
-        }
-    }
-
-    .w-thx-panel {
-        .w-like2 {
-            .u-icon {
-                top: -4px;
-            }
         }
     }
 
@@ -103,6 +90,29 @@
         color: #fff;
         .ml(5px);
         .normal;
+    }
+}
+.m-trick-item__thx {
+    .flex;
+    align-items: center;
+    gap: 20px;
+    transform: scale(0.8);
+    transform-origin: right top;
+    top: -6px;
+    .pr;
+    .u-icon {
+        .size(26px);
+        .pointer;
+        .pr;
+        top: 1px;
+    }
+
+    .w-thx-panel {
+        .w-like2 {
+            .u-icon {
+                top: -4px;
+            }
+        }
     }
 }
 .m-trick-item__left {
@@ -243,7 +253,15 @@
         .x;
         width: 100%;
     }
-    .m-trick-item__title {
+}
+@media screen and (max-width: @ipad) {
+    .m-trick-item__header {
         flex-direction: column;
+        overflow: hidden;
+    }
+    .m-trick-item__title {
+        white-space: nowrap;
+        overflow: hidden;
+        justify-content: flex-start;
     }
 }
