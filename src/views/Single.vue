@@ -24,7 +24,7 @@
                                 <div v-html="nl2br(data?.post_meta?.content)"></div>
                             </div>
                             <div class="m-content">
-                                <div class="m-talent">
+                                <div class="m-talent" v-if="Object.keys(talent).length">
                                     <div class="m-talent__title">
                                         <img class="u-icon" :src="getAppIcon('talent')" alt="" />
                                         奇穴
