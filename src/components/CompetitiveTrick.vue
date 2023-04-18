@@ -14,7 +14,7 @@
             >分享技巧</a
         >
     </div>
-    <div class="m-competitive-trick" v-if="data?.length">
+    <div class="m-competitive-trick" v-loading="loading">
         <CompetitiveTrickItemVue v-for="item in data" :key="item.id" :data="item" :preset="presetConfig" />
     </div>
 </template>
@@ -37,6 +37,7 @@ export default {
             data: [],
 
             presetConfig: {},
+            loading: false,
         };
     },
     computed: {
@@ -58,6 +59,7 @@ export default {
     methods: {
         publishLink,
         loadData() {
+            this.loading = true;
             getPosts({ type: "pvp", subtype: this.subtype, client: this.client, sticky: 1 })
                 .then((res) => {
                     this.data = res.data.data.list || [];
