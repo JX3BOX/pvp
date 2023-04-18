@@ -65,7 +65,7 @@
                 <div class="m-mount-info">
                     <div class="m-pasv">
                         <!-- <div class="u-title">门派内功</div> -->
-                        <el-popover width="450px" popper-class="m-pasv-pop" effect="dark">
+                        <el-popover width="450px" popper-class="m-pasv-pop" effect="dark" :show-arrow="false">
                             <div class="m-pasv">
                                 <div class="u-title">{{ subtype }}</div>
                                 <div class="u-name">{{ pasv_info?.Name }}</div>
@@ -88,7 +88,7 @@
                     </div>
                     <div class="m-zhenfa">
                         <!-- <div class="u-title">阵法</div> -->
-                        <el-popover width="500px" popper-class="m-pasv-pop" effect="dark">
+                        <el-popover width="500px" popper-class="m-pasv-pop" effect="dark" :show-arrow="false">
                             <div class="m-zhenfa-info">
                                 <div class="u-zhenfa-bg" :style="zhenfaBg">
                                     <img

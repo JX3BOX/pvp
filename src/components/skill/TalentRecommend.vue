@@ -42,7 +42,13 @@
             <div class="m-talent-desc" v-html="nl2br(activeData?.desc)"></div>
         </div>
 
-        <TalentRecommendDrawer v-model="showDialog" :data="list" :mount="mount" @update="loadRecommend" />
+        <TalentRecommendDrawer
+            v-model="showDialog"
+            :data="list"
+            :mount="mount"
+            @update="loadRecommend"
+            :current="active"
+        />
     </div>
 </template>
 
@@ -108,6 +114,7 @@ export default {
             }
             return [];
         },
+        // computedList() {}
     },
     watch: {
         mount: {

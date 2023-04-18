@@ -91,7 +91,7 @@ import { markRaw } from "vue";
 import { mapState } from "pinia";
 import { useStore } from "@/store";
 import { addTalentRecommend, putTalentRecommend, delTalentRecommend } from "@/service/talent_recommend";
-import { omit, uniqBy } from "lodash";
+import { omit } from "lodash";
 export default {
     name: "TalentRecommendDialog",
     props: {
@@ -106,6 +106,10 @@ export default {
         mount: {
             type: [String, Number],
             default: 0,
+        },
+        current: {
+            type: [String, Number],
+            default: "",
         },
     },
     emits: ["update:modelValue", "update"],
@@ -155,17 +159,51 @@ export default {
             return this.$route.query?.subtype || "冰心诀";
         },
         computedData() {
-            return uniqBy(
-                this.data.concat(
-                    ["副本", "百战", "竞技场", "绝境战场", "大小攻防", "跑酷"].map((item) => {
-                        return {
-                            key: item,
-                            id: item,
-                        };
-                    })
-                ),
-                "key"
-            );
+            const arr = ["竞技场", "绝境战场", "大小攻防", "跑酷", "百战", "副本"];
+            let data = [];
+
+            arr.forEach((item) => {
+                const itemData = this.data.filter((i) => i.key === item);
+                if (itemData) {
+                    data = data.concat(itemData);
+                } else {
+                    data.push({
+                        key: item,
+                        id: item,
+                    });
+                }
+            });
+
+            // arr中不存在的类型则添加
+            this.data.forEach((item) => {
+                if (!arr.includes(item.key)) {
+                    data.push(item);
+                }
+            });
+
+            return data;
+
+            // return uniqBy(
+            //     this.data.concat(
+            //         ["竞技场", "绝境战场", "大小攻防", "跑酷", "百战", "副本"].map((item) => {
+            //             return {
+            //                 key: item,
+            //                 id: item,
+            //             };
+            //         })
+            //     ),
+            //     "key"
+            // );
+        },
+    },
+    watch: {
+        modelValue(val) {
+            if (val) {
+                if (this.current) {
+                    this.active = this.current;
+                    this.onKeyChange();
+                }
+            }
         },
     },
     methods: {
