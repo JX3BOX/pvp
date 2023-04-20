@@ -132,11 +132,12 @@ export default {
             stat: {},
             loading: false,
             talentDriver: null,
+            authors: [],
         };
     },
     computed: {
         id() {
-            return this.$route.params.id;
+            return ~~this.$route.params.id;
         },
         post_type: function () {
             return this.post?.post_type;
@@ -234,7 +235,6 @@ export default {
             return JX3BOX.__imgPath + "image/xf/" + val + ".png";
         },
         installTalent() {
-            console.log(document.querySelector(`.m-qx-container-${this.data?.ID}`));
             this.talentDriver = new JX3_QIXUE({
                 container: `.m-qx-container-${this.data?.ID}`,
                 version: this.talent.version,

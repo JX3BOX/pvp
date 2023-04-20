@@ -69,7 +69,7 @@
                                         :alt="skill.IconID"
                                         :title="skill.Name"
                                     />
-                                    <span class="u-skill-name">{{ skill.Name }}</span>
+                                    <span class="u-skill-name" :title="skill.Name">{{ skill.Name }}</span>
                                     <i class="u-gcd-icon" v-show="skill.WithoutGcd" title="无GCD技能">
                                         <el-icon><Clock /></el-icon>
                                     </i>
