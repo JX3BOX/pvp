@@ -25,6 +25,11 @@
                                 <div class="u-skill">
                                     <img class="u-skill-icon" :src="iconLink(skill.IconID)" :alt="skill.IconID" />
                                     <span class="u-name" :title="skill.Name">{{ skill.Name }}</span>
+                                    <!-- <span class="u-mask"> -->
+                                    <el-icon size="16" class="u-del-icon" title="移除技能" @click="removeSkill(skill)"
+                                        ><Delete
+                                    /></el-icon>
+                                    <!-- </span> -->
                                 </div>
                                 <div class="u-desc">
                                     <el-input
@@ -152,6 +157,10 @@ export default {
         },
         onAddTab() {
             this.content.push(cloneDeep(default_content));
+        },
+        removeSkill(skill) {
+            let i = this.content[this.activeIndex - 1].skills.indexOf(skill);
+            this.content[this.activeIndex - 1].skills.splice(i, 1);
         },
         onTabRemove(name) {
             if (this.content.length < 2) {
