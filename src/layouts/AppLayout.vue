@@ -5,6 +5,7 @@
             <template #logo>
                 <img svg-inline :src="logo" />
             </template>
+            <Info />
         </Breadcrumb>
         <Main :class="className" :withoutRight="true" :withoutLeft="true">
             <slot></slot>
@@ -14,10 +15,14 @@
 </template>
 
 <script>
+import Info from "@/components/list/Info.vue";
 import JX3BOX from "@jx3box/jx3box-common/data/jx3box.json";
 import app from "../assets/data/app.json";
 export default {
     name: "AppLayout",
+    components: {
+        Info,
+    },
     props: {
         slug: {
             type: String,

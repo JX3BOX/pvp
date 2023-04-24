@@ -3,7 +3,7 @@
         <h5 class="u-title">
             心法导航
             <router-link class="u-more" :to="{ query: { subtype: '' } }"
-                >全部心法<i class="el-icon-arrow-right"></i
+                >全部心法<el-icon><ArrowRight /></el-icon
             ></router-link>
         </h5>
         <ul class="m-bps-nav u-list">
@@ -35,7 +35,7 @@
             </a>
             <a href="/jcl" target="_blank">
                 <img class="u-icon" :src="getAppIcon('jcl', true)" />
-                <span>战斗日志分析</span>
+                <span>战斗分析</span>
                 <em>JX3 Combat Log</em>
             </a>
         </div>

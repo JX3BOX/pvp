@@ -10,7 +10,7 @@
             :feedbackEnable="true"
             :crumbEnable="true"
         >
-            <!-- <Info /> -->
+            <Info />
         </Breadcrumb>
         <LeftSidebar>
             <Nav class="m-nav" />
@@ -35,7 +35,7 @@
 </template>
 
 <script>
-// import Info from "@/components/list/Info.vue";
+import Info from "@/components/list/Info.vue";
 import Nav from "@/components/list/ListNav.vue";
 import Side from "@/components/list/RightSide.vue";
 import Tabs from "@/components/Tabs.vue";
@@ -54,7 +54,7 @@ export default {
     },
     methods: {},
     components: {
-        // Info,
+        Info,
         Nav,
         Side,
         Tabs,
