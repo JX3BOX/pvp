@@ -8,82 +8,105 @@
                     ><ArrowUp v-if="isCollapse" /><ArrowDown v-else
                 /></el-icon>
             </div>
-            <el-icon class="u-icon" v-if="isEditor" @click.stop="dialogFormVisible = true"><Setting /></el-icon>
+            <!-- <el-icon class="u-icon" v-if="isEditor" @click.stop="dialogFormVisible = true"><Setting /></el-icon> -->
         </div>
 
         <div class="m-special-skill__content" v-if="isCollapse">
-            <el-tabs v-model="active">
-                <el-tab-pane v-for="(item, index) in content" :label="item.name" :name="index" :key="index">
-                    <div class="m-skill" v-for="skill in item.skills" :key="skill.SkillID">
-                        <div class="u-skill">
-                            <img class="u-skill-icon" :src="iconLink(skill.IconID)" :alt="skill.IconID" />
-                            <span class="u-name" :title="skill.Name">{{ skill.Name }}</span>
-                        </div>
-                        <div class="u-desc" v-html="nl2br(skill.desc)"></div>
+            <el-tabs v-model="type" type="card">
+                <el-tab-pane :label="item.label" :name="item.key" v-for="(item, i) in types" :key="i">
+                    <template #label>
+                        <span class="u-tab-icon">
+                            <el-icon :size="16">
+                                <component :is="item.icon"></component>
+                            </el-icon>
+                            {{ item.label }}
+                        </span>
+                    </template>
+                    <div class="m-collection-box">
+                        <div class="m-collection-header" v-html="item.desc"></div>
                     </div>
+                    <ul class="m-collection-list" v-if="data && data.length">
+                        <li class="u-item" v-for="(item, j) in data" :key="j">
+                            <a :href="getItemLink(item)" target="_blank">
+                                <img class="u-icon" :src="iconLink(item.icon, client)" />
+                                <span class="u-name">{{ item.name }}</span>
+                                <span class="u-xf"> ({{ getBelongTo(item) }}) </span>
+                                <span class="u-desc">{{ item.desc }}</span>
+                                <span class="u-remark">{{ item.content }}</span>
+                            </a>
+                        </li>
+                    </ul>
                 </el-tab-pane>
             </el-tabs>
         </div>
-
-        <SpecialSkillDrawer
-            v-model="dialogFormVisible"
-            :mount="mount"
-            :client="client"
-            :data="content"
-            @update="onUpdate"
-        />
     </div>
 </template>
 
 <script>
+import { markRaw } from "vue";
 import { useStore } from "@/store";
-import User from "@jx3box/jx3box-common/js/user.js";
-import { getSpecialSkillList } from "@/service/raw";
-import { iconLink } from "@jx3box/jx3box-common/js/utils";
+import { getSpecialSkillList, getSpecialSkillGroup } from "@/service/raw";
+import { iconLink, getLink } from "@jx3box/jx3box-common/js/utils";
+import schoolMap from "@jx3box/jx3box-data/data/xf/schoolid.json";
+import xfid from "@jx3box/jx3box-data/data/xf/xfid.json";
+import xfmap from "@jx3box/jx3box-data/data/xf/xf.json";
 
-import SpecialSkillDrawer from "./SpecialSkillDrawer.vue";
 export default {
     name: "SpecialSkill",
-    components: {
-        SpecialSkillDrawer,
-    },
-    props: {
-        mount: {
-            type: Number,
-            default: 0,
-        },
-    },
     data() {
         return {
-            dialogFormVisible: false,
-            data: {},
-            active: 0,
+            data: [],
 
             isCollapse: false,
+
+            types: [],
+            type: "jianshang",
+            icons: markRaw({
+                jianshang: "Sugar",
+                diyu: "Dessert",
+                wudi: "IceCream",
+                kongzhi: "HotWater",
+                jiekong: "ColdDrink",
+                qusan: "Watermelon",
+                jianliao: "Grape",
+                daduan: "Cherry",
+                weiyi: "Apple",
+                jixing: "MilkTea",
+                jiansu: "Lollipop",
+                chaofeng: "IceCreamRound",
+                huifu: "IceDrink",
+                chuantou: "KnifeFork",
+                chuanci: "Scissor",
+                guanti: "ForkSpoon",
+            }),
         };
     },
     computed: {
-        isEditor() {
-            return User.isEditor();
-        },
         client() {
             return useStore().client;
         },
-        content() {
-            try {
-                const content = JSON.parse(this.data.content);
-                return content;
-            } catch (e) {
-                return [];
-            }
+        subtype() {
+            return this.$route.query.subtype;
+        },
+        school() {
+            return xfmap[this.subtype]?.school || 0;
+        },
+        mount() {
+            return xfmap[this.subtype]?.id || 0;
         },
     },
     watch: {
-        mount: {
-            immediate: true,
-            handler() {
+        type() {
+            this.loadSkill();
+        },
+        subtype() {
+            this.loadSkill();
+        },
+        isCollapse(val) {
+            if (val) {
+                this.loadGroup();
                 this.loadSkill();
-            },
+            }
         },
     },
     methods: {
@@ -91,15 +114,31 @@ export default {
             return iconLink(id);
         },
         loadSkill() {
-            getSpecialSkillList(this.mount, this.client).then((res) => {
-                this.data = res.data.data;
+            this.loading = true;
+            getSpecialSkillList({ group: this.type, client: this.client, school: this.school })
+                .then((res) => {
+                    this.data = res.data.data.filter((item) => item?.mount == this.mount || !item?.mount);
+                })
+                .finally(() => {
+                    this.loading = false;
+                });
+        },
+        loadGroup() {
+            getSpecialSkillGroup().then((res) => {
+                this.types = res.data.data.map((item) => {
+                    return {
+                        ...item,
+                        icon: this.icons[item.name],
+                        key: item.name,
+                    };
+                });
             });
         },
-        nl2br(str) {
-            return str && str.replace(/\n/g, "<br />");
+        getBelongTo({ school, mount }) {
+            return mount ? xfid[mount] : schoolMap[school];
         },
-        onUpdate() {
-            this.loadSkill();
+        getItemLink: function (item) {
+            return getLink(item.type || "skill", item.id);
         },
     },
 };

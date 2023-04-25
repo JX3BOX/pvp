@@ -57,14 +57,16 @@ function getSandboxLogs(params) {
         });
 }
 
-// 获取所有特殊技能分类列表
-function getSpecialSkillList(mount) {
-    return $cms().get(`/api/cms/bps/pvp-special-skill/${mount}`);
+// 获取所有特殊技能分组
+function getSpecialSkillGroup() {
+    return $cms().get(`/api/cms/bps/pvp/specialskill/group`);
 }
 
-// 创建特殊技能分类
-function createSpecialSkillItem(data) {
-    return $cms().post(`/api/cms/bps/pvp-special-skill`, data);
+// 获取特殊技能列表
+function getSpecialSkillList(params) {
+    return $cms().get(`/api/cms/bps/pvp/specialskill`, {
+        params,
+    });
 }
 
 // 获取历史版本
@@ -99,7 +101,7 @@ export {
     getWikiToSkill,
     getSandboxLogs,
     getSpecialSkillList,
-    createSpecialSkillItem,
+    getSpecialSkillGroup,
     getVersions,
     getWikiById,
     getBread,
