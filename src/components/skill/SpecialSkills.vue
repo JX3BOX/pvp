@@ -59,7 +59,7 @@ export default {
             isCollapse: false,
 
             types: [],
-            type: "jianshang",
+            type: "",
             icons: markRaw({
                 jianshang: "Sugar",
                 diyu: "Dessert",
@@ -132,6 +132,7 @@ export default {
                         };
                     });
             });
+            this.type = this.types[0]?.key;
         },
         getBelongTo({ school, mount }) {
             return mount ? xfid[mount] : schoolMap[school];
