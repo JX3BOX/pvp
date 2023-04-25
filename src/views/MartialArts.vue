@@ -2,60 +2,67 @@
     <div class="p-martial-content">
         <div class="p-martial-arts" v-show="!isSpecialSkill">
             <div class="m-martial-skills" v-loading="loading">
-                <div v-for="kungfu in kungfus" :key="kungfu" class="m-martial-skill">
+                <div
+                    v-for="kungfu in kungfus"
+                    :key="kungfu"
+                    class="m-martial-skill"
+                    v-show="kungfusSkills?.[kungfu]?.length"
+                >
                     <div class="u-title">
                         <span class="u-title-name">{{ showKungfuName(kungfu) }}</span>
                         <img src="../assets/img/skillset.png" class="u-title-img" alt="" />
                     </div>
                     <div class="m-skills" v-if="kungfusSkills[kungfu]">
-                        <div class="m-skill" v-for="skill in kungfusSkills[kungfu]" :key="skill?.SkillID">
-                            <template v-if="skill?.IconID">
-                                <el-popover
-                                    v-if="hasSkill(skill) || subtype === '通用' || !subtype"
-                                    width="400px"
-                                    :show-after="100"
-                                    :hide-after="0"
-                                    popper-class="m-skill-pop"
-                                    :show-arrow="false"
-                                    placement="bottom-start"
-                                    :offset="0"
-                                >
-                                    <div v-if="selectedSkill">
-                                        <skill-item :item="selectedSkill"></skill-item>
-                                    </div>
-                                    <template #reference>
-                                        <div
-                                            class="u-skill"
-                                            @click="setSkill(skill)"
-                                            :class="{ active: activeSkill == skill.SkillID }"
-                                        >
-                                            <img
-                                                class="u-skill-icon"
-                                                :src="iconLink(skill.IconID)"
-                                                :alt="skill.IconID"
-                                                @mousemove="showSkill(skill)"
-                                            />
-                                            <span class="u-name" :title="skill.Name">{{ skill.Name }}</span>
+                        <template v-for="skill in kungfusSkills[kungfu]" :key="skill?.SkillID">
+                            <div class="m-skill" v-if="skill?.IconID">
+                                <template v-if="skill?.IconID">
+                                    <el-popover
+                                        v-if="hasSkill(skill) || subtype === '通用' || !subtype"
+                                        width="400px"
+                                        :show-after="100"
+                                        :hide-after="0"
+                                        popper-class="m-skill-pop"
+                                        :show-arrow="false"
+                                        placement="bottom-start"
+                                        :offset="0"
+                                    >
+                                        <div v-if="selectedSkill">
+                                            <skill-item :item="selectedSkill"></skill-item>
                                         </div>
-                                    </template>
-                                </el-popover>
-                                <div v-else class="u-skill">
-                                    <img
-                                        :src="iconLink(skill?.IconID)"
-                                        :alt="skill.IconID"
-                                        class="u-not-mount u-skill-icon"
-                                    />
-                                    <span class="u-name" :title="skill.Name">{{ skill.Name }}</span>
-                                </div>
-                            </template>
-                            <img
-                                v-if="getSkillRecipe(skill?.SkillID).length"
-                                class="u-icon"
-                                src="@/assets/img/challenge.png"
-                                :ref="(el) => setRefs(el, skill)"
-                                @click.stop="showRecipe(skill?.SkillID)"
-                            />
-                        </div>
+                                        <template #reference>
+                                            <div
+                                                class="u-skill"
+                                                @click="setSkill(skill)"
+                                                :class="{ active: activeSkill == skill.SkillID }"
+                                            >
+                                                <img
+                                                    class="u-skill-icon"
+                                                    :src="iconLink(skill.IconID)"
+                                                    :alt="skill.IconID"
+                                                    @mousemove="showSkill(skill)"
+                                                />
+                                                <span class="u-name" :title="skill.Name">{{ skill.Name }}</span>
+                                            </div>
+                                        </template>
+                                    </el-popover>
+                                    <div v-else class="u-skill">
+                                        <img
+                                            :src="iconLink(skill?.IconID)"
+                                            :alt="skill.IconID"
+                                            class="u-not-mount u-skill-icon"
+                                        />
+                                        <span class="u-name" :title="skill.Name">{{ skill.Name }}</span>
+                                    </div>
+                                </template>
+                                <img
+                                    v-if="getSkillRecipe(skill?.SkillID).length"
+                                    class="u-icon"
+                                    src="@/assets/img/challenge.png"
+                                    :ref="(el) => setRefs(el, skill)"
+                                    @click.stop="showRecipe(skill?.SkillID)"
+                                />
+                            </div>
+                        </template>
                     </div>
                 </div>
 
@@ -245,10 +252,14 @@ export default {
         kungfusSkills: function () {
             const obj = {};
             Object.entries(this.kungfumap[this.mountid]["skills"]).forEach(([key, value]) => {
-                obj[key] = value.map((SkillID) => {
-                    const currentSkill = this.data.find((d) => d.SkillID == SkillID);
-                    return currentSkill;
-                });
+                obj[key] = value
+                    .map((SkillID) => {
+                        const currentSkill = this.data.find(
+                            (d) => d.SkillID == SkillID && this.skills.find((s) => s._id == SkillID)
+                        );
+                        return currentSkill;
+                    })
+                    .filter(Boolean);
             });
             return obj;
         },
@@ -300,6 +311,10 @@ export default {
             const data = this.client == "origin" ? kungfumap_origin : kungfumap_std;
             return markRaw(data);
         },
+        // tl skillIds
+        tlSkillIds: function () {
+            return this.skills.map((item) => ~~item._id);
+        },
     },
     watch: {
         subtype: {
@@ -327,6 +342,9 @@ export default {
     methods: {
         iconLink,
         showMountIcon,
+        // filterSkills(arr) {
+        //     return arr.filter(item => this.tlSkillIds.includes(item.SkillID));
+        // },
         setRefs: function (ref, item) {
             if (ref) {
                 this.refMap.push({
