@@ -128,11 +128,13 @@ export default {
                     .map((item) => {
                         return {
                             ...item,
-                            skills: item.skills.filter((skill) => skill?.mount == this.mount || !skill?.mount),
+                            skills: item.skills
+                                .filter((skill) => skill?.mount == this.mount || !skill?.mount)
+                                .sort((a, b) => a.idKey - b.idKey),
                         };
                     });
+                this.type = this.types[0]?.key;
             });
-            this.type = this.types[0]?.key;
         },
         getBelongTo({ school, mount }) {
             return mount ? xfid[mount] : schoolMap[school];
