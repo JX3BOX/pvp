@@ -220,6 +220,7 @@ export default {
             selectedRecipe: [],
 
             skills: [],
+            subSkills: [],
             selectedSkill: null,
             ExtraPointKey: "",
 
@@ -254,9 +255,15 @@ export default {
             Object.entries(this.kungfumap[this.mountid]["skills"]).forEach(([key, value]) => {
                 obj[key] = value
                     .map((SkillID) => {
-                        const currentSkill = this.data.find(
-                            (d) => d.SkillID == SkillID && this.skills.find((s) => s._id == SkillID)
-                        );
+                        const currentSkill = this.data.find((d) => {
+                            if (this.subtype !== "通用") {
+                                return (
+                                    (d.SkillID == SkillID && this.skills.find((s) => s._id == SkillID)) ||
+                                    (d.SkillID == SkillID && this.subSkills.find((s) => s._id == SkillID))
+                                );
+                            }
+                            return d.SkillID == SkillID;
+                        });
                         return currentSkill;
                     })
                     .filter(Boolean);
@@ -409,6 +416,12 @@ export default {
                 const skills = res?.find((item) => item?.kungfuName == this.subtype);
                 this.skills = flattenDeep(
                     skills?.remarks?.map((item) => {
+                        return item?.forceSkills;
+                    })
+                );
+                const subSkills = res?.find((item) => item?.kungfuName != this.subtype);
+                this.subSkills = flattenDeep(
+                    subSkills?.remarks?.map((item) => {
                         return item?.forceSkills;
                     })
                 );

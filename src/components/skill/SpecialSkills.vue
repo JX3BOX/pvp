@@ -25,14 +25,15 @@
                     <div class="m-collection-box">
                         <div class="m-collection-header" v-html="item.desc"></div>
                     </div>
-                    <ul class="m-collection-list" v-if="data && data.length">
-                        <li class="u-item" v-for="(item, j) in data" :key="j">
-                            <a :href="getItemLink(item)" target="_blank">
-                                <img class="u-icon" :src="iconLink(item.icon, client)" />
-                                <span class="u-name">{{ item.name }}</span>
-                                <span class="u-xf"> ({{ getBelongTo(item) }}) </span>
-                                <span class="u-desc">{{ item.desc }}</span>
-                                <span class="u-remark">{{ item.content }}</span>
+
+                    <ul class="m-collection-list">
+                        <li class="u-item" v-for="(skill, j) in item.skills" :key="j">
+                            <a :href="getItemLink(skill)" target="_blank">
+                                <img class="u-icon" :src="iconLink(skill.icon, client)" />
+                                <span class="u-name">{{ skill.name }}</span>
+                                <span class="u-xf"> ({{ getBelongTo(skill) }}) </span>
+                                <span class="u-desc">{{ skill.desc }}</span>
+                                <span class="u-remark">{{ skill.content }}</span>
                             </a>
                         </li>
                     </ul>
@@ -45,7 +46,7 @@
 <script>
 import { markRaw } from "vue";
 import { useStore } from "@/store";
-import { getSpecialSkillList, getSpecialSkillGroup } from "@/service/raw";
+import { getSpecialSkillGroup } from "@/service/raw";
 import { iconLink, getLink } from "@jx3box/jx3box-common/js/utils";
 import schoolMap from "@jx3box/jx3box-data/data/xf/schoolid.json";
 import xfid from "@jx3box/jx3box-data/data/xf/xfid.json";
@@ -55,8 +56,6 @@ export default {
     name: "SpecialSkill",
     data() {
         return {
-            data: [],
-
             isCollapse: false,
 
             types: [],
@@ -86,26 +85,22 @@ export default {
             return useStore().client;
         },
         subtype() {
-            return this.$route.query.subtype;
+            return this.$route.query.subtype || "冰心诀";
         },
         school() {
-            return xfmap[this.subtype]?.school || 0;
+            return this.subtype === "通用" ? (this.subtype ? 0 : "") : xfmap[this.subtype]?.school;
         },
         mount() {
             return xfmap[this.subtype]?.id || 0;
         },
     },
     watch: {
-        type() {
-            this.loadSkill();
-        },
         subtype() {
-            this.loadSkill();
+            this.loadGroup();
         },
         isCollapse(val) {
             if (val) {
                 this.loadGroup();
-                this.loadSkill();
             }
         },
     },
@@ -113,25 +108,29 @@ export default {
         iconLink(id) {
             return iconLink(id);
         },
-        loadSkill() {
-            this.loading = true;
-            getSpecialSkillList({ group: this.type, client: this.client, school: this.school })
-                .then((res) => {
-                    this.data = res.data.data.filter((item) => item?.mount == this.mount || !item?.mount);
-                })
-                .finally(() => {
-                    this.loading = false;
-                });
-        },
         loadGroup() {
-            getSpecialSkillGroup().then((res) => {
-                this.types = res.data.data.map((item) => {
-                    return {
-                        ...item,
-                        icon: this.icons[item.name],
-                        key: item.name,
-                    };
-                });
+            const params = {
+                client: this.client,
+            };
+            if (this.school !== "") {
+                params.school = this.school;
+            }
+            getSpecialSkillGroup(params).then((res) => {
+                this.types = res.data.data
+                    .map((item) => {
+                        return {
+                            ...item,
+                            icon: this.icons[item.name],
+                            key: item.name,
+                        };
+                    })
+                    .filter((item) => !["chuanci", "chuantou", "guanti"].includes(item.key) && item.skills.length > 0)
+                    .map((item) => {
+                        return {
+                            ...item,
+                            skills: item.skills.filter((skill) => skill?.mount == this.mount || !skill?.mount),
+                        };
+                    });
             });
         },
         getBelongTo({ school, mount }) {

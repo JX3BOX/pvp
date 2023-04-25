@@ -58,8 +58,10 @@ function getSandboxLogs(params) {
 }
 
 // 获取所有特殊技能分组
-function getSpecialSkillGroup() {
-    return $cms().get(`/api/cms/bps/pvp/specialskill/group`);
+function getSpecialSkillGroup(params) {
+    return $cms().get(`/api/cms/bps/pvp/specialskill/group`, {
+        params,
+    });
 }
 
 // 获取特殊技能列表
