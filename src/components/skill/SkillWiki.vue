@@ -27,7 +27,7 @@
                                 class="u-value u-creator"
                                 v-for="(item, index) in userData"
                                 :key="index"
-                                ><img :src="item.avatar" :alt="item.nickname" :title="item.nickname"
+                                ><img :src="showAvatar(item.avatar)" :alt="item.nickname" :title="item.nickname"
                             /></a>
                         </div>
                         <div class="u-meta">
@@ -111,7 +111,7 @@
 import { useStore } from "@/store";
 const $store = useStore();
 import { getWikiToSkill, getVersions, getWikiById } from "@/service/raw.js";
-import { publishLink, getLink, authorLink, ts2str } from "@jx3box/jx3box-common/js/utils";
+import { publishLink, getLink, authorLink, ts2str, showAvatar } from "@jx3box/jx3box-common/js/utils";
 import dayjs from "dayjs";
 import { __Root, __OriginRoot } from "@jx3box/jx3box-common/data/jx3box.json";
 import User from "@jx3box/jx3box-common/js/user.js";
@@ -167,6 +167,7 @@ export default {
             this.userData = this.wikiData?.users;
         },
         publish_url: publishLink,
+        showAvatar,
         martialAltsToPasv_skills(data) {
             this.pasv_skills_data = data;
         },
