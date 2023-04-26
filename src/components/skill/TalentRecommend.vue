@@ -4,13 +4,12 @@
             <div class="u-talent-title">
                 奇穴推荐
                 <el-select size="small" v-model="active" style="width: 150px" v-show="list?.length">
-                    <el-option v-for="item in list" :key="item.key" :label="item.key" :value="item.id"></el-option>
+                    <el-option v-for="item in list" :key="item.id" :label="item.title" :value="item.id"></el-option>
                 </el-select>
             </div>
-            <el-icon v-if="isEditor" class="u-edit-icon" @click="onSettingIconClick"><Setting /></el-icon>
         </div>
 
-        <div class="m-talent-recommend__content">
+        <div class="m-talent-recommend__content" v-if="Object.keys(activeData).length">
             <div class="m-talent-box">
                 <div v-for="(item, index) in pzCode" :key="index" @click.stop="onSkillClick(item)">
                     <el-popover
@@ -41,14 +40,7 @@
             </div>
             <div class="m-talent-desc" v-html="nl2br(activeData?.desc)"></div>
         </div>
-
-        <TalentRecommendDrawer
-            v-model="showDialog"
-            :data="list"
-            :mount="mount"
-            @update="loadRecommend"
-            :current="active"
-        />
+        <el-alert show-icon type="warning" title="暂无奇穴推荐" class="u-alert" v-else :closable="false"></el-alert>
     </div>
 </template>
 
@@ -58,16 +50,11 @@ import User from "@jx3box/jx3box-common/js/user.js";
 import { getTalentRecommendList } from "@/service/talent_recommend";
 import xf from "@jx3box/jx3box-data/data/xf/xf.json";
 import { iconLink } from "@jx3box/jx3box-common/js/utils";
-// components
-import TalentRecommendDrawer from "./TalentRecommendDrawer.vue";
 
 const $store = useStore();
 
 export default {
     name: "TalentRecommend",
-    components: {
-        TalentRecommendDrawer,
-    },
     data() {
         return {
             showDialog: false,
@@ -94,7 +81,7 @@ export default {
         },
         pzCode() {
             try {
-                return JSON.parse(this.activeData.pz_code);
+                return JSON.parse(this.activeData.pzcode);
             } catch (error) {
                 return [];
             }
@@ -135,7 +122,7 @@ export default {
         },
         loadRecommend() {
             if (!this.mount) return;
-            getTalentRecommendList({ mount: this.mount, client: this.client })
+            getTalentRecommendList({ mount: this.mount, client: this.client, subtype: "pvp" })
                 .then((res) => {
                     this.list = res.data.data || [];
                     this.active = this.list[0]?.id || "";
