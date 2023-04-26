@@ -61,6 +61,12 @@
                                     :ref="(el) => setRefs(el, skill)"
                                     @click.stop="showRecipe(skill?.SkillID)"
                                 />
+                                <img
+                                    v-if="audios[skill?.SkillID]"
+                                    class="u-icon-audio"
+                                    src="@/assets/img/audio_static.gif"
+                                    @click.stop="showAudio(skill?.SkillID, $event.target)"
+                                />
                             </div>
                         </template>
                     </div>
@@ -126,6 +132,7 @@
                 <TalentRecommend />
             </div>
 
+            <!-- 技能秘籍悬浮窗 -->
             <el-popover
                 v-model:visible="visiblePopover"
                 :virtual-ref="iconRef"
@@ -155,6 +162,29 @@
                     </a>
                 </el-tooltip>
             </el-popover>
+
+            <!-- 技能音效悬浮窗 -->
+            <el-popover
+                v-model:visible="visibleAudioPopover"
+                :virtual-ref="audioIconRef"
+                trigger="manual"
+                :width="320"
+                transition="el-zoom-in-top"
+                popper-class="m-audio-pop"
+                virtual-triggering
+                placement="right"
+                effect="dark"
+                :show-arrow="false"
+                :offset="0"
+            >
+                <skill-audio
+                    class="u-audio"
+                    :src="audioUrl(audio.file)"
+                    :remark="audio.remark"
+                    v-for="(audio, index) in currentAudios"
+                    :key="index"
+                ></skill-audio>
+            </el-popover>
         </div>
 
         <skillWiki ref="skillWiki" v-model:pasv_skills_props="pasv_skills"></skillWiki>
@@ -169,10 +199,12 @@
 import { markRaw, ref } from "vue";
 import { useStore } from "@/store";
 import xfmap from "@jx3box/jx3box-data/data/xf/xf.json";
-import { getSkills, getTalents, getTalentVersions, getSkill, getBread } from "../service/raw";
+import { getSkills, getTalents, getTalentVersions, getSkill, getBread, getSkillAudios } from "../service/raw";
 import { iconLink, showMountIcon } from "@jx3box/jx3box-common/js/utils";
 import { getRecipe } from "@/service/node";
 import relation from "@jx3box/jx3box-data/data/xf/relation.json";
+import schools from "@jx3box/jx3box-data/data/xf/school.json";
+import JX3BOX from "@jx3box/jx3box-common/data/jx3box.json";
 
 import kungfumap_std from "@/assets/data/martial/kungfu_std.json";
 import kungfumap_origin from "@/assets/data/martial/kungfu_origin.json";
@@ -191,12 +223,14 @@ import SkillWiki from "@/components/skill/SkillWiki.vue";
 import TalentRecommend from "@/components/skill/TalentRecommend.vue";
 import SpecialSkill from "@/components/skill/SpecialSkills.vue";
 import CompetitiveTrick from "@/components/CompetitiveTrick.vue";
+import SkillAudio from "@/components/skill/SkillAudio.vue";
 
 const $store = useStore();
 
 export default {
     name: "MartialArts",
     components: {
+        SkillAudio,
         SkillItem,
         SkillWiki,
         TalentRecommend,
@@ -209,6 +243,11 @@ export default {
             data: [],
             talents: [],
             kungfuid: "pasv",
+            audios: {},
+            currentAudios: [],
+            audioIconRef: ref(null),
+            audioRefs: [],
+            visibleAudioPopover: false,
 
             talentDriver: null,
             recipe: [],
@@ -234,6 +273,9 @@ export default {
         },
         school() {
             return relation.mount_belong_school[this.subtype];
+        },
+        schoolid() {
+            return schools[this.school].school_id;
         },
         // 心法id
         mountid: function () {
@@ -333,6 +375,7 @@ export default {
                 await this.getSkill();
                 this.loading = false;
                 this.reloadTalent();
+                this.getAudioIndex();
             },
             immediate: true,
         },
@@ -352,6 +395,9 @@ export default {
         // filterSkills(arr) {
         //     return arr.filter(item => this.tlSkillIds.includes(item.SkillID));
         // },
+        audioUrl: function (path) {
+            return `${JX3BOX.__dataPath}/audio/src/${path}`;
+        },
         setRefs: function (ref, item) {
             if (ref) {
                 this.refMap.push({
@@ -365,6 +411,11 @@ export default {
             this.iconRef = this.refMap[index].ref;
             this.selectedRecipe = this.getSkillRecipe(id);
             this.visiblePopover = true;
+        },
+        showAudio: function (id, ref) {
+            this.currentAudios = this.audios[id];
+            this.audioIconRef = ref;
+            this.visibleAudioPopover = true;
         },
         async loadSkills() {
             this.loading = true;
@@ -507,6 +558,12 @@ export default {
         formatPasv(info) {
             if (!info.Desc) return;
             return info.Desc.replace(/\\n/g, "</br>");
+        },
+        // 技能音频索引文件
+        getAudioIndex() {
+            getSkillAudios(this.schoolid).then((data) => {
+                this.audios = data;
+            });
         },
     },
 };
