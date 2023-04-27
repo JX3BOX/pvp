@@ -62,6 +62,9 @@ export default {
     mounted() {
         this.init();
     },
+    beforeUnmount() {
+        this.ended();
+    },
 };
 </script>
 

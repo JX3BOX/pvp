@@ -64,7 +64,7 @@
                                 <img
                                     v-if="audios[skill?.SkillID]"
                                     class="u-icon-audio"
-                                    src="@/assets/img/audio_static.gif"
+                                    src="@/assets/img/audio_icon.png"
                                     @click.stop="showAudio(skill?.SkillID, $event.target)"
                                 />
                             </div>
@@ -165,15 +165,15 @@
 
             <!-- 技能音效悬浮窗 -->
             <el-popover
-                v-model:visible="visibleAudioPopover"
+                :visible="visibleAudioPopover"
                 :virtual-ref="audioIconRef"
+                virtual-triggering
                 trigger="manual"
-                :width="320"
                 transition="el-zoom-in-top"
                 popper-class="m-audio-pop"
-                virtual-triggering
                 placement="right"
                 effect="dark"
+                :width="320"
                 :show-arrow="false"
                 :offset="0"
             >
@@ -181,8 +181,8 @@
                     class="u-audio"
                     :src="audioUrl(audio.file)"
                     :remark="audio.remark"
-                    v-for="(audio, index) in currentAudios"
-                    :key="index"
+                    v-for="audio in currentAudios"
+                    :key="audio.file"
                 ></skill-audio>
             </el-popover>
         </div>
@@ -243,10 +243,10 @@ export default {
             data: [],
             talents: [],
             kungfuid: "pasv",
+
             audios: {},
             currentAudios: [],
-            audioIconRef: ref(null),
-            audioRefs: [],
+            audioIconRef: null,
             visibleAudioPopover: false,
 
             talentDriver: null,
@@ -413,6 +413,10 @@ export default {
             this.visiblePopover = true;
         },
         showAudio: function (id, ref) {
+            if (this.audioIconRef == ref && this.visibleAudioPopover) {
+                this.visibleAudioPopover = false;
+                return;
+            }
             this.currentAudios = this.audios[id];
             this.audioIconRef = ref;
             this.visibleAudioPopover = true;
