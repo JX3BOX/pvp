@@ -134,9 +134,10 @@
 
             <!-- 技能秘籍悬浮窗 -->
             <el-popover
-                v-model:visible="visiblePopover"
+                :visible="visiblePopover"
                 :virtual-ref="iconRef"
                 trigger="manual"
+                transition="el-zoom-in-top"
                 :width="226"
                 popper-class="m-recipe-pop"
                 virtual-triggering
@@ -144,6 +145,9 @@
                 effect="dark"
                 :show-arrow="false"
                 :offset="0"
+                :popper-options="{
+                    closeOnDocumentClick: true,
+                }"
             >
                 <el-tooltip
                     v-for="item in selectedRecipe"
@@ -277,6 +281,9 @@ export default {
         schoolid() {
             return schools[this.school].school_id;
         },
+        kungfuId() {
+            return xfmap[this.subtype]?.["kungfuId"];
+        },
         // 心法id
         mountid: function () {
             return xfmap[this.subtype]?.["id"] || "0";
@@ -408,6 +415,10 @@ export default {
         },
         showRecipe: function (id) {
             const index = this.refMap.findIndex((item) => item.item.SkillID == id);
+            if (this.iconRef == this.refMap[index].ref && this.visiblePopover) {
+                this.visiblePopover = false;
+                return;
+            }
             this.iconRef = this.refMap[index].ref;
             this.selectedRecipe = this.getSkillRecipe(id);
             this.visiblePopover = true;
@@ -468,13 +479,13 @@ export default {
                 return;
             }
             getSkill(this.subtype, this.client).then((res) => {
-                const skills = res?.find((item) => item?.kungfuName == this.subtype);
+                const skills = res?.find((item) => item?.kungfuId == this.kungfuId);
                 this.skills = flattenDeep(
                     skills?.remarks?.map((item) => {
                         return item?.forceSkills;
                     })
                 );
-                const subSkills = res?.find((item) => item?.kungfuName != this.subtype);
+                const subSkills = res?.find((item) => item?.kungfuId != this.kungfuId);
                 this.subSkills = flattenDeep(
                     subSkills?.remarks?.map((item) => {
                         return item?.forceSkills;
