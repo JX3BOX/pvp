@@ -3,7 +3,7 @@ import JX3BOX from "@jx3box/jx3box-common/data/jx3box.json";
 import xfmap from "@jx3box/jx3box-data/data/xf/xf.json";
 
 const $oss = axios.create({
-    baseURL: JX3BOX.__ossRoot,
+    baseURL: JX3BOX.__dataPath,
 });
 
 export function getSkills(params) {
@@ -13,16 +13,16 @@ export function getSkills(params) {
 }
 
 export async function getTalents() {
-    let res = await $oss.get("/data/qixue/talents.json");
+    let res = await $oss.get("talent/talents.json");
     return res.data;
 }
 
 export function getTalentVersions() {
-    return $oss.get("data/qixue/index.json");
+    return $oss.get("talent/index.json");
 }
 
 export async function getTalents2() {
-    let res = await $oss.get("/data/talent2/talent2.json");
+    let res = await $oss.get("talent2/talent2.json");
     return res.data;
 }
 

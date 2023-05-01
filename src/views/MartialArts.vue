@@ -526,7 +526,7 @@ export default {
             });
             await getTalentVersions().then((res) => {
                 this.version = this.version || res.data?.[0]?.version;
-                this.talentDriver = new JX3_QIXUE();
+                this.talentDriver = new JX3_QIXUE({ version: this.version });
                 this.reloadTalent();
             });
         },
@@ -537,7 +537,7 @@ export default {
                 this.talentDriver?.then((talent) => {
                     $store.qixueData = talent?._data;
                     talent.load({
-                        version: this.version,
+                        // version: this.version,
                         xf: this.subtype,
                         editable: true,
                     });
