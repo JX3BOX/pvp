@@ -26,7 +26,7 @@ export default {
     data: () => ({
         playing: false,
         currentTime: 0,
-        duration: 0,
+        duration: 1,
     }),
     methods: {
         init() {
@@ -37,6 +37,11 @@ export default {
             this.currentTime = this.$refs.audio.currentTime;
         },
         play() {
+            if (this.playing) {
+                this.$refs.audio.pause();
+                this.playing = false;
+                return;
+            }
             this.$refs.audio.play();
             this.playing = true;
             let interval = setInterval(() => {
