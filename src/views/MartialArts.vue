@@ -395,6 +395,11 @@ export default {
     mounted: async function () {
         this.talents = await getTalents();
         this.installTalent();
+        // 虚拟触发。点击悬浮窗外部，关闭悬浮窗
+        document.addEventListener("click", this.clickEvent);
+    },
+    beforeUnmount() {
+        document.removeEventListener("click", this.clickEvent);
     },
     methods: {
         iconLink,
@@ -402,6 +407,15 @@ export default {
         // filterSkills(arr) {
         //     return arr.filter(item => this.tlSkillIds.includes(item.SkillID));
         // },
+        clickEvent: function (event) {
+            const whiteList = ["m-recipe-pop", "m-audio-pop"];
+            const target = event.target;
+            if (!target.parentElement || whiteList.some((item) => target.closest(`.${item}`))) {
+                return;
+            }
+            this.visibleAudioPopover = false;
+            this.visiblePopover = false;
+        },
         audioUrl: function (path) {
             return `${JX3BOX.__dataPath}/audio/src/${path}`;
         },

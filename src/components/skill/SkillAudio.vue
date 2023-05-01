@@ -84,6 +84,7 @@ export default {
     .u-audio-progress__wrapper {
         .pa;
         .size(100%);
+        .z(-1);
     }
 
     .u-audio-progress__bar {
