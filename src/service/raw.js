@@ -30,14 +30,14 @@ export async function getTalents2() {
 export function getSkill(xf, client = "std") {
     const url =
         client === "std"
-            ? `${JX3BOX.__dataPath}/bps/std/${xfmap[xf]["force"]}/skill.json`
-            : `${JX3BOX.__dataPath}/bps/origin/${xf}/skill.json`;
+            ? `${JX3BOX.__dataPath}bps/std/${xfmap[xf]["force"]}/skill.json`
+            : `${JX3BOX.__dataPath}bps/origin/${xf}/skill.json`;
     return fetch(url).then((res) => res.json());
 }
 
 // 获取技能音频索引
 export function getSkillAudios(school) {
-    const url = `${JX3BOX.__dataPath}/audio/index/${school}.json`;
+    const url = `${JX3BOX.__dataPath}audio/index/${school}.json`;
     return fetch(url).then((res) => res.json());
 }
 
