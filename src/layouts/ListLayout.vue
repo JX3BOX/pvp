@@ -24,7 +24,11 @@
                 <Side class="m-extend">
                     <em>PVP交流群</em> :
                     <strong>
-                        <a href="https://jq.qq.com/?_wv=1027&k=mEl1e2hL">645370207</a>
+                        <a
+                            href="http://qm.qq.com/cgi-bin/qm/qr?_wv=1027&k=Z5vidGVY8gcCEaiwVTxOMTJQbJtfbtjl&authKey=e8WenzURIYHmCjJpw3ARGHQETW8tPAhzFt5pZS6Yb2MOCVTIRy%2B%2FMjBpEU75%2FHQw&noverify=0&group_code=645370207"
+                            target="_blank"
+                            >645370207</a
+                        >
                     </strong>
                 </Side>
                 <MiniRank />
