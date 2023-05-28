@@ -149,6 +149,9 @@
                         </template>
                     </draggable>
                 </el-form-item>
+                <el-form-item label="快速输入">
+                    <el-input v-model="quickInput" :rows="8" type="textarea" @change="onQuickInputChange"></el-input>
+                </el-form-item>
             </el-form>
 
             <template #footer>
@@ -175,6 +178,7 @@ import mountGroup from "@jx3box/jx3box-data/data/xf/mount_group.json";
 import { showSchoolIcon, showMountIcon } from "@jx3box/jx3box-common/js/utils";
 import User from "@jx3box/jx3box-common/js/user.js";
 import draggable from "vuedraggable";
+import rankMap from "@/assets/data/rankMap.json";
 
 const default_content = {
     id: "",
@@ -213,6 +217,8 @@ export default {
             saveLoading: false,
             activeName: "",
             tmpName: "",
+
+            quickInput: "",
         };
     },
     computed: {
@@ -424,6 +430,25 @@ export default {
                     this.tmpName = value;
                 })
                 .catch(() => {});
+        },
+
+        // quickinput
+        onQuickInputChange() {
+            if (!this.quickInput) return;
+            // 去除左右中括号 '{}', \n 和 空格
+            const value = this.quickInput
+                .replace(/[\\{\\}\n\s]/g, "")
+                .split(",")
+                .map((item) => {
+                    const _val = item.split(":");
+                    return {
+                        id: String(rankMap[_val[0]]),
+                        num: _val[1],
+                    };
+                })
+                .sort((a, b) => b.num - a.num);
+            // console.log(value);
+            this.form.content = value;
         },
     },
 };
