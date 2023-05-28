@@ -18,14 +18,28 @@
         </div>
 
         <div class="m-ladder-rank">
-            <ul v-if="content?.length">
-                <li v-for="(item, index) in content" :key="item.name" class="u-link">
-                    <span class="u-order" :class="highlight(index)">{{ index + 1 }}</span>
-                    <img :src="showSchoolIcon(item.id)" alt="" class="u-img" />
-                    <span class="u-team">{{ showSchoolName(item.id) }}</span>
-                    <span class="u-server">{{ item.num }}</span>
-                </li>
-            </ul>
+            <el-tabs v-model="activeTab">
+                <el-tab-pane label="输出" name="dps">
+                    <ul v-if="content?.dps.length">
+                        <li v-for="(item, index) in content.dps" :key="item.name" class="u-link">
+                            <span class="u-order" :class="highlight(index)">{{ index + 1 }}</span>
+                            <img :src="showMountIcon(item.id)" alt="" class="u-img" />
+                            <span class="u-team">{{ showMountName(item.id) }}</span>
+                            <span class="u-server">{{ item.num }}</span>
+                        </li>
+                    </ul>
+                </el-tab-pane>
+                <el-tab-pane label="治疗" name="hps">
+                    <ul v-if="content?.hps.length">
+                        <li v-for="(item, index) in content.hps" :key="item.name" class="u-link">
+                            <span class="u-order" :class="highlight(index)">{{ index + 1 }}</span>
+                            <img :src="showMountIcon(item.id)" alt="" class="u-img" />
+                            <span class="u-team">{{ showMountName(item.id) }}</span>
+                            <span class="u-server">{{ item.num }}</span>
+                        </li>
+                    </ul>
+                </el-tab-pane>
+            </el-tabs>
         </div>
 
         <el-drawer
@@ -83,7 +97,7 @@
                         <template #item="{ element, index }">
                             <div class="m-content-item">
                                 <el-icon class="u-rank-icon"><Rank /></el-icon>
-                                <el-select
+                                <!-- <el-select
                                     v-model="element.id"
                                     placeholder="请选择门派名称"
                                     popper-class="u-school-select"
@@ -99,8 +113,20 @@
                                         <img :src="showSchoolIcon(item.id)" alt="" class="u-img" />
                                         <span>{{ item.name }}</span>
                                     </el-option>
+                                </el-select> -->
+                                <el-select
+                                    v-model="element.id"
+                                    placeholder="请选择心法名称"
+                                    popper-class="u-school-select"
+                                    style="width: 300px"
+                                    filterable
+                                >
+                                    <el-option v-for="item in xfMap" :value="item.id" :key="item.id" :label="item.name">
+                                        <img :src="showMountIcon(item.id)" alt="" class="u-img" />
+                                        <span>{{ item.name }}</span>
+                                    </el-option>
                                 </el-select>
-                                <el-input v-model="element.num" placeholder="请输入门派人数"></el-input>
+                                <el-input v-model="element.num" placeholder="请输入心法人数"></el-input>
                                 <div class="u-action">
                                     <el-button
                                         size="small"
@@ -144,7 +170,9 @@ import { mapState } from "pinia";
 import { useStore } from "@/store";
 import { getRankList, createRankItem, putRankList, delRankList } from "@/service/rank.js";
 import schoolid from "@jx3box/jx3box-data/data/xf/schoolid.json";
-import { showSchoolIcon } from "@jx3box/jx3box-common/js/utils";
+import xfid from "@jx3box/jx3box-data/data/xf/xfid.json";
+import mountGroup from "@jx3box/jx3box-data/data/xf/mount_group.json";
+import { showSchoolIcon, showMountIcon } from "@jx3box/jx3box-common/js/utils";
 import User from "@jx3box/jx3box-common/js/user.js";
 import draggable from "vuedraggable";
 
@@ -164,6 +192,7 @@ export default {
                 { label: "重制版", value: "std" },
                 { label: "缘起", value: "origin" },
             ]),
+            activeTab: "dps",
 
             active: "",
             rankList: [],
@@ -199,9 +228,17 @@ export default {
         },
         content() {
             try {
-                return JSON.parse(this.selectedRank?.content);
+                const content = JSON.parse(this.selectedRank?.content);
+                const hps = mountGroup.mount_group["治疗"];
+                return {
+                    dps: content.filter((item) => !hps.includes(~~item.id)),
+                    hps: content.filter((item) => hps.includes(~~item.id)),
+                };
             } catch (error) {
-                return [];
+                return {
+                    dps: [],
+                    hps: [],
+                };
             }
         },
         schoolMap() {
@@ -214,6 +251,17 @@ export default {
                 })
                 .filter((item) => item.id != 0);
         },
+        xfMap() {
+            const tank = mountGroup.mount_group["坦克"];
+            return Object.entries(xfid)
+                .map(([key, value]) => {
+                    return {
+                        id: key,
+                        name: value,
+                    };
+                })
+                .filter((item) => item.id != 0 && !tank.includes(~~item.id));
+        },
     },
     mounted() {
         this.loadRankList();
@@ -221,6 +269,9 @@ export default {
     methods: {
         showSchoolName(id) {
             return this.schoolMap.find((item) => item.id == id)?.name || "";
+        },
+        showMountName(id) {
+            return xfid[id] || "";
         },
         loadRankList() {
             this.loading = true;
@@ -239,6 +290,7 @@ export default {
                 });
         },
         showSchoolIcon,
+        showMountIcon,
         highlight(i) {
             return `u-order-${i + 1}`;
         },
