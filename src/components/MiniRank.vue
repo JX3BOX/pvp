@@ -388,7 +388,7 @@ export default {
                 });
         },
         onDelete() {
-            const item = this.rankList.find((item) => item.id == this.form.label);
+            const item = this.rankList.find((item) => item.id == this.form.label || item.label == this.form.label);
             if (item) {
                 this.$confirm("此操作将永久删除该榜单, 是否继续?", "提示", {
                     confirmButtonText: "确定",
@@ -397,7 +397,7 @@ export default {
                 })
                     .then(() => {
                         this.saveLoading = true;
-                        delRankList(this.form.label)
+                        delRankList(item.id)
                             .then(() => {
                                 this.loadRankList();
                                 this.$notify({
