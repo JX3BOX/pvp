@@ -306,10 +306,7 @@ export default {
                     .map((SkillID) => {
                         const currentSkill = this.data.find((d) => {
                             if (this.subtype !== "通用") {
-                                return (
-                                    (d.SkillID == SkillID && this.skills.find((s) => s._id == SkillID)) ||
-                                    (d.SkillID == SkillID && this.subSkills.find((s) => s._id == SkillID))
-                                );
+                                return d.SkillID == SkillID;
                             }
                             return d.SkillID == SkillID;
                         });
@@ -404,9 +401,6 @@ export default {
     methods: {
         iconLink,
         showMountIcon,
-        // filterSkills(arr) {
-        //     return arr.filter(item => this.tlSkillIds.includes(item.SkillID));
-        // },
         clickEvent: function (event) {
             const whiteList = ["m-recipe-pop", "m-audio-pop"];
             const target = event.target;
@@ -516,13 +510,12 @@ export default {
                     desc: skill.Desc,
                 };
             } else {
-                const { SkillID, SkillName } = skill;
-                this.selectedSkill =
-                    this.skills?.find((item) => item._id == SkillID || item.skillName == SkillName) || {};
+                const { SkillID, Name } = skill;
+                this.selectedSkill = this.skills?.find((item) => item._id == SkillID || item.skillName == Name) || {};
             }
         },
-        hasSkill: function ({ SkillID, SkillName }) {
-            return this.skills?.find((item) => item._id == SkillID || item.skillName == SkillName);
+        hasSkill: function ({ SkillID, Name }) {
+            return this.skills?.find((item) => item._id == SkillID || Name == item.skillName);
         },
         // 设置activeSkill
         setSkill(skill) {
