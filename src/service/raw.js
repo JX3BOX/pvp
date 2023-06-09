@@ -95,7 +95,7 @@ export function getWikiById(post_id, params) {
 }
 
 export function getBread(params) {
-    return $cms().get(`/api/cms/helper/breadcrumb`, {
+    return $cms().get(`/api/cms/breadcrumb`, {
         params,
     });
 }
