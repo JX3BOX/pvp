@@ -1,4 +1,4 @@
-import { $helper, $cms } from "@jx3box/jx3box-common/js/https_v2";
+import { $helper, $cms, $next } from "@jx3box/jx3box-common/js/https_v2";
 
 function getCampServers() {
     return $helper()
@@ -9,7 +9,7 @@ function getCampServers() {
 }
 
 function getCamplist(params) {
-    return $helper()
+    return $next()
         .get("/api/sandmap", { params })
         .then((res) => {
             return res.data;

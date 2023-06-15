@@ -5,8 +5,8 @@
             <span>{{ item }}</span>
         </span>
         <el-switch class="u-route" v-model="route" inactive-text="进攻路线"> </el-switch>
-        <el-select class="u-server" v-model="id">
-            <el-option v-for="item in servers" :key="item.id" :label="item.server" :value="item.id"> </el-option>
+        <el-select class="u-server" v-model="server">
+            <el-option v-for="item in servers" :key="item" :label="item" :value="item"> </el-option>
         </el-select>
     </div>
 </template>
@@ -16,7 +16,7 @@ export default {
     props: ["servers"],
     data: function () {
         return {
-            id: 1,
+            server: "蝶恋花",
             camp: "haoqi",
             camps: { haoqi: "浩气盟", eren: "恶人谷" },
             route: true,
@@ -25,7 +25,7 @@ export default {
     computed: {
         serverData: function () {
             return {
-                id: this.id,
+                server: this.server,
                 route: this.route,
                 camp: this.camp,
             };
@@ -56,7 +56,7 @@ export default {
 .m-sandbox-search {
     overflow: hidden;
     .flex;
-    .size(620px,45px);
+    .size(620px, 45px);
     .r(10px);
     .fz(18px);
     .pl(20px);
@@ -68,11 +68,13 @@ export default {
     border: 1px solid #a7abaf;
     letter-spacing: 1px;
     text-shadow: 0 0 1px @fontColor;
+
     .u-camp {
         .pointer;
         .mr(25px);
         display: flex;
         align-items: center;
+
         b {
             .pr;
             .size(12px);
@@ -85,7 +87,7 @@ export default {
                 .pa;
                 .size(6px);
                 .r(50%);
-                .lt(50%,50%);
+                .lt(50%, 50%);
                 margin: -3px 0 0 -3px;
                 background: @blue;
                 opacity: 0.8;
@@ -98,12 +100,15 @@ export default {
             text-shadow: 0 0 1px @fontColor;
         }
     }
+
     .u-route {
         .mr(20px);
     }
+
     .el-select {
         flex: 1;
     }
+
     .el-select,
     .el-input,
     .select-trigger,
@@ -114,28 +119,35 @@ export default {
         border-top-right-radius: 10px;
         border-bottom-right-radius: 10px;
     }
+
     .el-input__inner {
         border: 0;
     }
+
     .el-input__wrapper {
         box-shadow: none;
+
         &:hover {
             box-shadow: none !important;
             border: none !important;
         }
     }
+
     .el-input {
         border-right: 1px solid #d4d4d2;
         border-left: 1px solid #d4d4d2;
     }
+
     .el-select .el-input.is-focus .el-input__inner,
     .el-select .el-input__inner:focus {
         border-color: transparent;
     }
+
     .el-switch__label * {
         .fz(12px);
         color: @color-link;
     }
+
     .el-switch__label.is-active {
         color: @color;
     }

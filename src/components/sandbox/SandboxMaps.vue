@@ -91,10 +91,10 @@
                         <span>占领势力：</span>
                         <span :class="active.camp">【{{ active.camp == "haoqi" ? "浩气盟" : "恶人谷" }}】</span>
                     </div>
-                    <div class="u-line u-gang">
+                    <!-- <div class="u-line u-gang">
                         <span>占领帮会：</span>
                         <span :class="active.camp">- {{ active.gang }} -</span>
-                    </div>
+                    </div> -->
                 </div>
                 <div class="u-log" @click="showLog(active)">
                     <i class="el-icon-date"></i>

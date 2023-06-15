@@ -13,7 +13,8 @@ import { onClickOutside } from "@vueuse/core";
 import sandboxSearch from "@/components/sandbox/SandboxSearch.vue";
 import sandboxMaps from "@/components/sandbox/SandboxMaps.vue";
 import sandboxLog from "@/components/sandbox/SandboxLog.vue";
-import { getCampDetail, getCamplist, getCampServers, getCampLog } from "@/service/sandbox";
+import servers_std from "@jx3box/jx3box-data/data/server/server_std.json";
+import { getCamplist, getCampLog } from "@/service/sandbox";
 export default {
     name: "SandBox",
     components: {
@@ -23,21 +24,17 @@ export default {
     },
     data: function () {
         return {
-            sandMaps: "",
-            servers: [],
+            sandMaps: {},
+            servers: servers_std,
             itemLog: "",
-
-            id: 1,
-            camp: "haoqi",
-            route: true,
-
             showLog: false,
+            server: "",
         };
     },
     computed: {
         parms: function () {
             return {
-                sandmap_id: this.id,
+                server: this.server,
                 camp: this.camp,
             };
         },
@@ -52,36 +49,17 @@ export default {
     methods: {
         //搜索更改 parms的条件
         onSandbox(data) {
-            let { id, camp, route } = data;
-            this.id = id;
+            let { server, camp, route } = data;
+            this.server = server;
             this.camp = camp;
             this.route = route;
             this.getSandbox();
-            for (let i = 0; i < this.servers.length; i++) {
-                const element = this.servers[i];
-                if (element.id == id) {
-                    this.$emit("sandboxChangeKey", element.server);
-                    break;
-                }
-            }
+            this.$emit("sandboxChangeKey", server);
         },
         //获取沙盘数据 含沙盘攻防路线
         getSandbox() {
             getCamplist(this.parms).then((res) => {
-                this.id = res.data.sandmap.id;
-                this.sandMaps = { ...this.sandMaps, list: res.data.sandmap.castles };
-            });
-            getCampDetail(this.parms).then((res) => {
-                this.id = res.sandmap.id;
-                this.sandMaps = { ...this.sandMaps, detail: res.sandmap.maps };
-            });
-        },
-        //获取沙盘服务器列表
-        getServers() {
-            getCampServers().then((res) => {
-                res.data.sandmaps.forEach((l) => {
-                    this.servers.push({ id: l.id, server: l.server });
-                });
+                this.sandMaps = { list: res.data };
             });
         },
         // 点击展示日志
@@ -98,7 +76,6 @@ export default {
     },
 
     created: function () {
-        this.getServers();
         this.getSandbox();
     },
 };
