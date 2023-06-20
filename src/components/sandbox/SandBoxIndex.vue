@@ -59,7 +59,7 @@ export default {
         //获取沙盘数据 含沙盘攻防路线
         getSandbox() {
             getCamplist(this.parms).then((res) => {
-                this.sandMaps = { list: res.data };
+                this.sandMaps = { list: res.data.castles };
             });
         },
         // 点击展示日志
