@@ -28,7 +28,7 @@ export default {
             servers: servers_std,
             itemLog: "",
             showLog: false,
-            server: "",
+            server: servers_std[0] || "",
         };
     },
     computed: {

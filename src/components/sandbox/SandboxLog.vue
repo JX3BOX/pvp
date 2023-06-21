@@ -18,10 +18,10 @@
                         <span>占领势力：</span>
                         <span :class="items.camp">[{{ items.camp == "haoqi" ? "浩气盟" : "恶人谷" }}]</span>
                     </div>
-                    <!-- <div class="u-line">
+                    <div class="u-line">
                         <span>占领帮会：</span>
                         <span :class="items.camp">{{ items.gang }}</span>
-                    </div> -->
+                    </div>
                 </li>
             </ul>
             <div class="u-cont" v-else>

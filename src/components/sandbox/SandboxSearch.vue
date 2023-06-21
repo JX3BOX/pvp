@@ -16,7 +16,7 @@ export default {
     props: ["servers"],
     data: function () {
         return {
-            server: "蝶恋花",
+            server: this.servers[0] || "",
             camp: "haoqi",
             camps: { haoqi: "浩气盟", eren: "恶人谷" },
             route: true,
