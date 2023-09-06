@@ -27,6 +27,7 @@
                         <a @click="onQQClick(645370207)">645370207</a>
                     </strong>
                 </Side>
+                <SkillChange></SkillChange>
                 <MiniRank />
             </RightSidebar>
             <Footer></Footer>
@@ -39,8 +40,8 @@ import Info from "@/components/list/Info.vue";
 import Nav from "@/components/list/ListNav.vue";
 import Side from "@/components/list/RightSide.vue";
 import Tabs from "@/components/Tabs.vue";
-// import RankList from "@/components/RankList.vue";
 import MiniRank from "@/components/MiniRank.vue";
+import SkillChange from "@/components/SkillChange.vue";
 export default {
     name: "App",
     props: {
@@ -70,6 +71,7 @@ export default {
         Tabs,
         // RankList,
         MiniRank,
+        SkillChange,
     },
 };
 </script>

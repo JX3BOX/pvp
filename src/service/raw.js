@@ -99,3 +99,17 @@ export function getBread(params) {
         params,
     });
 }
+
+// 菜单
+export function getMenu(key) {
+    return $cms()
+        .get(`/api/cms/menu-group/${key}`)
+        .then((res) => {
+            return res.data.data.menus || [];
+        });
+}
+
+// 管理菜单
+export function updateMenu(key, data) {
+    return $cms().put(`/api/cms/menu-group/${key}`, data);
+}

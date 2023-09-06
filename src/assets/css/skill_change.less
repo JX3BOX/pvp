@@ -1,0 +1,66 @@
+.m-skill-change {
+    padding: 0 20px;
+
+    .m-title {
+        .flex;
+        justify-content: space-between;
+        align-items: center;
+        margin: 0;
+        padding: 0 0 5px 0;
+        border-bottom: 1px solid #ebeef5;
+    }
+    .u-icon {
+        .y(-5px);
+        .size(24px);
+        margin-right: 6px;
+    }
+    .u-edit-icon {
+        .pointer;
+
+        &:hover {
+            color: @pink;
+        }
+    }
+
+    .m-sideblock-list {
+        // .u-list {
+        padding: 10px;
+        margin: 0;
+
+        li {
+            .nobreak;
+            .fz(12px, 28px);
+            color: #666;
+            padding: 0 5px;
+        }
+        a {
+            // color: @primary;
+            // color: #0059bd;
+        }
+        a:hover {
+            color: @pink;
+            box-shadow: 0 1px 0 @pink;
+        }
+
+        em {
+            font-style: normal;
+            &:after {
+                // content:']';
+                content: "／";
+                padding-left: 4px;
+                // padding-right:3px;
+                color: #888;
+            }
+            .mr(4px);
+        }
+        i {
+            font-style: normal;
+            &:after {
+                content: "»";
+                color: #888;
+            }
+            .mr(8px);
+        }
+        // }
+    }
+}
