@@ -1,6 +1,6 @@
 <template>
     <div class="m-cj-extra">
-        <el-tabs class="m-extra-tabs" v-model="view" @tab-click="handleClick">
+        <el-tabs class="m-tabs m-extra-tabs" v-model="view" @tab-click="handleClick">
             <el-tab-pane label="攻略" name="strategy">
                 <template #label>
                     <el-icon><Collection /></el-icon>
