@@ -25,7 +25,6 @@ import CJStrategy from "./CJStrategy.vue";
 import CJSkill from "./CJSkill.vue";
 export default {
     name: "CJExtra",
-    emits: ["scroll"],
     components: {
         CJStrategy,
         CJSkill,
@@ -41,9 +40,7 @@ export default {
         },
     },
     methods: {
-        handleClick() {
-            this.$emit("scroll");
-        },
+        handleClick() {},
     },
 };
 </script>

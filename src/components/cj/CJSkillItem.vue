@@ -70,7 +70,7 @@ export default {
         iconLink,
         getUrl(id) {
             const domain = process.env.NODE_ENV === "development" ? __Root : location.origin + "/";
-            const url = domain + `app/database/?type=skill&query=${id}`;
+            const url = domain + `app/database/?type=skill&client=${this.client}&query=${id}`;
             window.open(url, "_blank");
         },
     },
