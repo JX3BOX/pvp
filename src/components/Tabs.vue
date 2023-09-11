@@ -13,6 +13,12 @@
                 <b>阵营沙盘</b>
             </template>
         </el-tab-pane>
+        <el-tab-pane label="绝境战场" name="cj">
+            <template #label>
+                <el-icon><Collection /></el-icon>
+                <b>绝境战场</b>
+            </template>
+        </el-tab-pane>
         <el-tab-pane label="招募大厅" name="zm" disabled>
             <template #label>
                 <el-icon><Collection /></el-icon>
@@ -23,12 +29,6 @@
             <template #label>
                 <el-icon><Collection /></el-icon>
                 <b>阵营攻防</b>
-            </template>
-        </el-tab-pane>
-        <el-tab-pane label="绝境战场" name="cj" disabled>
-            <template #label>
-                <el-icon><Collection /></el-icon>
-                <b>绝境战场</b>
             </template>
         </el-tab-pane>
         <el-tab-pane label="竞技场" name="jjc" disabled>
