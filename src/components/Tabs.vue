@@ -13,7 +13,7 @@
                 <b>阵营沙盘</b>
             </template>
         </el-tab-pane>
-        <el-tab-pane label="绝境战场" name="cj">
+        <el-tab-pane label="绝境战场" name="desert">
             <template #label>
                 <el-icon><Chicken /></el-icon>
                 <b>绝境战场</b>

@@ -42,6 +42,11 @@ export default {
     methods: {
         handleClick() {},
     },
+    mounted() {
+        if (this.client === "origin") {
+            this.view = "skill";
+        }
+    },
 };
 </script>
 
