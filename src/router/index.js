@@ -10,7 +10,7 @@ const CJ = () => import("@/views/CJ.vue");
 const routes = [
     { path: "/", name: "index", component: Index },
     { path: "/sandbox", name: "sandbox", component: Sandbox },
-    { path: "/cj", name: "cj", component: CJ },
+    { path: "/desert", name: "desert", component: CJ },
     { name: "post", path: "/:id(\\d+)", component: () => import("@/views/Single.vue") },
 ];
 

@@ -15,7 +15,7 @@
         </el-tab-pane>
         <el-tab-pane label="绝境战场" name="cj">
             <template #label>
-                <el-icon><Collection /></el-icon>
+                <el-icon><Chicken /></el-icon>
                 <b>绝境战场</b>
             </template>
         </el-tab-pane>

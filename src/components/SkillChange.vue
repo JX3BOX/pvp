@@ -11,7 +11,7 @@
         <ul class="m-news-list m-sideblock-list" v-if="showData">
             <li v-for="(item, i) in showData" :key="i">
                 <el-icon><Notification /></el-icon>
-                <em v-if="item.time">{{ dateFormat(item.time) }}</em>
+                <!-- <em v-if="item.time">{{ dateFormat(item.time) }}</em> -->
                 <a :href="item.link" target="_blank" rel="noopener noreferrer">{{ item.label }}</a>
             </li>
         </ul>
