@@ -8,6 +8,7 @@
         </div>
         <div v-if="map" class="m-map">
             <img class="u-map" :src="getMapImage(map)" />
+            <!-- <img class="u-path" src="../../assets/img/1_x653_y140.png" /> -->
         </div>
     </div>
 </template>
