@@ -10,6 +10,8 @@ export const useStore = defineStore({
         postId: 0,
 
         qixueData: {},
+
+        post: null,
     }),
     actions: {
         setActiveSkill(skill) {
