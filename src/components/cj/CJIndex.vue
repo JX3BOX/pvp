@@ -10,7 +10,7 @@
             <img class="u-map" :src="getMapImage(map)" />
             <!-- <img class="u-path" src="../../assets/img/1_x653_y140.png" /> -->
             <!-- 1920 * 1080 下，在现有地图的基础上，往右 70px为基准点，往下50像素为基准点,放大1.1倍 -->
-            <div class="u-paths" v-if="paths.length">
+            <div class="u-paths" v-if="map && paths.length">
                 <img
                     class="u-path"
                     :class="`u-path__${path.key}`"
