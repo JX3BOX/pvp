@@ -52,7 +52,10 @@ export default {
                 return paths.map((item) => {
                     return {
                         ...item,
-                        url: `${this.imgRoot}${this.map}/${item.key}.png`,
+                        url:
+                            this.map === 532 && item.key === "c3"
+                                ? require("@/assets/img/c3.png")
+                                : `${this.imgRoot}${this.map}/${item.key}.png`,
                     };
                 });
             }
