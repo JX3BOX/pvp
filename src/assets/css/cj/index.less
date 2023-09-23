@@ -13,6 +13,7 @@
         width: 1024px;
         height: 896px;
         margin: 0 auto;
+        cursor: crosshair;
         .u-map {
             .size(100%, 100%);
         }
@@ -22,6 +23,9 @@
             left: 0;
             top: 0;
             .u-path {
+                user-select: none;
+                -webkit-user-drag: none;
+                -moz-user-drag: none;
                 position: absolute;
                 transform: scale(1.1);
                 &.u-path__c3 {
@@ -34,5 +38,35 @@
         //     left: 653px;
         //     top: 140px;
         // }
+        .u-point__0 {
+            position: absolute;
+            z-index: 1000;
+            .size(30px);
+        }
+        .u-context-menu {
+            position: absolute;
+            background-color: #fff;
+            border: 1px solid #ccc;
+            box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.2);
+            z-index: 1000;
+            .r(5px);
+        }
+
+        .u-context-menu ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .u-context-menu li {
+            padding: 8px 16px;
+            cursor: pointer;
+            .r(5px);
+            font-size: 12px;
+        }
+
+        .u-context-menu li:hover {
+            background-color: #f0f0f0;
+        }
     }
 }

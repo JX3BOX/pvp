@@ -32,4 +32,25 @@ function getDeserts(params) {
     });
 }
 
-export { getMapList, getPosts, getDesertTypes, getDeserts };
+// 吃鸡点位curd
+function getPoints(params) {
+    return $cms().get("/api/cms/app/desert/point", {
+        params,
+    });
+}
+function getMyPoints(params) {
+    return $cms().get("/api/cms/app/desert/point/my", {
+        params,
+    });
+}
+function addPoint(data) {
+    return $cms().post("/api/cms/app/desert/point", data);
+}
+function delPoint(id) {
+    return $cms().delete(`/api/cms/app/desert/point/${id}`);
+}
+function updatePoint(id, data) {
+    return $cms().put(`/api/cms/app/desert/point/${id}`, data);
+}
+
+export { getMapList, getPosts, getDesertTypes, getDeserts, getPoints, addPoint, delPoint, updatePoint, getMyPoints };
