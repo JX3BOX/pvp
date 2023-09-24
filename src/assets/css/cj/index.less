@@ -13,11 +13,50 @@
         width: 1024px;
         height: 896px;
         margin: 0 auto;
-        cursor: crosshair;
+        &.is-point {
+            cursor: crosshair;
+        }
         .u-map {
             .size(100%, 100%);
         }
-        .u-paths {
+        .m-legends {
+            position: absolute;
+            left: 10px;
+            top: 10px;
+            .flex;
+            align-items: center;
+            background-color: rgba(#fff, 0.5);
+            .r(5px);
+            z-index: 1001;
+            .u-legend {
+                .flex;
+                align-items: center;
+                gap: 5px;
+                cursor: pointer;
+                padding: 5px 10px;
+                &:nth-child(1) {
+                    border-top-left-radius: 5px;
+                    border-bottom-left-radius: 5px;
+                }
+                &:nth-child(2) {
+                    border-top-right-radius: 5px;
+                    border-bottom-right-radius: 5px;
+                }
+                &.is-active,
+                &:hover {
+                    background-color: #fff;
+                }
+            }
+            .u-legend__img {
+                .size(20px);
+                cursor: pointer;
+            }
+            .u-label {
+                cursor: pointer;
+                font-size: 12px;
+            }
+        }
+        .m-paths {
             position: absolute;
             .size(100%, 100%);
             left: 0;
@@ -38,11 +77,6 @@
         //     left: 653px;
         //     top: 140px;
         // }
-        .u-point__0 {
-            position: absolute;
-            z-index: 1000;
-            .size(30px);
-        }
         .u-context-menu {
             position: absolute;
             background-color: #fff;

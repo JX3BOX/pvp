@@ -6,8 +6,21 @@
                 <el-option v-for="item in maps" :key="item.value" :label="item.label" :value="item.value"></el-option>
             </el-select>
         </div>
-        <div v-if="map" ref="map" class="m-map" @contextmenu.prevent="showMenu">
+        <div v-if="map" ref="map" class="m-map" :class="legend && 'is-point'" @contextmenu.prevent="showMenu">
             <img class="u-map" :src="getMapImage(map)" />
+            <!-- 图例 -->
+            <div class="m-legends">
+                <div
+                    class="u-legend"
+                    v-for="legend in legends"
+                    :key="legend.value"
+                    :class="legend.value === this.legend && 'is-active'"
+                    @click="setLegend(legend)"
+                >
+                    <img class="u-legend__img" :src="legend.src" svg-inline :alt="legend.label" />
+                    <label class="u-label">{{ legend.label }}</label>
+                </div>
+            </div>
             <!-- 右键菜单 -->
             <div
                 v-if="contextMenuVisible"
@@ -19,17 +32,10 @@
                     <!-- <li @click="menuItemClicked('del')">移除</li> -->
                 </ul>
             </div>
-            <!-- 示例点 -->
-            <img
-                v-if="contextMenuVisible"
-                class="u-point__0"
-                src="../../assets/img/desert/point.svg"
-                :style="{ top: contextMenuPosition.top - 30 + 'px', left: contextMenuPosition.left - 15 + 'px' }"
-            />
 
             <!-- <img class="u-path" src="../../assets/img/1_x653_y140.png" /> -->
             <!-- 1920 * 1080 下，在现有地图的基础上，往右 70px为基准点，往下50像素为基准点,放大1.1倍 -->
-            <div class="u-paths" v-if="map && paths.length">
+            <div class="m-paths" v-if="map && paths.length">
                 <img
                     class="u-path"
                     :class="`u-path__${path.key}`"
@@ -97,10 +103,23 @@ export default {
             contextMenuPosition: { x: 0, y: 0 },
             showDialog: false,
             points: [],
+            legend: "", // 标点图例
+            legends: [
+                {
+                    label: "路线点",
+                    value: "path",
+                    src: require("@/assets/img/desert/path.svg"),
+                },
+                {
+                    label: "物资点",
+                    value: "goods",
+                    src: require("@/assets/img/desert/goods.svg"),
+                },
+            ],
             pointForm: {
                 point: {},
                 meta: {
-                    type: "path", // goods
+                    type: "path", // 标点类型，对应图例 goods
                 },
                 desc: "",
                 client: useStore().client,
@@ -126,7 +145,15 @@ export default {
         },
     },
     methods: {
+        setLegend(legend) {
+            if (this.legend === legend.value) {
+                this.legend = "";
+            } else {
+                this.legend = legend.value;
+            }
+        },
         showMenu(event) {
+            if (!this.legend) return;
             event.preventDefault();
             // 获取容器的位置
             const mapRect = this.$refs.map.getBoundingClientRect();
