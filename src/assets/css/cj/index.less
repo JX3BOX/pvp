@@ -7,12 +7,18 @@
         align-items: center;
         gap: 20px;
     }
+    .m-map-wrap {
+        .flex;
+        justify-content: center;
+        gap: 20px;
+        width: 100%;
+    }
     .m-map {
         position: relative;
         text-align: center;
         width: 1024px;
         height: 896px;
-        margin: 0 auto;
+        flex: none;
         &.is-point {
             cursor: crosshair;
         }
@@ -27,18 +33,18 @@
             align-items: center;
             background-color: rgba(#fff, 0.5);
             .r(5px);
-            z-index: 1001;
+            z-index: 401;
             .u-legend {
                 .flex;
                 align-items: center;
                 gap: 5px;
                 cursor: pointer;
                 padding: 5px 10px;
-                &:nth-child(1) {
+                &:first-child {
                     border-top-left-radius: 5px;
                     border-bottom-left-radius: 5px;
                 }
-                &:nth-child(2) {
+                &:last-child {
                     border-top-right-radius: 5px;
                     border-bottom-right-radius: 5px;
                 }
@@ -54,6 +60,25 @@
             .u-label {
                 cursor: pointer;
                 font-size: 12px;
+            }
+        }
+        .m-points {
+            .u-point {
+                position: absolute;
+                z-index: 401;
+                cursor: pointer;
+                &.is-my-point {
+                    &::after {
+                        position: absolute;
+                        .db;
+                        top: -13px;
+                        left: 9px;
+                        font-size: 12px;
+                        content: "▼";
+                        color: #0366d6;
+                        animation: move ease-in-out 1s infinite;
+                    }
+                }
             }
         }
         .m-paths {
@@ -72,6 +97,11 @@
                 }
             }
         }
+        .u-point__0 {
+            position: absolute;
+            z-index: 400;
+            .size(30px);
+        }
         // .u-path {
         //     position: absolute;
         //     left: 653px;
@@ -82,7 +112,7 @@
             background-color: #fff;
             border: 1px solid #ccc;
             box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.2);
-            z-index: 1000;
+            z-index: 400;
             .r(5px);
         }
 
@@ -102,5 +132,119 @@
         .u-context-menu li:hover {
             background-color: #f0f0f0;
         }
+    }
+    .m-my-points {
+        .flex;
+        flex-direction: column;
+        height: 896px;
+        overflow-x: hidden;
+        overflow-y: auto;
+        .scrollbar(2px);
+        width: 280px;
+        flex: none;
+        border: 1px dashed #eee;
+        .r(5px);
+        .u-point-item {
+            .flex;
+            flex-direction: column;
+            border-bottom: 1px dashed #eee;
+            box-sizing: border-box;
+            padding: 10px;
+            &.u-point-title {
+                font-weight: bold;
+                flex-direction: row;
+                justify-content: space-between;
+            }
+            .u-header {
+                .flex;
+                justify-content: space-between;
+                align-items: center;
+                height: 25px;
+                box-sizing: border-box;
+            }
+            .u-title {
+                .flex;
+                align-items: center;
+                gap: 5px;
+                font-size: 14px;
+                img {
+                    .size(20px);
+                }
+            }
+            .u-op {
+                .none;
+                align-items: center;
+                justify-content: flex-end;
+                .el-button.is-text {
+                    margin: 0;
+                    padding: 3px 5px;
+                    font-size: 12px;
+                }
+            }
+            .u-content {
+                font-size: 12px;
+            }
+            &:hover {
+                .u-op {
+                    .flex;
+                }
+            }
+        }
+    }
+}
+
+.u-point-pop {
+    .u-header {
+        .flex;
+        gap: 5px;
+        align-items: center;
+        justify-content: space-between;
+        .u-info {
+            .flex;
+            gap: 5px;
+            align-items: center;
+            img {
+                .size(20px);
+            }
+        }
+        .u-title {
+            .bold;
+        }
+    }
+    .u-content {
+        padding: 10px 0;
+    }
+    .u-footer {
+        .flex;
+        justify-content: flex-end;
+        align-items: center;
+    }
+}
+
+@media screen and (max-width: @notebook) {
+    .c-main {
+        &:not(.without-left) {
+            .m-my-points {
+                .none !important;
+            }
+        }
+    }
+}
+@media screen and (max-width: @ipad) {
+    .without-left {
+        .m-my-points {
+            .none;
+        }
+    }
+}
+@keyframes move {
+    0% {
+        transform: translateY(-2px);
+    }
+    50% {
+        transform: translateY(2px);
+    }
+    100% {
+        transform: translateY(-2px);
     }
 }

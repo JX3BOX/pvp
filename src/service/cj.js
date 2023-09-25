@@ -49,8 +49,22 @@ function addPoint(data) {
 function delPoint(id) {
     return $cms().delete(`/api/cms/app/desert/point/${id}`);
 }
-function updatePoint(id, data) {
+function updatePoint(data, id) {
     return $cms().put(`/api/cms/app/desert/point/${id}`, data);
 }
+function reviewPoint(id) {
+    return $cms().put(`/api/cms/app/desert/point/${id}/admin`, { status: 1 });
+}
 
-export { getMapList, getPosts, getDesertTypes, getDeserts, getPoints, addPoint, delPoint, updatePoint, getMyPoints };
+export {
+    getMapList,
+    getPosts,
+    getDesertTypes,
+    getDeserts,
+    getPoints,
+    addPoint,
+    delPoint,
+    updatePoint,
+    getMyPoints,
+    reviewPoint,
+};
