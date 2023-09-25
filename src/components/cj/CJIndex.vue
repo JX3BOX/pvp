@@ -101,6 +101,15 @@
                                 <el-button size="small" type="primary" @click="toEdit(point)">编辑</el-button>
                                 <el-button size="small" type="danger" @click="toDel(point.id)">删除</el-button>
                             </div>
+                            <div v-else class="u-footer u-footer-info">
+                                <div class="u-user">
+                                    By: <img class="u-avatar" :src="point.avatar" :alt="point.name" />
+                                    <span>{{ point.name }}</span>
+                                </div>
+                                <div class="u-time">
+                                    {{ formatTime(point.updated_at) }}
+                                </div>
+                            </div>
                         </el-popover>
                         <img
                             v-else
@@ -156,6 +165,7 @@
                         </div>
                     </div>
                     <div class="u-content">{{ pointItem.desc }}</div>
+                    <div class="u-time">UpdatedAt: {{ formatTime(pointItem.updated_at) }}</div>
                 </div>
             </div>
         </div>
@@ -212,6 +222,7 @@ import CJIntro from "./CJIntro.vue";
 import mapPath from "@/assets/data/mapPath.json";
 import { cloneDeep, pick } from "lodash";
 import User from "@jx3box/jx3box-common/js/user.js";
+import moment from "moment";
 export default {
     name: "CJIndex",
     components: {
@@ -317,6 +328,14 @@ export default {
         },
     },
     methods: {
+        /**
+         * format time
+         * @params time
+         * @return time String
+         */
+        formatTime(time) {
+            return moment(time).format("YYYY-MM-DD hh:mm:ss");
+        },
         // change map
         mapChange() {
             this.statusFilter = "";
@@ -333,7 +352,7 @@ export default {
         },
         /**
          * set popover status
-         * params[id]: point Id
+         * @params id: point Id
          */
         handlerPop(id) {
             if (this.visiblePopId === id) {
@@ -343,7 +362,7 @@ export default {
             }
         },
         /**
-         * return legend info
+         * @return legend info
          */
         getPointInfo(legend, type = "src") {
             const info = legend ? this.legends.find((item) => item.value === legend)?.[type] : "";
@@ -458,6 +477,7 @@ export default {
          * return my points I submit, includes all status
          */
         getMyPoints(status) {
+            if (!User.isLogin()) return;
             const params = { client: useStore().client, map: this.map };
             if (status !== undefined || status !== null) {
                 params.status = status;
@@ -498,7 +518,7 @@ export default {
             });
         },
         /**
-         * params[data]:addPoint / updatePoint return
+         * @params data:addPoint / updatePoint return
          */
         handlerPoint(data, id) {
             this.$notify({
@@ -522,6 +542,7 @@ export default {
                 this.myPoints.unshift(newData);
             }
             this.originMyPoints = cloneDeep(this.myPoints);
+            this.legend = "";
             this.onClose();
         },
         /**
@@ -538,7 +559,7 @@ export default {
         },
         /**
          * delete my point
-         * id: point Id
+         * @params id: point Id
          */
         toDel(id) {
             // hide point popover

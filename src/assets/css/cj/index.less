@@ -183,6 +183,14 @@
             }
             .u-content {
                 font-size: 12px;
+                padding: 10px 0;
+            }
+            .u-time {
+                .flex;
+                justify-content: flex-end;
+                align-items: center;
+                color: #999;
+                font-size: 12px;
             }
             &:hover {
                 .u-op {
@@ -218,6 +226,23 @@
         .flex;
         justify-content: flex-end;
         align-items: center;
+        &.u-footer-info {
+            flex-direction: column;
+            align-items: flex-end;
+            .u-user,
+            .u-time {
+                .flex;
+                justify-content: flex-end;
+                align-items: center;
+                gap: 5px;
+                font-size: 12px;
+                color: #999;
+                .u-avatar {
+                    .size(20px);
+                    .r(20px);
+                }
+            }
+        }
     }
 }
 
