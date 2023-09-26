@@ -43,6 +43,16 @@ function getMyPoints(params) {
         params,
     });
 }
+/**
+ *
+ * @param {*} params
+ * @returns the points to be reviewed
+ */
+function getUnAuditedPoints(params) {
+    return $cms().get("/api/cms/app/desert/point/unaudited", {
+        params,
+    });
+}
 function addPoint(data) {
     return $cms().post("/api/cms/app/desert/point", data);
 }
@@ -52,8 +62,8 @@ function delPoint(id) {
 function updatePoint(data, id) {
     return $cms().put(`/api/cms/app/desert/point/${id}`, data);
 }
-function reviewPoint(id) {
-    return $cms().put(`/api/cms/app/desert/point/${id}/admin`, { status: 1 });
+function reviewPoint(id, status = 1) {
+    return $cms().put(`/api/cms/app/desert/point/${id}/admin`, { status });
 }
 
 export {
@@ -67,4 +77,5 @@ export {
     updatePoint,
     getMyPoints,
     reviewPoint,
+    getUnAuditedPoints,
 };

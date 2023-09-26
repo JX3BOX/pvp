@@ -1,10 +1,11 @@
 <template>
-    <div v-loading="loading" class="m-cj-index" @click.prevent="contextMenuVisible = false">
+    <div v-loading="loading" class="m-cj-index" @click.prevent="cancelRightMenu">
         <div class="m-select">
             <label class="u-label">地图</label>
             <el-select v-model="map" @change="mapChange">
                 <el-option v-for="item in maps" :key="item.value" :label="item.label" :value="item.value"></el-option>
             </el-select>
+            <el-icon v-if="isEditor" class="u-edit-icon" @click="reviewVisible = true"><Setting /></el-icon>
         </div>
         <div class="m-map-wrap">
             <div v-if="map" ref="map" class="m-map" :class="legend && 'is-point'" @contextmenu.prevent="showMenu">
@@ -25,7 +26,7 @@
                     </div>
                 </div>
 
-                <!-- 右键菜单 -->
+                <!-- 地图右键菜单 -->
                 <div
                     v-if="contextMenuVisible"
                     class="u-context-menu"
@@ -35,10 +36,53 @@
                         <li @click="menuItemClicked('add')">新增</li>
                     </ul>
                 </div>
+                <!-- the point right-click menu -->
+                <div
+                    v-if="pointMenuVisible"
+                    class="u-context-menu"
+                    :style="{ top: contextMenuPosition.y + 'px', left: contextMenuPosition.x + 'px' }"
+                >
+                    <ul>
+                        <li v-if="currentRightClickPoint.id && currentRightClickPoint.belongToMe" @click="toEdit(null)">
+                            编辑
+                        </li>
+                        <li
+                            v-if="currentRightClickPoint.id && currentRightClickPoint.belongToMe"
+                            @click="toDel(currentRightClickPoint.id)"
+                        >
+                            删除
+                        </li>
+                        <li
+                            v-if="currentRightClickPoint.id && currentRightClickPoint.status === 1"
+                            @click="toOpenComment"
+                        >
+                            评论
+                        </li>
+                        <li
+                            v-if="isEditor && currentRightClickPoint.id && currentRightClickPoint.status !== 1"
+                            @click="toReview(1)"
+                        >
+                            通过
+                        </li>
+                        <li
+                            v-if="isEditor && currentRightClickPoint.id && currentRightClickPoint.status === 0"
+                            @click="toReview(2)"
+                        >
+                            拒绝
+                        </li>
+                        <!-- 已通过的标点重新打回 -->
+                        <li
+                            v-if="isEditor && currentRightClickPoint.id && currentRightClickPoint.status === 1"
+                            @click="toReview(0)"
+                        >
+                            弃用
+                        </li>
+                    </ul>
+                </div>
 
                 <!-- 示例点 -->
                 <img
-                    v-if="!pointForm.id && legend && (contextMenuVisible || showDialog)"
+                    v-if="!pointForm.id && legend && ((!pointMenuVisible && contextMenuVisible) || showDialog)"
                     class="u-point__0"
                     :src="getPointInfo(legend)"
                     :style="{
@@ -51,7 +95,7 @@
                 <div class="m-points">
                     <div
                         class="u-point"
-                        :class="[point.belongToMe ? 'is-my-point' : '']"
+                        :class="[point.belongToMe ? 'is-my-point' : '', point.isMark ? 'is-mark' : '']"
                         v-for="point in showPoints"
                         :key="point.id"
                         :style="{
@@ -79,7 +123,15 @@
                                     }"
                                     :src="point.pointImg"
                                     :alt="point.pointName"
+                                    :custom-data="
+                                        JSON.stringify({
+                                            id: point.id,
+                                            status: point.status,
+                                            belongToMe: point.belongToMe,
+                                        })
+                                    "
                                     @click="handlerPop(point.id)"
+                                    @contextmenu.prevent.stop="showMenu"
                                 />
                             </template>
                             <div class="u-header">
@@ -120,7 +172,15 @@
                             }"
                             :src="point.pointImg"
                             :alt="point.pointName"
+                            :custom-data="
+                                JSON.stringify({
+                                    id: point.id,
+                                    status: point.status,
+                                    belongToMe: point.belongToMe,
+                                })
+                            "
                             @click="handlerPop(point.id)"
+                            @contextmenu.prevent.stop="showMenu"
                         />
                     </div>
                 </div>
@@ -208,6 +268,16 @@
             </template>
         </el-dialog>
 
+        <!-- review points drawer -->
+        <review-point
+            v-if="map"
+            v-model:visible="reviewVisible"
+            :map="map"
+            @init="initData"
+            @mark="toMark"
+        ></review-point>
+
+        <!-- map introduce -->
         <CJIntro v-if="map" :map="map"></CJIntro>
     </div>
 </template>
@@ -215,18 +285,20 @@
 <script>
 import { useStore } from "@/store";
 import { markRaw } from "vue";
-import { getMapList, getPoints, addPoint, getMyPoints, delPoint, updatePoint } from "@/service/cj";
-// import { reviewPoint } from "@/service/cj";
+import { getMapList, getPoints, addPoint, getMyPoints, delPoint, updatePoint, reviewPoint } from "@/service/cj";
 import { __imgPath } from "@jx3box/jx3box-common/data/jx3box.json";
 import CJIntro from "./CJIntro.vue";
 import mapPath from "@/assets/data/mapPath.json";
 import { cloneDeep, pick } from "lodash";
 import User from "@jx3box/jx3box-common/js/user.js";
-import moment from "moment";
+import { formatTime } from "@/utils";
+import ReviewPoint from "./ReviewPoint.vue";
+import { legends, statusMap, getPointInfo } from "@/assets/data/desertPoints";
 export default {
     name: "CJIndex",
     components: {
         CJIntro,
+        ReviewPoint,
     },
     data() {
         return {
@@ -237,7 +309,8 @@ export default {
             mapPath: markRaw(mapPath),
             // img cdn
             imgRoot: __imgPath + "pve/desert/",
-            contextMenuVisible: false,
+            pointMenuVisible: false, // point right-click visible
+            contextMenuVisible: false, // map ...
             contextMenuPosition: { x: 0, y: 0 },
             showDialog: false,
             originMyPoints: [],
@@ -245,29 +318,9 @@ export default {
             points: [],
             legend: "", // 标点图例
             legendSize: 30, // legend show size
-            legends: [
-                {
-                    label: "路线建议",
-                    value: "path",
-                    src: require("@/assets/img/desert/path.svg"),
-                },
-                {
-                    label: "大量物资",
-                    value: "goods",
-                    src: require("@/assets/img/desert/goods.svg"),
-                },
-                {
-                    label: "少量物资",
-                    value: "small_goods",
-                    src: require("@/assets/img/desert/small_goods.svg"),
-                },
-            ],
+            legends: markRaw(legends),
             // point status map
-            statusMap: {
-                0: "审核中",
-                1: "已通过",
-                2: "已拒绝",
-            },
+            statusMap: markRaw(statusMap),
             pointForm: {
                 point: {},
                 meta: {
@@ -282,9 +335,15 @@ export default {
             btnLoading: false,
             visiblePopId: null,
             statusFilter: "", // my points filter
+            reviewVisible: false, // review drawer show
+            markPoints: [], // mark points
+            currentRightClickPoint: {}, // current right-click img point
         };
     },
     computed: {
+        isEditor() {
+            return User.isEditor();
+        },
         dialogTitle() {
             return !this.pointForm?.id ? "新增标点" : "编辑标点";
         },
@@ -313,7 +372,7 @@ export default {
         showPoints() {
             const points = this.myPoints
                 .filter((item) => item.status !== 1)
-                .concat(this.points)
+                .concat(this.points, this.markPoints)
                 .map((item) => {
                     return {
                         ...item,
@@ -327,20 +386,94 @@ export default {
             return points;
         },
     },
+    watch: {
+        reviewVisible(bol) {
+            if (!bol) {
+                // clear mark points
+                this.markPoints = [];
+                // clear the mark of my points
+                this.myPoints = this.myPoints.map((item) => {
+                    item.isMark = false;
+                    return item;
+                });
+            }
+        },
+    },
     methods: {
+        /**
+         * @params {reviewStatus} 1 is pass, 2 is refuse, 0 is reviewing
+         */
+        toReview(reviewStatus) {
+            const { id } = this.currentRightClickPoint;
+            let message = "通过";
+            if (reviewStatus === 2) {
+                message = "拒绝";
+            }
+            if (reviewStatus === 0) {
+                message = "弃用";
+            }
+            this.$confirm(`确定要${message}该短评吗？`, "温馨提示", {
+                confirmButtonText: "立即删除",
+                cancelButtonText: "取消",
+                type: "warning",
+            })
+                .then(() => {
+                    this.loading = true;
+
+                    reviewPoint(id, reviewStatus)
+                        .then(() => {
+                            this.$message({
+                                type: "success",
+                                message: message + "成功",
+                            });
+                            this.initData();
+                        })
+                        .finally(() => {
+                            this.loading = false;
+                        });
+                })
+                .catch(() => {});
+        },
+        // close the right-click menu
+        cancelRightMenu() {
+            this.pointMenuVisible = false;
+            this.contextMenuVisible = false;
+        },
+        toOpenComment() {
+            const point = this.currentRightClickPoint;
+            if (point.status !== 1) {
+                return this.$message({
+                    type: "warning",
+                    message: "当前标点尚未审核通过",
+                });
+            }
+        },
+        // set mark points
+        toMark(point) {
+            // if in myPoints
+            const myPointIndex = this.myPoints.findIndex((item) => item.id === point.id);
+            if (myPointIndex !== -1) {
+                this.myPoints[myPointIndex].isMark = !this.myPoints[myPointIndex]?.isMark;
+                return;
+            }
+            // if not belong to me
+            const index = this.markPoints.findIndex((item) => item.id === point.id);
+            if (index === -1) {
+                this.markPoints.push(point);
+            } else {
+                this.markPoints.splice(index, 1);
+            }
+        },
         /**
          * format time
          * @params time
          * @return time String
          */
-        formatTime(time) {
-            return moment(time).format("YYYY-MM-DD hh:mm:ss");
-        },
+        formatTime,
         // change map
         mapChange() {
             this.statusFilter = "";
-            this.getPoints();
-            this.getMyPoints();
+            this.initData();
         },
         // change my points status
         statusChange(val) {
@@ -364,17 +497,7 @@ export default {
         /**
          * @return legend info
          */
-        getPointInfo(legend, type = "src") {
-            const info = legend ? this.legends.find((item) => item.value === legend)?.[type] : "";
-            let defaultInfo = require("@/assets/img/desert/path.svg");
-            if (type === "value") {
-                defaultInfo = "path";
-            }
-            if (type === "label") {
-                defaultInfo = "路线建议";
-            }
-            return info || defaultInfo;
-        },
+        getPointInfo,
         /**
          * legend setting
          */
@@ -397,14 +520,6 @@ export default {
          * show right menus
          */
         showMenu(event) {
-            if (!this.legend) return;
-            if (event.target.className === "u-point__img") {
-                // the mouse click on the existing point
-                return this.$message({
-                    type: "warning",
-                    message: "附近已存在标点",
-                });
-            }
             event.preventDefault();
             // get the location of container
             const mapRect = this.$refs.map.getBoundingClientRect();
@@ -414,6 +529,17 @@ export default {
                 x: event.clientX - mapRect.left,
                 y: event.clientY - mapRect.top,
             };
+            if (event.target.className === "u-point__img") {
+                // the mouse click on the existing point
+                const data = event.target.getAttribute("custom-data")
+                    ? JSON.parse(event.target.getAttribute("custom-data"))
+                    : {};
+                this.currentRightClickPoint = data;
+                this.pointMenuVisible = true;
+                return false;
+            }
+            this.pointMenuVisible = false;
+            if (!this.legend) return;
 
             this.contextMenuVisible = true;
         },
@@ -430,7 +556,7 @@ export default {
                 this.pointForm.meta.type = this.legend;
                 this.showDialog = true;
             }
-            this.contextMenuVisible = false;
+            this.cancelRightMenu();
         },
         /**
          * all maps
@@ -549,6 +675,10 @@ export default {
          * params[point]: point item
          */
         toEdit(point) {
+            if (!point) {
+                // from right-click
+                point = this.myPoints.find((item) => item.id === this.currentRightClickPoint.id);
+            }
             // hide point popover
             this.visiblePopId = null;
             // reset legend
@@ -616,11 +746,14 @@ export default {
                 }
             });
         },
+        initData() {
+            this.getPoints();
+            this.getMyPoints();
+        },
     },
     mounted() {
         this.getMapList();
-        this.getPoints();
-        this.getMyPoints();
+        this.initData();
         // reviewPoint(3).then((res) => {
         //     console.log(res);
         // });
