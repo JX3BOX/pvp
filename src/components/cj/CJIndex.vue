@@ -54,7 +54,7 @@
                         </li>
                         <li
                             v-if="currentRightClickPoint.id && currentRightClickPoint.status === 1"
-                            @click="toOpenComment"
+                            @click="toOpenComment(null)"
                         >
                             评论
                         </li>
@@ -145,6 +145,7 @@
                                     :type="point.status === 1 ? 'success' : point.status === 2 ? 'danger' : ''"
                                     >{{ statusMap[point.status] }}</el-tag
                                 >
+                                <el-button v-else size="small" @click="toOpenComment(point)">评论</el-button>
                             </div>
                             <div class="u-content">
                                 {{ point.desc }}
@@ -152,6 +153,9 @@
                             <div v-if="point.belongToMe" class="u-footer">
                                 <el-button size="small" type="primary" @click="toEdit(point)">编辑</el-button>
                                 <el-button size="small" type="danger" @click="toDel(point.id)">删除</el-button>
+                                <el-button v-if="point.status === 1" size="small" @click="toOpenComment(point)"
+                                    >评论</el-button
+                                >
                             </div>
                             <div v-else class="u-footer u-footer-info">
                                 <div class="u-user">
@@ -200,7 +204,7 @@
                 </div>
             </div>
             <!-- 我的点位列表 -->
-            <div v-if="myPoints.length" class="m-my-points">
+            <div class="m-my-points">
                 <div class="u-point-item u-point-title">
                     <span>我的标点</span>
                     <el-select v-model="statusFilter" size="small" style="width: 100px" @change="statusChange">
@@ -208,25 +212,27 @@
                         <el-option label="已通过" value="1"></el-option>
                     </el-select>
                 </div>
-                <div class="u-point-item" v-for="pointItem in myPoints" :key="pointItem.id">
-                    <div class="u-header">
-                        <div class="u-title">
-                            <img :src="pointItem.pointImg" :alt="pointItem.pointName" />
-                            <span>{{ pointItem.pointName }}</span>
-                            <el-tag
-                                size="small"
-                                :type="pointItem.status === 1 ? 'success' : pointItem.status === 2 ? 'danger' : ''"
-                                >{{ statusMap[pointItem.status] }}
-                            </el-tag>
+                <template v-if="myPoints.length">
+                    <div class="u-point-item" v-for="pointItem in myPoints" :key="pointItem.id">
+                        <div class="u-header">
+                            <div class="u-title">
+                                <img :src="pointItem.pointImg" :alt="pointItem.pointName" />
+                                <span>{{ pointItem.pointName }}</span>
+                                <el-tag
+                                    size="small"
+                                    :type="pointItem.status === 1 ? 'success' : pointItem.status === 2 ? 'danger' : ''"
+                                    >{{ statusMap[pointItem.status] }}
+                                </el-tag>
+                            </div>
+                            <div class="u-op">
+                                <el-button type="primary" text @click="toEdit(pointItem)">编辑</el-button>
+                                <el-button type="danger" text @click="toDel(pointItem.id)">删除</el-button>
+                            </div>
                         </div>
-                        <div class="u-op">
-                            <el-button type="primary" text @click="toEdit(pointItem)">编辑</el-button>
-                            <el-button type="danger" text @click="toDel(pointItem.id)">删除</el-button>
-                        </div>
+                        <div class="u-content">{{ pointItem.desc }}</div>
+                        <div class="u-time">UpdatedAt: {{ formatTime(pointItem.updated_at) }}</div>
                     </div>
-                    <div class="u-content">{{ pointItem.desc }}</div>
-                    <div class="u-time">UpdatedAt: {{ formatTime(pointItem.updated_at) }}</div>
-                </div>
+                </template>
             </div>
         </div>
 
@@ -279,26 +285,35 @@
 
         <!-- map introduce -->
         <CJIntro v-if="map" :map="map"></CJIntro>
+
+        <!-- point comment -->
+        <PointComment
+            v-if="commentVisible && commentPoint.id"
+            :point="commentPoint"
+            v-model:visible="commentVisible"
+        ></PointComment>
     </div>
 </template>
 
 <script>
 import { useStore } from "@/store";
 import { markRaw } from "vue";
+import CJIntro from "./CJIntro.vue";
+import ReviewPoint from "./ReviewPoint.vue";
+import PointComment from "./PointComment.vue";
 import { getMapList, getPoints, addPoint, getMyPoints, delPoint, updatePoint, reviewPoint } from "@/service/cj";
 import { __imgPath } from "@jx3box/jx3box-common/data/jx3box.json";
-import CJIntro from "./CJIntro.vue";
 import mapPath from "@/assets/data/mapPath.json";
 import { cloneDeep, pick } from "lodash";
 import User from "@jx3box/jx3box-common/js/user.js";
 import { formatTime } from "@/utils";
-import ReviewPoint from "./ReviewPoint.vue";
 import { legends, statusMap, getPointInfo } from "@/assets/data/desertPoints";
 export default {
     name: "CJIndex",
     components: {
         CJIntro,
         ReviewPoint,
+        PointComment,
     },
     data() {
         return {
@@ -338,6 +353,8 @@ export default {
             reviewVisible: false, // review drawer show
             markPoints: [], // mark points
             currentRightClickPoint: {}, // current right-click img point
+            commentVisible: false, // comment control
+            commentPoint: {},
         };
     },
     computed: {
@@ -439,14 +456,20 @@ export default {
             this.pointMenuVisible = false;
             this.contextMenuVisible = false;
         },
-        toOpenComment() {
-            const point = this.currentRightClickPoint;
-            if (point.status !== 1) {
-                return this.$message({
-                    type: "warning",
-                    message: "当前标点尚未审核通过",
-                });
+        toOpenComment(point) {
+            if (!point) {
+                const clickPoint = this.currentRightClickPoint;
+                if (clickPoint.status !== 1) {
+                    return this.$message({
+                        type: "warning",
+                        message: "当前标点尚未审核通过",
+                    });
+                }
+                this.commentPoint = this.showPoints.find((item) => item.id === clickPoint.id);
+            } else {
+                this.commentPoint = point;
             }
+            this.commentVisible = true;
         },
         // set mark points
         toMark(point) {
