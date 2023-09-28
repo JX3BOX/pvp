@@ -145,7 +145,9 @@
                                     :type="point.status === 1 ? 'success' : point.status === 2 ? 'danger' : ''"
                                     >{{ statusMap[point.status] }}</el-tag
                                 >
-                                <el-button v-else size="small" @click="toOpenComment(point)">评论</el-button>
+                                <el-button v-else size="small" plain icon="ChatDotRound" @click="toOpenComment(point)"
+                                    >评论</el-button
+                                >
                             </div>
                             <div class="u-content">
                                 {{ point.desc }}
@@ -153,13 +155,18 @@
                             <div v-if="point.belongToMe" class="u-footer">
                                 <el-button size="small" type="primary" @click="toEdit(point)">编辑</el-button>
                                 <el-button size="small" type="danger" @click="toDel(point.id)">删除</el-button>
-                                <el-button v-if="point.status === 1" size="small" @click="toOpenComment(point)"
+                                <el-button
+                                    v-if="point.status === 1"
+                                    size="small"
+                                    plain
+                                    icon="ChatDotRound"
+                                    @click="toOpenComment(point)"
                                     >评论</el-button
                                 >
                             </div>
                             <div v-else class="u-footer u-footer-info">
                                 <div class="u-user">
-                                    By: <img class="u-avatar" :src="point.avatar" :alt="point.name" />
+                                    <img class="u-avatar" :src="point.avatar" :alt="point.name" />
                                     <span>{{ point.name }}</span>
                                 </div>
                                 <div class="u-time">
