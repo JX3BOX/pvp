@@ -1,11 +1,24 @@
-.m-cj-index {
-    .m-select {
-        margin-top: 20px;
-        margin-bottom: 20px;
+.m-map-index {
+    position: relative;
+    @mapW: 1024px;
+    @mapH: 896px;
+    .flex;
+    justify-content: center;
+    gap: 20px;
+    width: @mapW;
+    height: @mapH;
+    .m-map-op {
+        position: absolute;
+        left: 10px;
+        top: 10px;
+        width: calc(@mapW - 20px);
         .flex;
-        justify-content: center;
-        align-items: center;
-        gap: 20px;
+        justify-content: space-between;
+        z-index: 401;
+    }
+    .m-select {
+        .flex;
+        gap: 10px;
         .u-edit-icon {
             .pointer;
             font-size: 1.17em;
@@ -15,60 +28,66 @@
             }
         }
     }
-    .m-map-wrap {
+
+    .m-legends {
         .flex;
-        justify-content: center;
-        gap: 20px;
-        width: 100%;
+        align-items: center;
+        background-color: rgba(#fff, 0.5);
+        .r(5px);
+        .u-legend {
+            .flex;
+            align-items: center;
+            gap: 5px;
+            cursor: pointer;
+            padding: 5px;
+            height: 30px;
+            box-sizing: border-box;
+            &:first-child {
+                border-top-left-radius: 5px;
+                border-bottom-left-radius: 5px;
+            }
+            &:last-child {
+                border-top-right-radius: 5px;
+                border-bottom-right-radius: 5px;
+            }
+            &.is-active,
+            &:hover {
+                background-color: #fff;
+            }
+        }
+        .u-legend__img {
+            padding: 5px;
+            .size(20px);
+            cursor: pointer;
+        }
+        .u-label {
+            cursor: pointer;
+            font-size: 12px;
+            padding: 0 5px;
+        }
+    }
+    .u-op {
+        position: relative;
+        z-index: 402;
+        .r(5px);
+        background-color: rgba(#fff, 0.5);
     }
     .m-map {
+        @imgPadding: 35px;
         position: relative;
         text-align: center;
         width: 1024px;
-        height: 896px;
+        height: calc(@mapH - @imgPadding * 2);
         flex: none;
+        overflow: hidden;
         &.is-point {
             cursor: crosshair;
         }
         .u-map {
-            .size(100%, 100%);
-        }
-        .m-legends {
             position: absolute;
-            left: 10px;
-            top: 10px;
-            .flex;
-            align-items: center;
-            background-color: rgba(#fff, 0.5);
-            .r(5px);
-            z-index: 401;
-            .u-legend {
-                .flex;
-                align-items: center;
-                gap: 5px;
-                cursor: pointer;
-                padding: 5px 10px;
-                &:first-child {
-                    border-top-left-radius: 5px;
-                    border-bottom-left-radius: 5px;
-                }
-                &:last-child {
-                    border-top-right-radius: 5px;
-                    border-bottom-right-radius: 5px;
-                }
-                &.is-active,
-                &:hover {
-                    background-color: #fff;
-                }
-            }
-            .u-legend__img {
-                .size(20px);
-                cursor: pointer;
-            }
-            .u-label {
-                cursor: pointer;
-                font-size: 12px;
-            }
+            left: 0;
+            top: -@imgPadding;
+            .size(100%, @mapH);
         }
         .m-points {
             .u-point {
@@ -143,6 +162,7 @@
             list-style: none;
             padding: 0;
             margin: 0;
+            user-select: none;
         }
 
         .u-context-menu li {
@@ -150,6 +170,7 @@
             cursor: pointer;
             .r(5px);
             font-size: 12px;
+            user-select: none;
         }
 
         .u-context-menu li:hover {

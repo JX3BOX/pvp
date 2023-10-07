@@ -14,6 +14,16 @@ export const legends = [
         value: "small_goods",
         src: require("@/assets/img/desert/small_goods.svg"),
     },
+    {
+        label: "马匪刷新",
+        value: "monster",
+        src: require("@/assets/img/desert/monster.svg"),
+    },
+    {
+        label: "洞穴入口",
+        value: "cave",
+        src: require("@/assets/img/desert/cave.svg"),
+    },
 ];
 // point status map
 export const statusMap = {

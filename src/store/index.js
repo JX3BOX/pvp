@@ -12,6 +12,8 @@ export const useStore = defineStore({
         qixueData: {},
 
         post: null,
+
+        reviewVisible: false, // manager review drawer show
     }),
     actions: {
         setActiveSkill(skill) {
