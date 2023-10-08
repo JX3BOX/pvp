@@ -1,7 +1,7 @@
 <template>
     <div class="m-cj-extra">
         <el-tabs class="m-tabs m-extra-tabs" v-model="view" @tab-click="handleClick">
-            <el-tab-pane v-if="client === 'origin'" label="技能查询" name="skill">
+            <el-tab-pane label="技能查询" name="skill">
                 <template #label>
                     <el-icon><Files /></el-icon>
                     <b>技能查询</b>
@@ -50,4 +50,17 @@ export default {
 };
 </script>
 
-<style lang="less"></style>
+<style lang="less">
+.m-cj-extra {
+    @extraW: 519px;
+    @extraH: 826px;
+    width: @extraW;
+    height: @extraH;
+    overflow-x: hidden;
+    .scrollbar();
+    .el-tabs {
+        width: @extraW;
+        height: @extraH;
+    }
+}
+</style>

@@ -2,11 +2,12 @@
     position: relative;
     @mapW: 1024px;
     @mapH: 896px;
+    @imgPadding: 35px;
     .flex;
     justify-content: center;
     gap: 20px;
     width: @mapW;
-    height: @mapH;
+    height: calc(@mapH - @imgPadding * 2);
     .m-map-op {
         position: absolute;
         left: 10px;
@@ -73,13 +74,12 @@
         background-color: rgba(#fff, 0.5);
     }
     .m-map {
-        @imgPadding: 35px;
         position: relative;
         text-align: center;
         width: 1024px;
         height: calc(@mapH - @imgPadding * 2);
         flex: none;
-        overflow: hidden;
+        // overflow: hidden;
         &.is-point {
             cursor: crosshair;
         }
@@ -155,7 +155,7 @@
             border: 1px solid #ccc;
             box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.2);
             z-index: 402;
-            .r(5px);
+            .r(3px);
         }
 
         .u-context-menu ul {
@@ -166,11 +166,24 @@
         }
 
         .u-context-menu li {
-            padding: 5px 10px;
+            .flex;
+            gap: 5px;
+            justify-content: center;
+            align-items: center;
+            padding: 5px 12px;
             cursor: pointer;
-            .r(5px);
+            .r(3px);
             font-size: 12px;
             user-select: none;
+            // .u-danger {
+            //     color: #f56c6c;
+            // }
+            // .u-success {
+            //     color: #67c23a;
+            // }
+            .u-legend {
+                .size(20px);
+            }
         }
 
         .u-context-menu li:hover {
@@ -180,7 +193,7 @@
     .m-my-points {
         .flex;
         flex-direction: column;
-        height: 896px;
+        height: @mapH;
         overflow-x: hidden;
         overflow-y: auto;
         .scrollbar(2px);
@@ -261,6 +274,19 @@
         }
         .u-title {
             .bold;
+            &.u-legend__small_goods,
+            &.u-legend__goods {
+                color: #ffff00;
+            }
+            &.u-legend__path {
+                color: #0ffff8;
+            }
+            &.u-legend__monster {
+                color: #ff407f;
+            }
+            &.u-legend__cave {
+                color: #43fe73;
+            }
         }
     }
     .u-content {
@@ -284,6 +310,12 @@
                 .u-avatar {
                     .size(20px);
                     .r(20px);
+                }
+                a {
+                    color: #999;
+                    &:hover {
+                        color: #0366d6;
+                    }
                 }
             }
         }

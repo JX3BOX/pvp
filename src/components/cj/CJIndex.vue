@@ -10,8 +10,6 @@
                         :value="item.value"
                     ></el-option>
                 </el-select>
-
-                <!-- <el-icon v-if="isEditor" class="u-edit-icon" @click="reviewVisible = true"><Setting /></el-icon> -->
             </div>
             <!-- 图例 -->
             <div class="m-legends">
@@ -34,7 +32,13 @@
 
             <!-- 模式选择 -->
             <div class="u-op">
-                <el-checkbox class="u-mode" v-model="isEditMode" border label="编辑模式"></el-checkbox>
+                <el-checkbox
+                    class="u-mode"
+                    v-model="isEditMode"
+                    :disabled="!isLogin"
+                    border
+                    label="编辑模式"
+                ></el-checkbox>
             </div>
         </div>
         <div v-if="map" ref="map" class="m-map" :class="isEditMode && 'is-point'" @contextmenu.prevent="showMenu">
@@ -48,7 +52,11 @@
                 :style="{ top: contextMenuPosition.y + 'px', left: contextMenuPosition.x + 'px' }"
             >
                 <ul>
-                    <li @click="menuItemClicked('add')">新增</li>
+                    <li @click="menuItemClicked('add')">
+                        <el-icon size="16"><CirclePlus /></el-icon>
+                        <span>新增</span>
+                        <!-- <img v-if="getLegendSrc()" :src="getLegendSrc()" class="u-legend" /> -->
+                    </li>
                 </ul>
             </div>
             <!-- the point right-click menu -->
@@ -59,38 +67,44 @@
             >
                 <ul>
                     <li v-if="currentRightClickPoint.id && currentRightClickPoint.belongToMe" @click="toEdit(null)">
-                        编辑
-                    </li>
-                    <li
-                        v-if="currentRightClickPoint.id && currentRightClickPoint.belongToMe"
-                        @click="toDel(currentRightClickPoint.id)"
-                    >
-                        删除
+                        <el-icon size="16"><Edit /></el-icon>
+                        <span>编辑</span>
                     </li>
                     <li
                         v-if="currentRightClickPoint.id && currentRightClickPoint.status === 1"
                         @click="toOpenComment(null)"
                     >
-                        评论
+                        <el-icon size="16"><ChatDotRound /></el-icon>
+                        <span>评论</span>
                     </li>
                     <li
                         v-if="isEditor && currentRightClickPoint.id && currentRightClickPoint.status !== 1"
                         @click="toReview(1)"
                     >
-                        通过
+                        <el-icon size="16"><CircleCheck /></el-icon>
+                        <span class="u-success">通过</span>
                     </li>
                     <li
                         v-if="isEditor && currentRightClickPoint.id && currentRightClickPoint.status === 0"
                         @click="toReview(2)"
                     >
-                        拒绝
+                        <el-icon size="16"><CircleClose /></el-icon>
+                        <span class="u-danger">拒绝</span>
+                    </li>
+                    <li
+                        v-if="currentRightClickPoint.id && currentRightClickPoint.belongToMe"
+                        @click="toDel(currentRightClickPoint.id)"
+                    >
+                        <el-icon size="16"><Delete /></el-icon>
+                        <span class="u-danger">删除</span>
                     </li>
                     <!-- 已通过的标点重新打回 -->
                     <li
                         v-if="isEditor && currentRightClickPoint.id && currentRightClickPoint.status === 1"
                         @click="toReview(0)"
                     >
-                        弃用
+                        <el-icon size="16"><Remove /></el-icon>
+                        <span class="u-danger">弃用</span>
                     </li>
                 </ul>
             </div>
@@ -123,7 +137,7 @@
                     <el-popover
                         v-if="point.id === visiblePopId"
                         placement="top"
-                        :width="200"
+                        :width="210"
                         trigger="manual"
                         :content="point.desc"
                         v-model:visible="visiblePop"
@@ -152,7 +166,9 @@
                         <div class="u-header">
                             <div class="u-info">
                                 <img :src="point.pointImg" :alt="point.pointName" />
-                                <span class="u-title">{{ point.pointName }}</span>
+                                <span class="u-title" :class="`u-legend__${point.meta.type}`">{{
+                                    point.pointName
+                                }}</span>
                             </div>
                             <el-tag
                                 v-if="point.belongToMe"
@@ -182,7 +198,7 @@
                         <div v-else class="u-footer u-footer-info">
                             <div class="u-user">
                                 <img class="u-avatar" :src="point.avatar" :alt="point.name" />
-                                <span>{{ point.name }}</span>
+                                <a :href="authorLink(point.post_author)" target="_blank">{{ point.name }}</a>
                             </div>
                             <div class="u-time">
                                 {{ formatTime(point.updated_at) }}
@@ -299,6 +315,7 @@ import { cloneDeep, pick } from "lodash";
 import User from "@jx3box/jx3box-common/js/user.js";
 import { formatTime } from "@/utils";
 import { legends, statusMap, getPointInfo } from "@/assets/data/desertPoints";
+import { authorLink } from "@jx3box/jx3box-common/js/utils";
 export default {
     name: "CJIndex",
     components: {
@@ -356,6 +373,9 @@ export default {
                 $store.reviewVisible = val;
             },
         },
+        isLogin() {
+            return User.isLogin();
+        },
         isEditor() {
             return User.isEditor();
         },
@@ -386,8 +406,9 @@ export default {
         // Points to show, contains points pending reviewed and rejected
         showPoints() {
             const points = this.myPoints
-                .filter((item) => item.status !== 1)
+                .filter((item) => item.status !== 1) // points includes  status 0 2 of myPoints
                 .concat(this.points, this.markPoints)
+                .filter((item) => !this.legend || item.meta.type === this.legend) // filter legend
                 .map((item) => {
                     return {
                         ...item,
@@ -396,6 +417,7 @@ export default {
                         belongToMe: ~~User?.profile?.uid === item.user_id, // my point
                         pointImg: this.getPointInfo(item.meta?.type),
                         pointName: this.getPointInfo(item.meta?.type, "label"),
+                        post_author: item.user_id,
                     };
                 });
             return points;
@@ -420,6 +442,12 @@ export default {
         },
     },
     methods: {
+        authorLink,
+        // get current legend src
+        getLegendSrc() {
+            if (!this.legend) return "";
+            return this.legends.find((item) => item.value === this.legend)?.src || "";
+        },
         /**
          * @params {reviewStatus} 1 is pass, 2 is refuse, 0 is reviewing
          */
@@ -433,7 +461,7 @@ export default {
                 message = "弃用";
             }
             this.$confirm(`确定要${message}该短评吗？`, "温馨提示", {
-                confirmButtonText: "立即删除",
+                confirmButtonText: `立即${reviewStatus !== undefined ? message : "删除"}`,
                 cancelButtonText: "取消",
                 type: "warning",
             })
@@ -785,6 +813,7 @@ export default {
         },
     },
     mounted() {
+        console.log(User);
         this.getMapList();
         this.initData();
         // reviewPoint(3).then((res) => {

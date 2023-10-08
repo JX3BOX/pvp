@@ -26,6 +26,8 @@ export default {
 <style lang="less" scoped>
 .u-header {
     text-align: center;
+    margin-top: 0;
+    margin-bottom: 10px;
 }
 .m-cj-content {
     .flex;
