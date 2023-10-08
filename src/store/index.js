@@ -14,6 +14,11 @@ export const useStore = defineStore({
         post: null,
 
         reviewVisible: false, // manager review drawer show
+        map: null, // current mapId
+        myPoints: [], // my points includes change
+        originMyPoints: [], // my points from service
+        editPoint: {}, // point which is editing
+        delPointId: null, // pointId which is deleting
     }),
     actions: {
         setActiveSkill(skill) {

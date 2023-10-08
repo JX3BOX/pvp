@@ -1,7 +1,15 @@
 <template>
     <div class="m-cj-extra">
+        <CJIntro class="m-intro-tabs"></CJIntro>
         <el-tabs class="m-tabs m-extra-tabs" v-model="view" @tab-click="handleClick">
-            <el-tab-pane label="技能查询" name="skill">
+            <el-tab-pane label="我的标点" name="points">
+                <template #label>
+                    <el-icon><Location /></el-icon>
+                    <b>我的标点</b>
+                </template>
+                <CJPoints v-if="view === 'points'"></CJPoints>
+            </el-tab-pane>
+            <el-tab-pane v-if="client === 'origin'" label="技能查询" name="skill">
                 <template #label>
                     <el-icon><Files /></el-icon>
                     <b>技能查询</b>
@@ -21,17 +29,21 @@
 
 <script>
 import { useStore } from "@/store";
+import CJIntro from "./CJIntro.vue";
 import CJStrategy from "./CJStrategy.vue";
 import CJSkill from "./CJSkill.vue";
+import CJPoints from "./CJPoints.vue";
 export default {
     name: "CJExtra",
     components: {
         CJStrategy,
         CJSkill,
+        CJIntro,
+        CJPoints,
     },
     data() {
         return {
-            view: "strategy",
+            view: "points",
         };
     },
     computed: {
@@ -43,24 +55,37 @@ export default {
         handleClick() {},
     },
     mounted() {
-        if (this.client === "origin") {
-            this.view = "skill";
-        }
+        // if (this.client === "origin") {
+        //     this.view = "skill";
+        // }
     },
 };
 </script>
 
 <style lang="less">
 .m-cj-extra {
-    @extraW: 519px;
+    @extraW: 536px;
     @extraH: 826px;
+    @tabH: 40px;
+    @introH: 150px;
     width: @extraW;
     height: @extraH;
     overflow-x: hidden;
-    .scrollbar();
-    .el-tabs {
+    .m-intro-tabs {
         width: @extraW;
-        height: @extraH;
+        .el-tabs__content {
+            height: @introH;
+            overflow-y: auto;
+            .scrollbar(6px);
+        }
+    }
+    .m-extra-tabs {
+        width: @extraW;
+        .el-tabs__content {
+            max-height: calc(@extraH - @introH - @tabH * 2 - 30px);
+            overflow-y: auto;
+            .scrollbar(6px);
+        }
     }
 }
 </style>

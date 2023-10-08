@@ -7,7 +7,7 @@
                     <b>{{ item.label }}</b>
                 </template>
                 <div class="u-content">
-                    <h2 class="u-title">{{ item.label }}</h2>
+                    <!-- <h2 class="u-title">{{ item.label }}</h2> -->
                     <div class="u-info" v-html="getData()"></div>
                 </div>
             </el-tab-pane>
@@ -17,9 +17,10 @@
 
 <script>
 import { markRaw } from "vue";
+import { useStore } from "@/store";
+const $store = useStore();
 export default {
     name: "CJMapIntro",
-    props: ["map"],
     components: {},
     data: function () {
         return {
@@ -40,6 +41,14 @@ export default {
                 {
                     id: 296,
                     name: "龙门绝境",
+                    setting:
+                        "<p>数百年前，鄯善国公主图兰凭借手中的烨阳刀、沙驰军和“十二飞沙”纵横西域。百年过后，秘宝再现。无数侠士前往大漠沙海，希望寻找到传说中的秘宝和失传绝学。</p>",
+                    feature:
+                        "<p>【驼铃】道具，使用后会在地图的某处出现 5 只移速过人的骆驼坐骑。队伍仅剩一人时，可通过采集叹息风碑掉落的“流萤返魂花”复活队友，仅能随机复活一人，且该道具无法在决赛圈中使用。</p>",
+                },
+                {
+                    id: 297,
+                    name: "龙门绝境·夜",
                     setting:
                         "<p>数百年前，鄯善国公主图兰凭借手中的烨阳刀、沙驰军和“十二飞沙”纵横西域。百年过后，秘宝再现。无数侠士前往大漠沙海，希望寻找到传说中的秘宝和失传绝学。</p>",
                     feature:
@@ -96,6 +105,11 @@ export default {
             active: "setting",
         };
     },
+    computed: {
+        map() {
+            return $store.map;
+        },
+    },
     methods: {
         getData() {
             return this.data.find((item) => item.id === this.map)?.[this.active];
@@ -105,7 +119,6 @@ export default {
 </script>
 <style lang="less">
 .m-cj-intro {
-    margin: 20px 0;
     .el-tabs__nav {
         .flex;
     }

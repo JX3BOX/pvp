@@ -32,8 +32,8 @@
                     </span>
                 </div>
                 <div class="u-user">
-                    By: <img class="u-avatar" :src="pointItem.avatar" :alt="pointItem.name" />
-                    <span>{{ pointItem.name }}</span>
+                    <img class="u-avatar" :src="pointItem.avatar" :alt="pointItem.name" />
+                    <a :href="authorLink(pointItem.user_id)" target="_blank">{{ pointItem.name }}</a>
                 </div>
                 <div class="u-time">UpdatedAt: {{ formatTime(pointItem.updated_at) }}</div>
             </div>
@@ -66,6 +66,7 @@ import { mapState } from "pinia";
 import { getUnAuditedPoints, reviewPoint } from "@/service/cj";
 import { formatTime } from "@/utils";
 import { legends, getPointInfo } from "@/assets/data/desertPoints";
+import { authorLink } from "@jx3box/jx3box-common/js/utils";
 
 import User from "@jx3box/jx3box-common/js/user.js";
 export default {
@@ -113,6 +114,7 @@ export default {
         },
     },
     methods: {
+        authorLink,
         formatTime,
         getPointInfo,
         /**
@@ -232,6 +234,12 @@ export default {
                 .u-avatar {
                     .size(20px);
                     .r(20px);
+                }
+                a {
+                    color: #999;
+                    &:hover {
+                        color: #0366d6;
+                    }
                 }
             }
         }

@@ -1,6 +1,6 @@
 <template>
     <MapLayout>
-        <h1 class="u-header">绝境战场</h1>
+        <h2 class="u-header">绝境战场</h2>
         <div class="m-cj-content">
             <CJIndex></CJIndex>
             <CJExtra></CJExtra>
@@ -31,12 +31,10 @@ export default {
 }
 .m-cj-content {
     .flex;
+    flex-wrap: wrap;
     gap: 20px;
     .m-map-index {
         flex: none;
-    }
-    .m-cj-extra {
-        flex: 1;
     }
 }
 </style>

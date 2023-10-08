@@ -176,9 +176,6 @@
                                 :type="point.status === 1 ? 'success' : point.status === 2 ? 'danger' : ''"
                                 >{{ statusMap[point.status] }}</el-tag
                             >
-                            <el-button v-else size="small" plain icon="ChatDotRound" @click="toOpenComment(point)"
-                                >评论</el-button
-                            >
                         </div>
                         <div class="u-content">
                             {{ point.desc }}
@@ -336,8 +333,8 @@ export default {
             contextMenuVisible: false, // map ...
             contextMenuPosition: { x: 0, y: 0 },
             showDialog: false,
-            originMyPoints: [],
-            myPoints: [],
+            // originMyPoints: [],
+            // myPoints: [],
             points: [],
             legend: "", // 标点图例
             legendSize: 30, // legend show size
@@ -405,7 +402,7 @@ export default {
         },
         // Points to show, contains points pending reviewed and rejected
         showPoints() {
-            const points = this.myPoints
+            const points = $store.myPoints
                 .filter((item) => item.status !== 1) // points includes  status 0 2 of myPoints
                 .concat(this.points, this.markPoints)
                 .filter((item) => !this.legend || item.meta.type === this.legend) // filter legend
@@ -422,6 +419,12 @@ export default {
                 });
             return points;
         },
+        editPoint() {
+            return $store.editPoint;
+        },
+        delPointId() {
+            return $store.delPointId;
+        },
     },
     watch: {
         reviewVisible(bol) {
@@ -429,7 +432,7 @@ export default {
                 // clear mark points
                 this.markPoints = [];
                 // clear the mark of my points
-                this.myPoints = this.myPoints.map((item) => {
+                $store.myPoints = $store.myPoints.map((item) => {
                     item.isMark = false;
                     return item;
                 });
@@ -439,6 +442,15 @@ export default {
             if (!bol) {
                 this.cancelRightMenu();
             }
+        },
+        map(mapId) {
+            $store.map = mapId;
+        },
+        editPoint(point) {
+            this.toEdit(point);
+        },
+        delPointId(id) {
+            this.toDel(id);
         },
     },
     methods: {
@@ -504,10 +516,12 @@ export default {
         },
         // set mark points
         toMark(point) {
+            // reset legend
+            this.legend = point.meta.type;
             // if in myPoints
-            const myPointIndex = this.myPoints.findIndex((item) => item.id === point.id);
+            const myPointIndex = $store.myPoints.findIndex((item) => item.id === point.id);
             if (myPointIndex !== -1) {
-                this.myPoints[myPointIndex].isMark = !this.myPoints[myPointIndex]?.isMark;
+                $store.myPoints[myPointIndex].isMark = !$store.myPoints[myPointIndex]?.isMark;
                 return;
             }
             // if not belong to me
@@ -528,14 +542,6 @@ export default {
         mapChange() {
             this.statusFilter = "";
             this.initData();
-        },
-        // change my points status
-        statusChange(val) {
-            if (val) {
-                this.myPoints = this.originMyPoints.filter((item) => item.status === ~~val);
-            } else {
-                this.myPoints = this.originMyPoints;
-            }
         },
         /**
          * set popover status
@@ -664,14 +670,14 @@ export default {
             }
             getMyPoints(params).then((res) => {
                 const list = res.data?.data || [];
-                this.myPoints = list.map((item) => {
+                $store.myPoints = list.map((item) => {
                     return {
                         ...item,
                         pointImg: this.getPointInfo(item.meta?.type),
                         pointName: this.getPointInfo(item.meta?.type, "label"),
                     };
                 });
-                this.originMyPoints = cloneDeep(this.myPoints);
+                $store.originMyPoints = cloneDeep($store.myPoints);
             });
         },
         /**
@@ -720,12 +726,16 @@ export default {
                 },
             };
             if (id) {
-                const index = this.myPoints.findIndex((item) => item.id === id);
-                this.myPoints.splice(index, 1, newData);
+                const index = $store.myPoints.findIndex((item) => item.id === id);
+                if (index !== -1) {
+                    // to get BelongToMe
+                    newData.user_id = $store.myPoints.find((item) => item.id === id)?.user_id;
+                }
+                $store.myPoints.splice(index, 1, newData);
             } else {
-                this.myPoints.unshift(newData);
+                $store.myPoints.unshift(newData);
             }
-            this.originMyPoints = cloneDeep(this.myPoints);
+            $store.originMyPoints = cloneDeep($store.myPoints);
             this.legend = "";
             this.onClose();
         },
@@ -735,12 +745,12 @@ export default {
         toEdit(point) {
             if (!point) {
                 // from right-click
-                point = this.myPoints.find((item) => item.id === this.currentRightClickPoint.id);
+                point = $store.myPoints.find((item) => item.id === this.currentRightClickPoint.id);
             }
             // hide point popover
             this.visiblePopId = null;
             // reset legend
-            this.legend = "";
+            // this.legend = "";
 
             this.pointForm = {
                 ...cloneDeep(point),
@@ -763,8 +773,8 @@ export default {
             })
                 .then(() => {
                     delPoint(id).then(() => {
-                        this.myPoints = this.myPoints.filter((item) => item.id !== id);
-                        this.originMyPoints = cloneDeep(this.myPoints);
+                        $store.myPoints = $store.myPoints.filter((item) => item.id !== id);
+                        $store.originMyPoints = cloneDeep($store.myPoints);
                         this.$notify({
                             title: "成功",
                             message: "删除成功",
@@ -813,7 +823,6 @@ export default {
         },
     },
     mounted() {
-        console.log(User);
         this.getMapList();
         this.initData();
         // reviewPoint(3).then((res) => {

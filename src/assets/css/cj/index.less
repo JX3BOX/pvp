@@ -190,72 +190,6 @@
             background-color: #f0f0f0;
         }
     }
-    .m-my-points {
-        .flex;
-        flex-direction: column;
-        height: @mapH;
-        overflow-x: hidden;
-        overflow-y: auto;
-        .scrollbar(2px);
-        width: 280px;
-        flex: none;
-        border: 1px dashed #eee;
-        .r(5px);
-        .u-point-item {
-            .flex;
-            flex-direction: column;
-            border-bottom: 1px dashed #eee;
-            box-sizing: border-box;
-            padding: 10px;
-            &.u-point-title {
-                font-weight: bold;
-                flex-direction: row;
-                justify-content: space-between;
-            }
-            .u-header {
-                .flex;
-                justify-content: space-between;
-                align-items: center;
-                height: 25px;
-                box-sizing: border-box;
-            }
-            .u-title {
-                .flex;
-                align-items: center;
-                gap: 5px;
-                font-size: 14px;
-                img {
-                    .size(20px);
-                }
-            }
-            .u-op {
-                .none;
-                align-items: center;
-                justify-content: flex-end;
-                .el-button.is-text {
-                    margin: 0;
-                    padding: 3px 5px;
-                    font-size: 12px;
-                }
-            }
-            .u-content {
-                font-size: 12px;
-                padding: 10px 0;
-            }
-            .u-time {
-                .flex;
-                justify-content: flex-end;
-                align-items: center;
-                color: #999;
-                font-size: 12px;
-            }
-            &:hover {
-                .u-op {
-                    .flex;
-                }
-            }
-        }
-    }
 }
 
 .u-point-pop {
@@ -324,18 +258,15 @@
 
 @media screen and (max-width: @notebook) {
     .c-main {
-        &:not(.without-left) {
-            .m-my-points {
-                .none !important;
+        // &:not(.without-left) {
+        .m-cj-extra,
+        .m-extra-tabs {
+            width: 1024px !important;
+            .m-cj-intro {
+                width: 1024px;
             }
         }
-    }
-}
-@media screen and (max-width: @ipad) {
-    .without-left {
-        .m-my-points {
-            .none;
-        }
+        // }
     }
 }
 @keyframes move {

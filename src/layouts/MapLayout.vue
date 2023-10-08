@@ -81,7 +81,6 @@ export default {
     .mt(48px);
     padding: 0;
     .mr(0);
-    overflow-x: hidden;
     .m-extend {
         .pointer;
     }
