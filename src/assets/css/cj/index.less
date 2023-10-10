@@ -8,6 +8,9 @@
     gap: 20px;
     width: @mapW;
     height: calc(@mapH - @imgPadding * 2);
+    border: 10px solid #faebcc;
+    .r(3px);
+    overflow: hidden;
     .m-map-op {
         position: absolute;
         left: 10px;
@@ -172,6 +175,7 @@
             justify-content: center;
             align-items: center;
             padding: 5px 12px;
+            min-width: 40px;
             cursor: pointer;
             .r(3px);
             font-size: 12px;

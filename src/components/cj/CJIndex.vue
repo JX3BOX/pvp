@@ -45,27 +45,21 @@
             <!-- 地图 -->
             <img class="u-map" :src="getMapImage(map)" />
 
-            <!-- 地图右键菜单 -->
+            <!-- the point right-click menu -->
             <div
-                v-if="contextMenuVisible"
+                v-if="pointMenuVisible || contextMenuVisible"
                 class="u-context-menu"
+                ref="contextMenu"
                 :style="{ top: contextMenuPosition.y + 'px', left: contextMenuPosition.x + 'px' }"
             >
-                <ul>
+                <ul v-if="contextMenuVisible">
                     <li @click="menuItemClicked('add')">
                         <el-icon size="16"><CirclePlus /></el-icon>
                         <span>新增</span>
                         <!-- <img v-if="getLegendSrc()" :src="getLegendSrc()" class="u-legend" /> -->
                     </li>
                 </ul>
-            </div>
-            <!-- the point right-click menu -->
-            <div
-                v-if="pointMenuVisible"
-                class="u-context-menu"
-                :style="{ top: contextMenuPosition.y + 'px', left: contextMenuPosition.x + 'px' }"
-            >
-                <ul>
+                <ul v-if="pointMenuVisible">
                     <li v-if="currentRightClickPoint.id && currentRightClickPoint.belongToMe" @click="toEdit(null)">
                         <el-icon size="16"><Edit /></el-icon>
                         <span>编辑</span>
@@ -115,8 +109,8 @@
                 class="u-point__0"
                 :src="getPointInfo(legend)"
                 :style="{
-                    top: contextMenuPosition.y - legendSize + 'px',
-                    left: contextMenuPosition.x - legendSize / 2 + 'px',
+                    top: contextMenuPositionSave.y - legendSize + 'px',
+                    left: contextMenuPositionSave.x - legendSize / 2 + 'px',
                 }"
             />
 
@@ -333,6 +327,7 @@ export default {
             pointMenuVisible: false, // point right-click visible
             contextMenuVisible: false, // map ...
             contextMenuPosition: { x: 0, y: 0 },
+            contextMenuPositionSave: { x: 0, y: 0 },
             showDialog: false,
             // originMyPoints: [],
             // myPoints: [],
@@ -584,9 +579,16 @@ export default {
             event.preventDefault();
             // get the location of container
             const mapRect = this.$refs.map.getBoundingClientRect();
+            const mapW = mapRect.width;
+            const mapH = mapRect.height;
 
             // calculate the location of the right-click menu
             this.contextMenuPosition = {
+                x: event.clientX - mapRect.left,
+                y: event.clientY - mapRect.top,
+            };
+            // use to formData
+            this.contextMenuPositionSave = {
                 x: event.clientX - mapRect.left,
                 y: event.clientY - mapRect.top,
             };
@@ -597,12 +599,32 @@ export default {
                     : {};
                 this.currentRightClickPoint = data;
                 this.pointMenuVisible = true;
+                this.adjustMenuPosition(mapW, mapH);
                 return false;
             }
             this.pointMenuVisible = false;
             if (!this.isEditMode) return;
 
             this.contextMenuVisible = true;
+            this.adjustMenuPosition(mapW, mapH);
+        },
+        adjustMenuPosition(mapW, mapH) {
+            this.$nextTick(() => {
+                const contextMenu = this.$refs.contextMenu;
+                const menuRect = contextMenu.getBoundingClientRect();
+                const width = menuRect.width;
+                const height = menuRect.height;
+                const top = ~~contextMenu.style.top.split("px")[0];
+                const left = ~~contextMenu.style.left.split("px")[0];
+                const basePadding = 5;
+
+                if (mapW - left - basePadding < width) {
+                    this.contextMenuPosition.x = this.contextMenuPositionSave.x - width;
+                }
+                if (mapH - top - basePadding < height) {
+                    this.contextMenuPosition.y = this.contextMenuPositionSave.y - height;
+                }
+            });
         },
         /**
          * menu item click
@@ -694,7 +716,7 @@ export default {
             if (!id) {
                 // add
                 formData.map = this.map;
-                formData.point = this.contextMenuPosition;
+                formData.point = this.contextMenuPositionSave;
             } else {
                 // update
                 formData = pick(formData, ["map", "point", "meta", "desc", "client", "status"]);
