@@ -72,11 +72,13 @@ export default {
     },
     computed: {
         showData() {
-            return this.data.map((item) => {
-                item.time = new Date(item.icon);
-                item.type = "skill_change";
-                return item;
-            });
+            return this.data
+                .map((item) => {
+                    item.time = new Date(item.icon);
+                    item.type = "skill_change";
+                    return item;
+                })
+                .slice(0, 5);
         },
         client() {
             return useStore().client;
