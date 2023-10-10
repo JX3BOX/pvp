@@ -111,5 +111,5 @@ export function getMenu(key) {
 
 // 管理菜单
 export function updateMenu(key, data) {
-    return $cms().put(`/api/cms/menu-group/${key}`, data);
+    return $cms().put(`/api/cms/manage/menu-group/${key}`, data);
 }
