@@ -1,20 +1,20 @@
 <template>
-    <MapLayout>
+    <DarkLayout>
         <h2 class="u-header">绝境战场</h2>
         <div class="m-cj-content">
             <CJIndex></CJIndex>
             <CJExtra></CJExtra>
         </div>
-    </MapLayout>
+    </DarkLayout>
 </template>
 
 <script>
-import MapLayout from "@/layouts/MapLayout.vue";
+import DarkLayout from "@/layouts/DarkLayout.vue";
 import CJIndex from "@/components/cj/CJIndex.vue";
 import CJExtra from "@/components/cj/CJExtra.vue";
 export default {
     name: "CJ",
-    components: { MapLayout, CJIndex, CJExtra },
+    components: { DarkLayout, CJIndex, CJExtra },
     data: function () {
         return {};
     },

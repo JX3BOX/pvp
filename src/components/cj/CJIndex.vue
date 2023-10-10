@@ -23,7 +23,7 @@
                     :class="legend.value === this.legend && 'is-active'"
                     @click="setLegend(legend)"
                 >
-                    <el-tooltip effect="light" :content="legend.label" placement="top">
+                    <el-tooltip effect="dark" :content="legend.label" placement="top">
                         <img class="u-legend__img" :src="legend.src" svg-inline :alt="legend.label" />
                     </el-tooltip>
                     <!-- <label class="u-label">{{ legend.label }}</label> -->
@@ -142,6 +142,7 @@
                         :content="point.desc"
                         v-model:visible="visiblePop"
                         popper-class="u-point-pop"
+                        effect="dark"
                     >
                         <template #reference>
                             <img

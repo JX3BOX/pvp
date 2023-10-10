@@ -1,5 +1,5 @@
 <template>
-    <div>
+    <div class="p-dark-layout">
         <Header></Header>
         <Breadcrumb
             name="绝境战场"
@@ -15,8 +15,8 @@
             </template>
             <Info />
         </Breadcrumb>
-        <LeftSidebar>
-            <Nav class="m-nav" />
+        <LeftSidebar class="m-dark-sidebar">
+            <!-- <Nav class="m-nav" /> -->
         </LeftSidebar>
         <Main :withoutRight="!hasRight">
             <div class="m-main">
@@ -29,7 +29,7 @@
 
 <script>
 import Info from "@/components/list/Info.vue";
-import Nav from "@/components/list/ListNav.vue";
+// import Nav from "@/components/list/ListNav.vue";
 import { useStore } from "@/store";
 const $store = useStore();
 import User from "@jx3box/jx3box-common/js/user.js";
@@ -68,21 +68,11 @@ export default {
     },
     components: {
         Info,
-        Nav,
+        // Nav,
     },
 };
 </script>
 
-<style lang="less" scoped>
-.u-admin-btn {
-    margin-top: -2px;
-}
-.c-main {
-    .mt(48px);
-    padding: 0;
-    .mr(0);
-    .m-extend {
-        .pointer;
-    }
-}
+<style lang="less">
+@import "~@/assets/css/dark_layout.less";
 </style>
