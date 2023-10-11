@@ -9,14 +9,14 @@
             :adminEnable="false"
             :feedbackEnable="true"
             :crumbEnable="true"
+            class="m-dark-breadcrumb"
         >
             <template v-if="isEditor" v-slot:op-append>
                 <el-button class="u-admin-btn" type="primary" icon="Setting" @click="toggleReview">管理</el-button>
             </template>
-            <Info />
         </Breadcrumb>
         <LeftSidebar class="m-dark-sidebar">
-            <!-- <Nav class="m-nav" /> -->
+            <CJNav class="m-nav" />
         </LeftSidebar>
         <Main :withoutRight="!hasRight">
             <div class="m-main">
@@ -28,8 +28,7 @@
 </template>
 
 <script>
-import Info from "@/components/list/Info.vue";
-// import Nav from "@/components/list/ListNav.vue";
+import CJNav from "@/components/cj/CJNav.vue";
 import { useStore } from "@/store";
 const $store = useStore();
 import User from "@jx3box/jx3box-common/js/user.js";
@@ -53,22 +52,12 @@ export default {
         },
     },
     methods: {
-        onQQClick(qq) {
-            navigator.clipboard.writeText(qq).then(() => {
-                this.$notify({
-                    title: "复制成功",
-                    message: "内容：" + qq,
-                    type: "success",
-                });
-            });
-        },
         toggleReview() {
             $store.reviewVisible = !$store.reviewVisible;
         },
     },
     components: {
-        Info,
-        // Nav,
+        CJNav,
     },
 };
 </script>

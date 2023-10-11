@@ -1,0 +1,39 @@
+.m-cj-nav {
+    color: @colorDark;
+    .m-cj-xf {
+        .m-xf-select {
+            .flex;
+            align-items: center;
+            gap: 10px;
+            .u-logo {
+                img {
+                    .size(48px);
+                }
+                &.is-logo {
+                    img {
+                        filter: invert(85%) sepia(0%) saturate(0%) hue-rotate(137deg) brightness(98%) contrast(85%);
+                    }
+                }
+            }
+            .u-select {
+                .el-input__wrapper {
+                    border: none;
+                    box-shadow: none;
+                    background-color: @selectBgDark;
+                    input {
+                        color: @colorDark;
+                    }
+                }
+            }
+        }
+    }
+}
+
+.u-xf-option {
+    .flex;
+    align-items: center;
+    gap: 5px;
+    .u-pic {
+        .size(28px);
+    }
+}

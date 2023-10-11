@@ -1,64 +1,66 @@
 <template>
     <div class="m-cj-extra">
-        <CJIntro class="m-intro-tabs"></CJIntro>
-        <el-tabs class="m-tabs m-extra-tabs" v-model="view" @tab-click="handleClick">
-            <el-tab-pane label="我的标点" name="points">
-                <template #label>
-                    <el-icon><Location /></el-icon>
-                    <b>我的标点</b>
-                </template>
-                <CJPoints v-if="view === 'points'"></CJPoints>
-            </el-tab-pane>
-            <el-tab-pane v-if="client === 'origin'" label="技能查询" name="skill">
-                <template #label>
-                    <el-icon><Files /></el-icon>
-                    <b>技能查询</b>
-                </template>
-                <CJSkill v-if="view === 'skill'"></CJSkill>
-            </el-tab-pane>
-            <el-tab-pane label="攻略" name="strategy">
-                <template #label>
-                    <el-icon><Collection /></el-icon>
-                    <b>吃鸡攻略</b>
-                </template>
-                <CJStrategy v-if="view === 'strategy'"></CJStrategy>
-            </el-tab-pane>
-        </el-tabs>
+        <div class="m-extra-info">
+            <CJIntro></CJIntro>
+        </div>
+        <div class="m-extra-bottom">
+            <div class="m-extra-tabs">
+                <div class="u-tab" v-for="tab in tabs" :key="tab.value" @click="activeTab = tab.value">
+                    <el-icon>
+                        <component :is="tab.icon"></component>
+                    </el-icon>
+                    <b>{{ tab.label }}</b>
+                </div>
+            </div>
+            <div class="m-tab-content">
+                <component v-if="currentComponent" :is="currentComponent"></component>
+            </div>
+        </div>
     </div>
 </template>
 
 <script>
 import { useStore } from "@/store";
+const $store = useStore();
+
 import CJIntro from "./CJIntro.vue";
 import CJStrategy from "./CJStrategy.vue";
-import CJSkill from "./CJSkill.vue";
 import CJPoints from "./CJPoints.vue";
 export default {
     name: "CJExtra",
     components: {
         CJStrategy,
-        CJSkill,
         CJIntro,
         CJPoints,
     },
     data() {
         return {
-            view: "points",
+            activeTab: "point",
+            tabs: [
+                {
+                    label: "我的标点",
+                    value: "point",
+                    icon: "Location",
+                    component: "CJPoints",
+                },
+                {
+                    label: "吃鸡攻略",
+                    value: "strategy",
+                    icon: "Collection",
+                    component: "CJStrategy",
+                },
+            ],
         };
     },
     computed: {
         client() {
-            return useStore().client;
+            return $store.client;
+        },
+        currentComponent() {
+            return this.tabs.find((tab) => tab.value === this.activeTab)?.component || "";
         },
     },
-    methods: {
-        handleClick() {},
-    },
-    mounted() {
-        // if (this.client === "origin") {
-        //     this.view = "skill";
-        // }
-    },
+    methods: {},
 };
 </script>
 

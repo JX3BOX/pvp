@@ -1,16 +1,23 @@
-@bgColor: #1f2937;
-@bgActiveColor: #111827;
-@activeColor: #7879d0;
-@color: #c8c8c8;
 .p-dark-layout {
-    background-color: @bgColor;
-    @color: #c8c8c8;
+    background-color: @bgColorDark;
     font-size: 14px;
     .u-admin-btn {
         margin-top: -2px;
     }
+    .m-dark-breadcrumb {
+        background-color: @bgColorDark;
+        border-color: @bgColorDark1;
+        .u-channel-logo {
+            img {
+                filter: invert(85%) sepia(0%) saturate(0%) hue-rotate(137deg) brightness(98%) contrast(85%);
+            }
+        }
+        .u-channel span {
+            color: @colorDark;
+        }
+    }
     .m-dark-sidebar {
-        background-color: @bgColor;
+        background-color: @bgColorDark1;
     }
     .c-main {
         .mt(48px);
