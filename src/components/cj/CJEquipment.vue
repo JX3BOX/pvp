@@ -1,5 +1,5 @@
 <template>
-    <div class="m-cj-equipment"></div>
+    <div class="m-cj-equipment">123</div>
 </template>
 
 <script>

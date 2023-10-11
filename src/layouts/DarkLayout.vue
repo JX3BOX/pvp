@@ -18,7 +18,7 @@
         <LeftSidebar class="m-dark-sidebar">
             <CJNav class="m-nav" />
         </LeftSidebar>
-        <Main :withoutRight="!hasRight">
+        <Main class="m-dark-main" :withoutRight="!hasRight">
             <div class="m-main">
                 <slot></slot>
             </div>

@@ -7,6 +7,7 @@
                 trigger="hover"
                 :visible-arrow="false"
                 :width="350"
+                effect="dark"
             >
                 <template #reference>
                     <div class="u-skill-icon">

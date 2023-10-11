@@ -5,8 +5,8 @@
             <div class="u-logo" :class="currentLogo.alt === '门派心法' && 'is-logo'">
                 <img :src="currentLogo.src" :alt="currentLogo.alt" />
             </div>
-            <el-select class="u-select" v-model="subtype" @change="toRoute">
-                <el-option value="">
+            <el-select class="u-select" v-model="subtype" filterable @change="toRoute">
+                <el-option label="全部心法" value="">
                     <div class="u-xf-option">
                         <img class="u-pic" src="@/assets/img/logo.svg" alt="全部心法" />
                         <span class="u-txt">全部心法</span>
@@ -20,8 +20,12 @@
                 </el-option>
             </el-select>
         </div>
-        <!-- 心法加成 origin -->
-        <div class="m-xf-buff"></div>
+        <div v-if="client === 'std'" class="m-xf-buff">
+            <h4 class="u-title">
+                <el-icon><ZoomIn /></el-icon>心法加成
+            </h4>
+            <div class="u-buff">+1</div>
+        </div>
     </div>
 </template>
 
@@ -50,10 +54,10 @@ export default {
             return Object.values(xfmap).filter((item) => item.client.includes(this.client));
         },
         currentLogo() {
-            const id = this.subtype ? xfmap[this.subtype].id : null;
+            const id = this.subtype !== "" ? xfmap[this.subtype].id : null;
             return {
-                src: id ? this.showMountIcon(id) : require("@/assets/img/logo.svg"),
-                alt: id ? xfmap[this.subtype].name : "门派心法",
+                src: id !== null ? this.showMountIcon(id) : require("@/assets/img/logo.svg"),
+                alt: id !== null ? xfmap[this.subtype].name : "门派心法",
             };
         },
     },

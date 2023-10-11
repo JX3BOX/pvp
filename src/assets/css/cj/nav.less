@@ -1,10 +1,15 @@
 .m-cj-nav {
     color: @colorDark;
     .m-cj-xf {
+        background-color: @bgColorDark1;
+        border-radius: 10px;
+        padding: 20px;
         .m-xf-select {
             .flex;
             align-items: center;
             gap: 10px;
+            padding-bottom: 10px;
+            border-bottom: 1px dashed #333;
             .u-logo {
                 img {
                     .size(48px);
@@ -23,8 +28,63 @@
                     input {
                         color: @colorDark;
                     }
+                    &.is-focus {
+                        box-shadow: none !important;
+                    }
+                }
+                .el-input.is-focus .el-input__wrapper {
+                    box-shadow: none !important;
                 }
             }
+        }
+        .m-xf-buff {
+            margin-top: 10px;
+            .u-title {
+                .flex;
+                align-items: center;
+                gap: 5px;
+                margin-top: 0;
+                margin-bottom: 10px;
+            }
+        }
+    }
+    .m-nav-bottom {
+        position: relative;
+        margin-top: 20px;
+        overflow: hidden;
+        height: calc(100vh - 355px);
+        background-color: @bgColorDark1;
+        .r(10px);
+        overflow-y: auto;
+        width: 100%;
+        .scrollbar(4px, #F9EACC, #333);
+        .m-nav-tabs {
+            position: sticky;
+            top: 0;
+            left: 0;
+            .flex;
+            gap: 10px;
+            border-bottom: 1px dashed #333;
+            padding: 20px 20px 10px;
+            background-color: @bgColorDark1;
+            z-index: 1;
+            .u-tab {
+                .flex;
+                align-items: center;
+                gap: 5px;
+                .r(4px);
+                padding: 4px 8px;
+                cursor: pointer;
+                &.is-active,
+                &:hover {
+                    background-color: @activeColorDark;
+                    color: @colorDark1;
+                }
+            }
+        }
+        .m-tab-content {
+            margin-top: 14px;
+            padding: 0 20px;
         }
     }
 }

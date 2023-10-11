@@ -5,7 +5,13 @@
         </div>
         <div class="m-nav-bottom">
             <div class="m-nav-tabs">
-                <div class="u-tab" v-for="tab in tabs" :key="tab.value" @click="activeTab = tab.value">
+                <div
+                    class="u-tab"
+                    :class="activeTab === tab.value && 'is-active'"
+                    v-for="tab in tabs"
+                    :key="tab.value"
+                    @click="setTab(tab.value)"
+                >
                     <el-icon>
                         <component :is="tab.icon"></component>
                     </el-icon>
@@ -13,7 +19,7 @@
                 </div>
             </div>
             <div class="m-tab-content">
-                <component v-if="currentComponent" :is="currentComponent"></component>
+                <component :is="currentComponent"></component>
             </div>
         </div>
     </div>
@@ -47,7 +53,7 @@ export default {
                 {
                     label: "技能查询",
                     value: "skill",
-                    client: ["origin"],
+                    client: ["std", "origin"],
                     icon: "Search",
                     component: "CJSkill",
                 },
@@ -63,6 +69,11 @@ export default {
         },
         currentComponent() {
             return this.tabs.find((tab) => tab.value === this.activeTab)?.component || "";
+        },
+    },
+    methods: {
+        setTab(tab) {
+            this.activeTab = tab;
         },
     },
 };

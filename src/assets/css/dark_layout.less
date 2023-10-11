@@ -6,7 +6,7 @@
     }
     .m-dark-breadcrumb {
         background-color: @bgColorDark;
-        border-color: @bgColorDark1;
+        border-color: transparent;
         .u-channel-logo {
             img {
                 filter: invert(85%) sepia(0%) saturate(0%) hue-rotate(137deg) brightness(98%) contrast(85%);
@@ -17,10 +17,23 @@
         }
     }
     .m-dark-sidebar {
-        background-color: @bgColorDark1;
+        background-color: @bgColorDark;
+        border-color: transparent;
+        padding: 0;
+        padding-left: 20px;
+        width: @darkLeftWidth;
+        box-sizing: border-box;
+        .c-sidebar-left-toggle {
+            background-color: @bgColorDark1;
+            border-color: @bgColorDark;
+            &:hover {
+                color: @colorDark1;
+            }
+        }
     }
-    .c-main {
+    .m-dark-main {
         .mt(48px);
+        .ml(@darkLeftWidth);
         padding: 0;
         .mr(0);
         .m-extend {
