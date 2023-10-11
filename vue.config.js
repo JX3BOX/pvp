@@ -78,6 +78,8 @@ module.exports = {
     //❤️ define path for static files ~
     publicPath: process.env.NODE_ENV === "development" ? "/" : process.env.STATIC_PATH + pkg.name,
 
+    outputDir: process.env["BUILD_MODE"] == "preview" ? path.resolve(__dirname, pkg.name) : "dist", // 指定构建输出的目录
+
     //❤️ Webpack configuration
     chainWebpack: (config) => {
         //💘 html-webpack-plugin ~
