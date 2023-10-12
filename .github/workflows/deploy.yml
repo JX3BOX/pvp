@@ -16,29 +16,6 @@ jobs:
               with:
                   node-version: ${{ matrix.node-version }}
 
-            - name: Install && Build
-              run: |
-                  npm install
-                  npm run build
-
-            - name: Github Pages
-              uses: JamesIves/github-pages-deploy-action@releases/v3
-              with:
-                  ACCESS_TOKEN: ${{ secrets.ACCESS_TOKEN }}
-                  BRANCH: gh-pages
-                  FOLDER: dist
-                  CLEAN: true
-
-            ## TODO:下方修改两处
-            - name: OSS
-              uses: manyuanrong/setup-ossutil@v2.0
-              with:
-                  endpoint: "oss-cn-hangzhou.aliyuncs.com"
-                  access-key-id: ${{secrets.AccessKey_ID}}
-                  access-key-secret: ${{secrets.Access_Key_Secret}}
-            - run: ossutil cp -rf dist oss://jx3box/static/pvp
-            #- run: ossutil cp -rf dist oss://jx3box-www/pvp
-
             ## TODO:下方修改一处
             - name: Deploy
               uses: appleboy/ssh-action@master
