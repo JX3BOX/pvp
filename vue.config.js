@@ -1,6 +1,7 @@
 const path = require("path");
 const setting = require("./setting.json");
 const pkg = require("./package.json");
+const { JX3BOX } = require("@jx3box/jx3box-common");
 module.exports = {
     //❤️ Multiple pages ~
     // pages: {
@@ -76,7 +77,26 @@ module.exports = {
     },
 
     //❤️ define path for static files ~
-    publicPath: process.env.NODE_ENV === "development" ? "/" : process.env.STATIC_PATH + pkg.name,
+    publicPath:
+        //FOR Localhost => development
+        (process.env.NODE_ENV === "development" && "/") ||
+        (process.env.BUILD_MODE == "preview" && `/${pkg.name}/`) ||
+        //BY relative path
+        (process.env.BUILD_MODE === "preview" && `/${pkg.name}/`) ||
+        //BY origin
+        (process.env.STATIC_PATH === "origin" && `${JX3BOX.__staticPath["origin"]}${pkg.name}/`) ||
+        //BY github
+        (process.env.STATIC_PATH === "github" && `${JX3BOX.__staticPath["github"]}${pkg.name}/`) ||
+        //BY jsdelivr
+        (process.env.STATIC_PATH === "jsdelivr" && `${JX3BOX.__staticPath["jsdelivr"]}${pkg.name}@gh-pages/`) ||
+        //BY OSS=>CDN
+        (process.env.STATIC_PATH === "mirror" && `${JX3BOX.__staticPath["mirror"]}${pkg.name}/`) ||
+        //BY relative path
+        (process.env.STATIC_PATH === "repo" && `/${pkg.name}/`) ||
+        //BY root path or bind a domain
+        (process.env.STATIC_PATH == "root" && "/") ||
+        //for lost
+        "/",
 
     outputDir: process.env["BUILD_MODE"] == "preview" ? path.resolve(__dirname, pkg.name) : "dist", // 指定构建输出的目录
 

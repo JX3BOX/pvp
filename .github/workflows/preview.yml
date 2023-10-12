@@ -21,15 +21,6 @@ jobs:
                   npm install
                   npm run preview
 
-            ## TODO:下方修改2处
-            - name: OSS
-              uses: manyuanrong/setup-ossutil@v2.0
-              with:
-                  endpoint: "oss-cn-hangzhou.aliyuncs.com"
-                  access-key-id: ${{secrets.AccessKey_ID}}
-                  access-key-secret: ${{secrets.Access_Key_Secret}}
-            - run: ossutil cp -rf pvp oss://jx3box/static/pvp
-
             ## TODO:下方修改1处
             - name: GrayEnv
               uses: appleboy/scp-action@v0.1.4
