@@ -4,6 +4,8 @@
         background-color: @bgColorDark1;
         border-radius: 10px;
         padding: 20px;
+        height: @darksideTopHeight;
+        box-sizing: border-box;
         .m-xf-select {
             .flex;
             align-items: center;
@@ -52,7 +54,7 @@
         position: relative;
         margin-top: 20px;
         overflow: hidden;
-        height: calc(100vh - 355px);
+        height: calc(100vh - 310px);
         background-color: @bgColorDark1;
         .r(10px);
         overflow-y: auto;
@@ -63,7 +65,7 @@
             top: 0;
             left: 0;
             .flex;
-            gap: 10px;
+            gap: 5px;
             border-bottom: 1px dashed #333;
             padding: 20px 20px 10px;
             background-color: @bgColorDark1;
@@ -71,9 +73,11 @@
             .u-tab {
                 .flex;
                 align-items: center;
+                justify-content: center;
                 gap: 5px;
                 .r(4px);
-                padding: 4px 8px;
+                height: 30px;
+                width: 90px;
                 cursor: pointer;
                 &.is-active,
                 &:hover {

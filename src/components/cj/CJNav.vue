@@ -29,6 +29,7 @@
 import CJXf from "./CJXf.vue";
 import CJSkill from "./CJSkill.vue";
 import CJEquipment from "./CJEquipment.vue";
+import CJItem from "./CJItem.vue";
 import { useStore } from "@/store";
 const $store = useStore();
 
@@ -38,6 +39,7 @@ export default {
         CJXf,
         CJSkill,
         CJEquipment,
+        CJItem,
     },
     data() {
         return {
@@ -53,9 +55,17 @@ export default {
                 {
                     label: "技能查询",
                     value: "skill",
+                    // client: ["origin"],
                     client: ["std", "origin"],
                     icon: "Search",
                     component: "CJSkill",
+                },
+                {
+                    label: "道具介绍",
+                    value: "item",
+                    client: ["std", "origin"],
+                    icon: "Money",
+                    component: "CJItem",
                 },
             ],
         };

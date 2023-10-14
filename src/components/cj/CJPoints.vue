@@ -2,11 +2,11 @@
     <!-- 我的点位列表 -->
     <div class="m-my-points">
         <template v-if="originMyPoints.length">
-            <el-radio-group class="m-status" v-model="statusFilter" @change="statusChange">
+            <!-- <el-radio-group class="m-status" v-model="statusFilter" @change="statusChange">
                 <el-radio-button :label="status.value" v-for="status in statusList" :key="status.value">{{
                     status.label
                 }}</el-radio-button>
-            </el-radio-group>
+            </el-radio-group> -->
             <template v-if="myPoints.length">
                 <div class="u-point-item" v-for="pointItem in myPoints" :key="pointItem.id">
                     <div class="u-header">
@@ -15,6 +15,7 @@
                             <span>{{ pointItem.pointName }}</span>
                             <el-tag
                                 size="small"
+                                effect="dark"
                                 :type="pointItem.status === 1 ? 'success' : pointItem.status === 2 ? 'danger' : ''"
                                 >{{ statusMap[pointItem.status] }}
                             </el-tag>
@@ -44,32 +45,40 @@ export default {
     name: "CJPoints",
     data() {
         return {
-            statusFilter: "", // my points filter
+            // statusFilter: "", // my points filter
             // point status map
             statusMap: markRaw(statusMap),
         };
     },
     computed: {
+        statusFilter() {
+            return $store.myPointsStatus;
+        },
         myPoints() {
             return $store.myPoints;
         },
         originMyPoints() {
             return $store.originMyPoints;
         },
-        statusList() {
-            const list = [
-                {
-                    value: "",
-                    label: "全部",
-                },
-            ];
-            for (const [key, value] of Object.entries(this.statusMap)) {
-                list.push({
-                    value: key,
-                    label: value,
-                });
-            }
-            return list;
+        // statusList() {
+        //     const list = [
+        //         {
+        //             value: "",
+        //             label: "全部",
+        //         },
+        //     ];
+        //     for (const [key, value] of Object.entries(this.statusMap)) {
+        //         list.push({
+        //             value: key,
+        //             label: value,
+        //         });
+        //     }
+        //     return list;
+        // },
+    },
+    watch: {
+        statusFilter(val) {
+            this.statusChange(val);
         },
     },
     methods: {
@@ -101,7 +110,7 @@ export default {
     .u-point-item {
         .flex;
         flex-direction: column;
-        border-top: 1px dashed #eee;
+        border-bottom: 1px dashed #333;
         box-sizing: border-box;
         padding: 10px;
         width: 100%;

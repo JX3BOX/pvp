@@ -1,0 +1,90 @@
+.m-cj-extra {
+    min-width: @darksideWidth;
+    max-width: calc(@darkMapW + 20px);
+    overflow-x: hidden;
+    color: @colorDark;
+    flex: 1;
+    .m-cj-intro {
+        height: @darksideTopHeight;
+        .scrollbar(4px, #F9EACC, #333);
+        overflow-y: auto;
+        background-color: @bgColorDark1;
+        border-radius: 10px;
+        padding: 20px;
+        box-sizing: border-box;
+        .u-title {
+            .flex;
+            gap: 5px;
+            align-items: center;
+            justify-content: center;
+            padding-bottom: 10px;
+            border-bottom: 1px dashed #333;
+        }
+        .u-info {
+            font-size: 12px;
+            p {
+                text-indent: 2em;
+            }
+        }
+    }
+    .m-extra-bottom {
+        border-radius: 10px;
+        padding: 20px;
+        box-sizing: border-box;
+        margin-top: 20px;
+        background-color: @bgColorDark1;
+        height: calc(@darkMapH - @darksideTopHeight - @darkImgPadding * 2);
+
+        .m-extra-tabs {
+            position: relative;
+            .flex;
+            justify-content: center;
+            align-items: center;
+            gap: 5px;
+            padding-bottom: 10px;
+            border-bottom: 1px dashed #333;
+            .u-tab {
+                .flex;
+                align-items: center;
+                justify-content: center;
+                gap: 5px;
+                .r(4px);
+                height: 30px;
+                width: 90px;
+                cursor: pointer;
+                &.is-active,
+                &:hover {
+                    background-color: @activeColorDark;
+                    color: @colorDark1;
+                }
+            }
+            .u-filter {
+                position: absolute;
+                right: 10px;
+                .u-select {
+                    .el-input__wrapper {
+                        border: none;
+                        box-shadow: none;
+                        background-color: @selectBgDark;
+                        input {
+                            color: @colorDark;
+                        }
+                        &.is-focus {
+                            box-shadow: none !important;
+                        }
+                    }
+                    .el-input.is-focus .el-input__wrapper {
+                        box-shadow: none !important;
+                    }
+                }
+            }
+        }
+        .m-tab-content {
+            margin-top: 10px;
+            height: calc(100% - 60px);
+            overflow-y: auto;
+            .scrollbar(4px, #F9EACC, #333);
+            background-color: @bgColorDark1;
+        }
+    }
+}

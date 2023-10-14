@@ -1,17 +1,9 @@
 <template>
     <div class="m-cj-intro">
-        <el-tabs v-model="active">
-            <el-tab-pane v-for="item in tabs" :key="item.value" :label="item.label" :name="item.value">
-                <template #label>
-                    <el-icon class="u-tab-icon"><component :is="item.icon"></component></el-icon>
-                    <b>{{ item.label }}</b>
-                </template>
-                <div class="u-content">
-                    <!-- <h2 class="u-title">{{ item.label }}</h2> -->
-                    <div class="u-info" v-html="getData()"></div>
-                </div>
-            </el-tab-pane>
-        </el-tabs>
+        <div class="u-title">
+            <el-icon class="u-tab-icon"><Compass></Compass></el-icon><b>背景特色</b>
+        </div>
+        <div class="u-info" v-html="getData()"></div>
     </div>
 </template>
 
@@ -24,19 +16,6 @@ export default {
     components: {},
     data: function () {
         return {
-            loading: false,
-            tabs: [
-                {
-                    icon: "Compass",
-                    value: "setting",
-                    label: "背景设定",
-                },
-                {
-                    icon: "Cpu",
-                    value: "feature",
-                    label: "地图特色",
-                },
-            ],
             data: markRaw([
                 {
                     id: 296,
@@ -102,7 +81,6 @@ export default {
                             <p>战斗越临近终章，则【劫掠的货物】价值越高!是逆风翻盘还是如虎添翼?或许你最需要的东西就在这里!</p>`,
                 },
             ]),
-            active: "setting",
         };
     },
     computed: {
@@ -112,7 +90,8 @@ export default {
     },
     methods: {
         getData() {
-            return this.data.find((item) => item.id === this.map)?.[this.active];
+            const data = this.data.find((item) => item.id === this.map) || {};
+            return data.setting + data.feature;
         },
     },
 };

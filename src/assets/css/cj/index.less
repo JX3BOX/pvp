@@ -1,13 +1,10 @@
 .m-map-index {
     position: relative;
-    @mapW: 1024px;
-    @mapH: 896px;
-    @imgPadding: 35px;
     .flex;
     justify-content: center;
     gap: 20px;
-    width: @mapW;
-    height: calc(@mapH - @imgPadding * 2);
+    width: @darkMapW;
+    height: calc(@darkMapH - @darkImgPadding * 2);
     border: 10px solid #faebcc;
     .r(3px);
     overflow: hidden;
@@ -15,7 +12,7 @@
         position: absolute;
         left: 10px;
         top: 10px;
-        width: calc(@mapW - 20px);
+        width: calc(@darkMapW - 20px);
         .flex;
         justify-content: space-between;
         z-index: 401;
@@ -80,7 +77,7 @@
         position: relative;
         text-align: center;
         width: 1024px;
-        height: calc(@mapH - @imgPadding * 2);
+        height: calc(@darkMapH - @darkImgPadding * 2);
         flex: none;
         // overflow: hidden;
         &.is-point {
@@ -89,8 +86,8 @@
         .u-map {
             position: absolute;
             left: 0;
-            top: -@imgPadding;
-            .size(100%, @mapH);
+            top: -@darkImgPadding;
+            .size(100%, @darkMapH);
         }
         .m-points {
             .u-point {

@@ -19,6 +19,7 @@ export const useStore = defineStore({
         originMyPoints: [], // my points from service
         editPoint: {}, // point which is editing
         delPointId: null, // pointId which is deleting
+        myPointsStatus: "", // My points filter status
     }),
     actions: {
         setActiveSkill(skill) {

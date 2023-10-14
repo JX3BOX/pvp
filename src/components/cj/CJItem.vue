@@ -1,10 +1,10 @@
 <template>
-    <div class="m-cj-equipment">装备对比</div>
+    <div class="m-cj-item">道具介绍</div>
 </template>
 
 <script>
 export default {
-    name: "CJEquipment",
+    name: "CJItem",
 };
 </script>
 
