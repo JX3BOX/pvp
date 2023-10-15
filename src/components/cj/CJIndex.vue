@@ -168,6 +168,7 @@
                             <el-tag
                                 v-if="point.belongToMe"
                                 size="small"
+                                effect="dark"
                                 :type="point.status === 1 ? 'success' : point.status === 2 ? 'danger' : ''"
                                 >{{ statusMap[point.status] }}</el-tag
                             >
