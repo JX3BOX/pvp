@@ -8,6 +8,10 @@
     border: 10px solid #faebcc;
     .r(3px);
     overflow: hidden;
+    flex: none;
+    @media screen and (max-width: @ipad) {
+        flex: auto;
+    }
     .m-map-op {
         position: absolute;
         left: 10px;
@@ -258,17 +262,14 @@
     }
 }
 
-@media screen and (max-width: @notebook) {
+@media screen and (max-width: @ipad) {
     .c-main {
-        // &:not(.without-left) {
-        .m-cj-extra,
-        .m-extra-tabs {
-            width: 1024px !important;
+        .m-cj-extra {
+            width: calc(100% - 40px);
             .m-cj-intro {
-                width: 1024px;
+                width: 100%;
             }
         }
-        // }
     }
 }
 @keyframes move {

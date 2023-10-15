@@ -27,8 +27,5 @@ export default {
     .flex;
     flex-wrap: wrap;
     gap: 20px;
-    .m-map-index {
-        flex: none;
-    }
 }
 </style>

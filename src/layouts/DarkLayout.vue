@@ -15,10 +15,10 @@
                 <el-button class="u-admin-btn" type="primary" icon="Setting" @click="toggleReview">管理</el-button>
             </template>
         </Breadcrumb>
-        <LeftSidebar class="m-dark-sidebar">
+        <LeftSidebar class="m-dark-sidebar" :open="isOpen">
             <CJNav class="m-nav" />
         </LeftSidebar>
-        <Main class="m-dark-main" :withoutRight="!hasRight">
+        <Main class="m-dark-main" :withoutLeft="!isOpen">
             <div class="m-main">
                 <slot></slot>
             </div>
@@ -34,14 +34,13 @@ const $store = useStore();
 import User from "@jx3box/jx3box-common/js/user.js";
 export default {
     name: "App",
-    props: {
-        hasRight: {
-            type: Boolean,
-            default: true,
-        },
-    },
     data: function () {
-        return {};
+        return {
+            isOpen: true,
+        };
+    },
+    components: {
+        CJNav,
     },
     computed: {
         client() {
@@ -56,8 +55,10 @@ export default {
             $store.reviewVisible = !$store.reviewVisible;
         },
     },
-    components: {
-        CJNav,
+    mounted() {
+        if (window.innerWidth < 1024) {
+            this.isOpen = false;
+        }
     },
 };
 </script>
