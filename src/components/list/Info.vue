@@ -12,6 +12,8 @@
 </template>
 
 <script>
+import { useStore } from "@/store";
+
 export default {
     name: "BreadRouter",
     props: [],
@@ -20,7 +22,7 @@ export default {
     },
     computed: {
         client: function () {
-            return this.$store.state.client;
+            return useStore().client;
         },
     },
     methods: {},

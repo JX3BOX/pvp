@@ -1,19 +1,19 @@
 <template>
-    <ListLayout>
+    <DarkLayout>
         <div class="m-cj-content">
             <CJIndex></CJIndex>
             <CJExtra></CJExtra>
         </div>
-    </ListLayout>
+    </DarkLayout>
 </template>
 
 <script>
-import ListLayout from "@/layouts/ListLayout.vue";
+import DarkLayout from "@/layouts/DarkLayout.vue";
 import CJIndex from "@/components/cj/CJIndex.vue";
 import CJExtra from "@/components/cj/CJExtra.vue";
 export default {
     name: "CJ",
-    components: { ListLayout, CJIndex, CJExtra },
+    components: { DarkLayout, CJIndex, CJExtra },
     data: function () {
         return {};
     },
@@ -22,3 +22,10 @@ export default {
     mounted() {},
 };
 </script>
+<style lang="less" scoped>
+.m-cj-content {
+    .flex;
+    flex-wrap: wrap;
+    gap: 20px;
+}
+</style>

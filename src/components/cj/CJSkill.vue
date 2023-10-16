@@ -1,7 +1,8 @@
 <template>
-    <div v-loading="loading" class="m-cj-skill">
+    <div class="m-cj-skill">
         <div class="m-search">
-            <el-select v-model="quality">
+            <el-input class="u-input" v-model="search" placeholder="请输入 技能名称 查询" clearable></el-input>
+            <el-select class="u-select" v-model="quality">
                 <el-option
                     v-for="item in qualities"
                     :key="item.value"
@@ -9,10 +10,9 @@
                     :label="item.label"
                 ></el-option>
             </el-select>
-            <el-select v-model="skillType">
+            <el-select class="u-select" v-model="skillType">
                 <el-option v-for="item in types" :key="item.value" :value="item.value" :label="item.label"></el-option>
             </el-select>
-            <el-input v-model="search" placeholder="请输入 技能名称 查询" clearable></el-input>
         </div>
         <div v-if="list.length" class="m-skill-list">
             <div class="u-skill-item">

@@ -53,6 +53,7 @@ import { getMenu, updateMenu } from "@/service/raw.js";
 import dateFormat from "@/assets/js/dateFormat.js";
 import draggable from "vuedraggable";
 import cloneDeep from "lodash/cloneDeep";
+import { useStore } from "@/store";
 
 export default {
     name: "SkillChange",
@@ -71,11 +72,19 @@ export default {
     },
     computed: {
         showData() {
-            return this.data.map((item) => {
-                item.time = new Date(item.icon);
-                item.type = "skill_change";
-                return item;
-            });
+            return this.data
+                .map((item) => {
+                    item.time = new Date(item.icon);
+                    item.type = "skill_change";
+                    return item;
+                })
+                .slice(0, 5);
+        },
+        client() {
+            return useStore().client;
+        },
+        bpsType() {
+            return this.client === "origin" ? "bps_skill_change_origin" : "bps_skill_change";
         },
     },
     mounted() {
@@ -89,7 +98,7 @@ export default {
             this.showDialog = true;
         },
         loadSkillChangeData() {
-            getMenu("bps_skill_change").then((res) => {
+            getMenu(this.bpsType).then((res) => {
                 this.data = cloneDeep(res);
                 this.menus = cloneDeep(res);
             });
@@ -99,7 +108,7 @@ export default {
             const data = this.menus.filter((item) => {
                 return item.label && item.link && item.icon;
             });
-            updateMenu("bps_skill_change", { menus: data }).then(() => {
+            updateMenu(this.bpsType, { menus: data }).then(() => {
                 this.showDialog = false;
                 this.loadSkillChangeData();
             });

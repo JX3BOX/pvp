@@ -3,8 +3,35 @@
     flex-direction: column;
     .m-search {
         .flex;
+        flex-direction: column;
         gap: 10px;
-        align-items: center;
+        .u-select {
+            .el-input__wrapper {
+                border: none;
+                box-shadow: none;
+                background-color: @selectBgDark;
+                input {
+                    color: @colorDark;
+                }
+                &.is-focus {
+                    box-shadow: none !important;
+                }
+            }
+            .el-input.is-focus .el-input__wrapper {
+                box-shadow: none !important;
+            }
+        }
+        .u-input {
+            .el-input__wrapper {
+                border: none;
+                box-shadow: none;
+                background-color: @inputBgDark;
+                input {
+                    color: @colorDark1;
+                    background-color: @inputBgDark;
+                }
+            }
+        }
     }
     .u-no-data {
         margin-top: 20px;

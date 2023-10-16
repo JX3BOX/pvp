@@ -10,6 +10,11 @@
             :feedbackEnable="true"
             :crumbEnable="true"
         >
+            <template #title>
+                <span>
+                    {{ title }}
+                </span>
+            </template>
         </Breadcrumb>
         <LeftSidebar :uid="user_id">
             <Nav :id="id" class="m-nav" />
@@ -51,6 +56,9 @@ export default {
         },
         postId() {
             return useStore().postId;
+        },
+        title() {
+            return useStore().post?.title || document.title;
         },
     },
     methods: {},

@@ -28,7 +28,7 @@
                     </strong>
                 </Side>
                 <SkillChange></SkillChange>
-                <MiniRank />
+                <MiniRank v-if="client === 'std'" />
             </RightSidebar>
             <Footer></Footer>
         </Main>
@@ -42,6 +42,7 @@ import Side from "@/components/list/RightSide.vue";
 import Tabs from "@/components/Tabs.vue";
 import MiniRank from "@/components/MiniRank.vue";
 import SkillChange from "@/components/SkillChange.vue";
+import { useStore } from "@/store";
 export default {
     name: "App",
     props: {
@@ -52,6 +53,11 @@ export default {
     },
     data: function () {
         return {};
+    },
+    computed: {
+        client() {
+            return useStore().client;
+        },
     },
     methods: {
         onQQClick(qq) {

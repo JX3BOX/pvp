@@ -215,6 +215,7 @@ export default {
                     this.post = res.data.data;
                     useStore().userId = this.post?.post_author;
                     useStore().postId = this.post?.ID;
+                    useStore().post = this.post;
 
                     document.title = this.post?.post_title;
 

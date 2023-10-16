@@ -1,25 +1,27 @@
 .u-skill-item {
     display: grid;
-    grid-template-columns: 2fr 1fr 1fr;
+    grid-template-columns: 3fr 1fr 1.5fr;
     height: 50px;
     margin-bottom: 5px;
     margin-top: 5px;
     font-size: 14px;
-    border-bottom: 1px solid #eee;
+    border-bottom: 1px solid #333;
+    .fz(12px);
     &:not(:first-child) {
-        padding: 5px;
+        padding: 3px;
         border-radius: 4px;
         &:hover {
-            background-color: #eee;
+            background-color: #666;
         }
     }
     .u-skill-icon {
         cursor: pointer;
+        .size(32px);
     }
     .u-td {
         .flex;
         align-items: center;
-        gap: 10px;
+        gap: 5px;
     }
 }
 .w-skill {

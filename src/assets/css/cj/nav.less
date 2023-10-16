@@ -1,0 +1,104 @@
+.m-cj-nav {
+    color: @colorDark;
+    .m-cj-xf {
+        background-color: @bgColorDark1;
+        border-radius: 10px;
+        padding: 20px;
+        height: @darksideTopHeight;
+        box-sizing: border-box;
+        .m-xf-select {
+            .flex;
+            align-items: center;
+            gap: 10px;
+            padding-bottom: 10px;
+            border-bottom: 1px dashed #333;
+            .u-logo {
+                img {
+                    .size(48px);
+                }
+                &.is-logo {
+                    img {
+                        filter: invert(85%) sepia(0%) saturate(0%) hue-rotate(137deg) brightness(98%) contrast(85%);
+                    }
+                }
+            }
+            .u-select {
+                .el-input__wrapper {
+                    border: none;
+                    box-shadow: none;
+                    background-color: @selectBgDark;
+                    input {
+                        color: @colorDark;
+                    }
+                    &.is-focus {
+                        box-shadow: none !important;
+                    }
+                }
+                .el-input.is-focus .el-input__wrapper {
+                    box-shadow: none !important;
+                }
+            }
+        }
+        .m-xf-buff {
+            margin-top: 10px;
+            .u-title {
+                .flex;
+                align-items: center;
+                gap: 5px;
+                margin-top: 0;
+                margin-bottom: 10px;
+            }
+        }
+    }
+    .m-nav-bottom {
+        position: relative;
+        margin-top: 20px;
+        overflow: hidden;
+        height: calc(100vh - 310px);
+        background-color: @bgColorDark1;
+        .r(10px);
+        overflow-y: auto;
+        width: 100%;
+        .scrollbar(4px, #F9EACC, #333);
+        .m-nav-tabs {
+            position: sticky;
+            top: 0;
+            left: 0;
+            .flex;
+            gap: 5px;
+            border-bottom: 1px dashed #333;
+            padding: 20px 20px 10px;
+            background-color: @bgColorDark1;
+            z-index: 1;
+            .u-tab {
+                .flex;
+                align-items: center;
+                justify-content: center;
+                gap: 5px;
+                .r(4px);
+                height: 30px;
+                width: 90px;
+                cursor: pointer;
+                &.is-active,
+                &:hover {
+                    background-color: @activeColorDark;
+                    color: @colorDark1;
+                }
+            }
+        }
+        .m-tab-content {
+            margin-top: 14px;
+            padding: 0 20px;
+        }
+    }
+}
+
+.u-xf-option {
+    .flex;
+    align-items: center;
+    gap: 5px;
+    .fz(13px);
+    .u-pic {
+        .size(22px);
+    }
+}

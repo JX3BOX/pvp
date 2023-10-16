@@ -4,7 +4,15 @@
             <ListItem v-for="item in list" :key="item.post_id" :item="item" :order="params.order"></ListItem>
         </div>
         <!-- 空 -->
-        <el-alert v-else class="m-strategy-null" title="没有找到相关条目" type="info" center show-icon></el-alert>
+        <el-alert
+            v-else
+            effect="dark"
+            class="m-strategy-null"
+            title="没有找到相关条目"
+            type="info"
+            center
+            show-icon
+        ></el-alert>
 
         <!-- 下一页 -->
         <el-button
@@ -44,7 +52,7 @@ export default {
         return {
             page: 1,
             pages: 1,
-            per: 10,
+            per: 5,
             total: 0,
             loading: false,
             list: [],

@@ -32,4 +32,50 @@ function getDeserts(params) {
     });
 }
 
-export { getMapList, getPosts, getDesertTypes, getDeserts };
+// 吃鸡点位curd
+function getPoints(params) {
+    return $cms().get("/api/cms/app/desert/point", {
+        params,
+    });
+}
+function getMyPoints(params) {
+    return $cms().get("/api/cms/app/desert/point/my", {
+        params,
+    });
+}
+/**
+ *
+ * @param {*} params
+ * @returns the points to be reviewed
+ */
+function getUnAuditedPoints(params) {
+    return $cms().get("/api/cms/app/desert/point/unaudited", {
+        params,
+    });
+}
+function addPoint(data) {
+    return $cms().post("/api/cms/app/desert/point", data);
+}
+function delPoint(id) {
+    return $cms().delete(`/api/cms/app/desert/point/${id}`);
+}
+function updatePoint(data, id) {
+    return $cms().put(`/api/cms/app/desert/point/${id}`, data);
+}
+function reviewPoint(id, status = 1) {
+    return $cms().put(`/api/cms/app/desert/point/${id}/admin`, { status });
+}
+
+export {
+    getMapList,
+    getPosts,
+    getDesertTypes,
+    getDeserts,
+    getPoints,
+    addPoint,
+    delPoint,
+    updatePoint,
+    getMyPoints,
+    reviewPoint,
+    getUnAuditedPoints,
+};

@@ -10,6 +10,16 @@ export const useStore = defineStore({
         postId: 0,
 
         qixueData: {},
+
+        post: null,
+
+        reviewVisible: false, // manager review drawer show
+        map: null, // current mapId
+        myPoints: [], // my points includes change
+        originMyPoints: [], // my points from service
+        editPoint: {}, // point which is editing
+        delPointId: null, // pointId which is deleting
+        myPointsStatus: "", // My points filter status
     }),
     actions: {
         setActiveSkill(skill) {

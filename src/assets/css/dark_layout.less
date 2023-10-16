@@ -1,0 +1,48 @@
+.p-dark-layout {
+    background-color: @bgColorDark;
+    font-size: 14px;
+
+    .u-admin-btn {
+        margin-top: -2px;
+    }
+    .m-dark-breadcrumb {
+        background-color: @bgColorDark;
+        border-color: transparent;
+        .u-channel-logo {
+            margin-left: 10px;
+            img {
+                filter: invert(85%) sepia(0%) saturate(0%) hue-rotate(137deg) brightness(98%) contrast(85%);
+            }
+        }
+        .u-channel span {
+            color: @colorDark;
+        }
+    }
+    .m-dark-sidebar {
+        background-color: @bgColorDark;
+        border-color: transparent;
+        padding: 0;
+        padding-left: 20px;
+        width: @darksideWidth;
+        box-sizing: border-box;
+        .c-sidebar-left-toggle {
+            background-color: @bgColorDark1;
+            border-color: @bgColorDark;
+            &:hover {
+                color: @colorDark1;
+            }
+        }
+    }
+    .m-dark-main {
+        .mt(48px);
+        .ml(@darksideWidth);
+        padding: 0;
+        .mr(0);
+        .m-extend {
+            .pointer;
+        }
+        .m-main {
+            padding-top: 0;
+        }
+    }
+}
