@@ -28,14 +28,14 @@
                 <span>配装模拟器</span>
                 <em>Assembly Simulator</em>
             </a>
-            <a href="/pvp/sandbox">
+            <!-- <a href="/pvp/sandbox">
                 <img class="u-icon" :src="getAppIcon('sandbox', true)" />
                 <span>阵营沙盘</span>
                 <em>JX3 Sandbox</em>
-            </a>
+            </a> -->
             <a href="/jcl" target="_blank">
                 <img class="u-icon" :src="getAppIcon('jcl', true)" />
-                <span>战斗分析</span>
+                <span>战斗统计分析</span>
                 <em>JX3 Combat Log</em>
             </a>
         </div>
