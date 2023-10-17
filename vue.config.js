@@ -96,7 +96,7 @@ module.exports = {
         //BY root path or bind a domain
         (process.env.STATIC_PATH == "root" && "/") ||
         //for lost
-        "/",
+        process.env.STATIC_PATH + pkg.name,
 
     outputDir: process.env["BUILD_MODE"] == "preview" ? path.resolve(__dirname, pkg.name) : "dist", // 指定构建输出的目录
 
