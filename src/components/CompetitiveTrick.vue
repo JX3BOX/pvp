@@ -1,21 +1,14 @@
 <template>
-    <div class="u-competitive-trick-null">
-        <template v-if="data?.length"
-            ><el-icon><Promotion /></el-icon>一起分享竞技连招，前往</template
-        >
-        <template v-else>
-            <el-icon :size="13"><Warning /></el-icon>
-            <span>当前暂无分享记录，我要</span>
-        </template>
-        <a
-            class="s-link el-button el-button--small is-round el-button--primary"
-            target="_blank"
-            :href="publishLink(`pvp`)"
-            >分享技巧</a
-        >
-    </div>
-    <div class="m-competitive-trick" v-loading="loading">
-        <CompetitiveTrickItemVue v-for="item in data" :key="item.id" :data="item" :preset="presetConfig" />
+    <div class="m-competitive-trick">
+        <TrickNotice></TrickNotice>
+
+        <div class="m-search">
+            <a :href="publishLink" class="u-publish el-button el-button--primary">+ 发布作品</a>
+        </div>
+
+        <div class="m-competitive-trick" v-loading="loading">
+            <CompetitiveTrickItemVue v-for="item in data" :key="item.id" :data="item" :preset="presetConfig" />
+        </div>
     </div>
 </template>
 
@@ -25,12 +18,14 @@ import { getPosts, getBoxcoinStatus, getPostBoxcoinConfig } from "@/service/post
 import User from "@jx3box/jx3box-common/js/user.js";
 
 import CompetitiveTrickItemVue from "./trick/CompetitiveTrickItem.vue";
+import TrickNotice from "./trick/TrickNotice.vue";
 import { publishLink } from "@jx3box/jx3box-common/js/utils";
 
 export default {
     name: "CompetitiveTrick",
     components: {
         CompetitiveTrickItemVue,
+        TrickNotice,
     },
     data() {
         return {
@@ -57,7 +52,9 @@ export default {
         },
     },
     methods: {
-        publishLink,
+        publishLink() {
+            return publishLink("pvp");
+        },
         loadData() {
             this.loading = true;
             getPosts({ type: "pvp", subtype: this.subtype, client: this.client, sticky: 1 })

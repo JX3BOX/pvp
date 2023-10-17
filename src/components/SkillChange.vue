@@ -1,13 +1,13 @@
 <template>
     <div class="m-skill-change">
-        <div class="m-skill-change__header">
+        <!-- <div class="m-skill-change__header">
             <h3 class="m-title">
                 <span class="m-title__text"
                     ><img class="u-icon" svg-inline src="@/assets/img/side/history.svg" />技改历史</span
                 >
                 <el-icon v-if="isEditor" class="u-edit-icon" @click="onSettingIconClick"><Setting /></el-icon>
             </h3>
-        </div>
+        </div> -->
         <ul class="m-news-list m-sideblock-list" v-if="showData">
             <li v-for="(item, i) in showData" :key="i">
                 <el-icon><Notification /></el-icon>
@@ -72,13 +72,12 @@ export default {
     },
     computed: {
         showData() {
-            return this.data
-                .map((item) => {
-                    item.time = new Date(item.icon);
-                    item.type = "skill_change";
-                    return item;
-                })
-                .slice(0, 5);
+            return this.data.map((item) => {
+                item.time = new Date(item.icon);
+                item.type = "skill_change";
+                return item;
+            });
+            // .slice(0, 5);
         },
         client() {
             return useStore().client;

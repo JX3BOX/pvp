@@ -5,7 +5,7 @@
                 <span class="u-title">
                     <img class="u-icon" svg-inline src="@/assets/img/side/rank.svg" /> 竞技场热门榜
                 </span>
-                <el-icon v-if="isEditor" class="u-edit-icon" @click="onSettingIconClick"><Setting /></el-icon>
+                <!-- <el-icon v-if="isEditor" class="u-edit-icon" @click="onSettingIconClick"><Setting /></el-icon> -->
             </h3>
             <el-select class="m-ladder-select" v-model="active" placeholder="请选择" size="small">
                 <el-option
