@@ -34,12 +34,12 @@ function getDeserts(params) {
 
 // 吃鸡点位curd
 function getPoints(params) {
-    return $cms().get("/api/cms/app/desert/point", {
+    return $cms().get("/api/cms/pvp/desert/point", {
         params,
     });
 }
 function getMyPoints(params) {
-    return $cms().get("/api/cms/app/desert/point/my", {
+    return $cms().get("/api/cms/pvp/desert/point/my", {
         params,
     });
 }
@@ -49,21 +49,21 @@ function getMyPoints(params) {
  * @returns the points to be reviewed
  */
 function getUnAuditedPoints(params) {
-    return $cms().get("/api/cms/app/desert/point/unaudited", {
+    return $cms().get("/api/cms/pvp/desert/point/unaudited", {
         params,
     });
 }
 function addPoint(data) {
-    return $cms().post("/api/cms/app/desert/point", data);
+    return $cms().post("/api/cms/pvp/desert/point", data);
 }
 function delPoint(id) {
-    return $cms().delete(`/api/cms/app/desert/point/${id}`);
+    return $cms().delete(`/api/cms/pvp/desert/point/${id}`);
 }
 function updatePoint(data, id) {
-    return $cms().put(`/api/cms/app/desert/point/${id}`, data);
+    return $cms().put(`/api/cms/pvp/desert/point/${id}`, data);
 }
 function reviewPoint(id, status = 1) {
-    return $cms().put(`/api/cms/app/desert/point/${id}/admin`, { status });
+    return $cms().put(`/api/cms/pvp/desert/point/${id}/admin`, { status });
 }
 
 export {
