@@ -15,8 +15,11 @@
         padding-bottom: 20px;
         box-sizing: border-box;
         padding: 10px;
-        .clearfix;
         .pr;
+        .flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 10px;
     }
 
     // 标题
@@ -40,14 +43,24 @@
             font-weight: 400;
             font-size: 14px;
             &:hover {
-                color: @primary;
-                box-shadow: 0 1px 0 @primary;
+                color: #adaeef;
+                // color: @primary;
+                // box-shadow: 0 1px 0 @primary;
             }
         }
         .fz(15px, 2);
         font-weight: normal;
         .lh(2);
         font-weight: 400;
+    }
+
+    .u-zlp {
+        .fz(12px);
+        color: #adaeef;
+        padding: 2px 5px;
+        border: 1px solid #adaeef;
+        font-style: normal;
+        .r(2px);
     }
 
     // 底部
@@ -57,6 +70,7 @@
         .x(right);
         .fz(12px, 20px);
         color: #999;
+        flex-shrink: 0;
     }
 
     .u-author-avatar {
@@ -73,8 +87,9 @@
         }
     }
     .u-date {
-        .db;
-        .clear;
+        .flex;
+        align-items: center;
+        gap: 5px;
     }
 
     .u-down {

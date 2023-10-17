@@ -3,22 +3,27 @@
         <!-- 标题 -->
         <h2 class="u-post" :class="{ isSticky: item.sticky }">
             <!-- 图标 -->
-            <img class="u-icon" svg-inline src="@/assets/img/post.svg" />
+            <!-- <img class="u-icon" svg-inline src="@/assets/img/post.svg" /> -->
 
             <!-- 标题文字 -->
-            <a class="u-title" :style="showHighlight(item.color)" :href="postLink(item.ID)" :target="target">{{
-                item.post_title || "无标题"
-            }}</a>
+            <a class="u-author" :href="authorLink(item.post_author)" target="_blank">
+                <img
+                    class="u-author-avatar"
+                    :src="showAvatar(item.author_info)"
+                    :alt="showNickname(item.author_info)"
+                />
+                <!-- <span class="u-author-name">{{ showNickname(item.author_info) }}</span> -->
+            </a>
+            <a class="u-title" :style="showHighlight(item.color)" :href="postLink(item.ID)" :target="target">
+                <i class="u-zlp">{{ item.zlp || "未知版本" }}</i>
+                {{ item.post_title || "无标题" }}</a
+            >
         </h2>
 
         <!-- 作者 -->
         <div class="u-misc">
-            <img class="u-author-avatar" :src="showAvatar(item.author_info)" :alt="showNickname(item.author_info)" />
-            <a class="u-author-name" :href="authorLink(item.post_author)" target="_blank">{{
-                showNickname(item.author_info)
-            }}</a>
             <span class="u-date">
-                UpdatedAt:
+                <el-icon><Clock /></el-icon>
                 <time v-if="order == 'update'">{{ dateFormat(item.post_modified) }}</time>
                 <time v-else>{{ dateFormat(item.post_date) }}</time>
             </span>
@@ -27,7 +32,7 @@
 </template>
 
 <script>
-import { showAvatar, authorLink, showBanner, buildTarget } from "@jx3box/jx3box-common/js/utils";
+import { showAvatar, authorLink, showBanner, buildTarget, getLink } from "@jx3box/jx3box-common/js/utils";
 import { __imgPath } from "@jx3box/jx3box-common/data/jx3box";
 import { cms as mark_map } from "@jx3box/jx3box-common/data/mark.json";
 import { showDate } from "@jx3box/jx3box-common/js/moment.js";
@@ -74,7 +79,7 @@ export default {
             });
         },
         postLink(val) {
-            return `${this.rootLink}bps/${val}`;
+            return getLink("bps", val);
         },
         authorLink,
         showHighlight(val) {
