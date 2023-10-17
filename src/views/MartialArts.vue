@@ -194,8 +194,6 @@
         <skillWiki ref="skillWiki" v-model:pasv_skills_props="pasv_skills"></skillWiki>
 
         <SpecialSkill :mount="mountid"></SpecialSkill>
-
-        <CompetitiveTrick />
     </div>
 </template>
 
@@ -226,7 +224,6 @@ import SkillItem from "@/components/SkillItem.vue";
 import SkillWiki from "@/components/skill/SkillWiki.vue";
 import TalentRecommend from "@/components/skill/TalentRecommend.vue";
 import SpecialSkill from "@/components/skill/SpecialSkills.vue";
-import CompetitiveTrick from "@/components/CompetitiveTrick.vue";
 import SkillAudio from "@/components/skill/SkillAudio.vue";
 
 const $store = useStore();
@@ -239,7 +236,6 @@ export default {
         SkillWiki,
         TalentRecommend,
         SpecialSkill,
-        CompetitiveTrick,
     },
     data() {
         return {

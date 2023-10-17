@@ -27,7 +27,7 @@
                         <a @click="onQQClick(645370207)">645370207</a>
                     </strong>
                 </Side>
-                <SkillChange></SkillChange>
+                <!-- <SkillChange></SkillChange> -->
                 <MiniRank v-if="client === 'std'" />
             </RightSidebar>
             <Footer></Footer>
@@ -41,7 +41,7 @@ import Nav from "@/components/list/ListNav.vue";
 import Side from "@/components/list/RightSide.vue";
 import Tabs from "@/components/Tabs.vue";
 import MiniRank from "@/components/MiniRank.vue";
-import SkillChange from "@/components/SkillChange.vue";
+// import SkillChange from "@/components/SkillChange.vue";
 import { useStore } from "@/store";
 export default {
     name: "App",
@@ -77,7 +77,7 @@ export default {
         Tabs,
         // RankList,
         MiniRank,
-        SkillChange,
+        // SkillChange,
     },
 };
 </script>
@@ -90,6 +90,7 @@ export default {
 .c-main {
     .mt(48px);
     padding: 0;
+    background-color: #fff;
     .m-extend {
         .pointer;
     }

@@ -7,6 +7,22 @@
                 <em class="u-secret">竞技全指南</em>
             </template>
         </el-tab-pane>
+        <el-tab-pane label="连招技巧" name="post">
+            <template #label
+                ><el-icon>
+                    <notebook />
+                </el-icon>
+                <b>连招技巧</b>
+            </template>
+        </el-tab-pane>
+        <el-tab-pane label="技改历史" name="changelog">
+            <template #label
+                ><el-icon>
+                    <notebook />
+                </el-icon>
+                <b>技改历史</b>
+            </template>
+        </el-tab-pane>
         <el-tab-pane label="阵营沙盘" name="sandbox">
             <template #label>
                 <el-icon><Compass /></el-icon>

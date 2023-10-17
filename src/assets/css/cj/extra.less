@@ -4,6 +4,7 @@
     overflow-x: hidden;
     color: @colorDark;
     flex: 1;
+    @opH: 42px; // 地图操作栏高度
     .m-cj-intro {
         height: @darksideTopHeight;
         .scrollbar(4px, #F9EACC, #333);
@@ -33,7 +34,7 @@
         box-sizing: border-box;
         margin-top: 20px;
         background-color: @bgColorDark1;
-        height: calc(@darkMapH - @darksideTopHeight - @darkImgPadding * 2);
+        height: calc(@darkMapH + @opH - @darksideTopHeight - @darkImgPadding * 2);
 
         .m-extra-tabs {
             position: relative;
@@ -76,6 +77,11 @@
                     .el-input.is-focus .el-input__wrapper {
                         box-shadow: none !important;
                     }
+                }
+                .el-button {
+                    background: @activeColorDark;
+                    border: none;
+                    color: #fff;
                 }
             }
         }

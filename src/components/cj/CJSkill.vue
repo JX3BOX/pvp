@@ -3,12 +3,11 @@
         <div class="m-search">
             <el-input class="u-input" v-model="search" placeholder="请输入 技能名称 查询" clearable></el-input>
             <el-select class="u-select" v-model="quality">
-                <el-option
-                    v-for="item in qualities"
-                    :key="item.value"
-                    :value="item.value"
-                    :label="item.label"
-                ></el-option>
+                <el-option v-for="item in qualities" :key="item.value" :value="item.value" :label="item.label">
+                    <div class="u-skill-select-label" :class="`is-quality-bg-${item.value}`">
+                        {{ item.label }}
+                    </div>
+                </el-option>
             </el-select>
             <el-select class="u-select" v-model="skillType">
                 <el-option v-for="item in types" :key="item.value" :value="item.value" :label="item.label"></el-option>
@@ -17,7 +16,7 @@
         <div v-if="list.length" class="m-skill-list">
             <div class="u-skill-item">
                 <div class="u-td">技能名称</div>
-                <div class="u-td">品质</div>
+                <!-- <div class="u-td">品质</div> -->
                 <div class="u-td">效果</div>
             </div>
             <SkillItem :source="item" v-for="(item, index) in list" :key="item.dwSkillID + index"></SkillItem>
@@ -126,4 +125,36 @@ export default {
 
 <style lang="less">
 @import "~@/assets/css/cj/skill.less";
+@q_purple: #ff2dff;
+// 蓝色品质：007eff
+@q_blue: #007eff;
+// 绿色品质：00d24b
+@q_green: #00d24b;
+.u-skill-select-label {
+    position: relative;
+    &::before {
+        position: absolute;
+        content: "";
+        left: -8px;
+        top: 9px;
+        width: 3px;
+        height: 15px;
+        background-color: transparent;
+    }
+    &.is-quality-bg-2 {
+        &::before {
+            background-color: @q_green;
+        }
+    }
+    &.is-quality-bg-3 {
+        &::before {
+            background-color: @q_blue;
+        }
+    }
+    &.is-quality-bg-4 {
+        &::before {
+            background-color: @q_purple;
+        }
+    }
+}
 </style>

@@ -2,18 +2,21 @@
     <div class="p-dark-layout">
         <Header></Header>
         <Breadcrumb
-            name="绝境战场"
+            name="竞技专栏"
             slug="pvp"
             root="/pvp"
-            :publishEnable="true"
+            :publishEnable="false"
             :adminEnable="false"
             :feedbackEnable="true"
-            :crumbEnable="true"
+            :crumbEnable="false"
             class="m-dark-breadcrumb"
         >
-            <template v-if="isEditor" v-slot:op-append>
+            <span class="u-breadcrumb-title"
+                ><el-icon><ArrowRight /></el-icon> 绝境战场</span
+            >
+            <!-- <template v-if="isEditor" v-slot:op-append>
                 <el-button class="u-admin-btn" type="primary" icon="Setting" @click="toggleReview">管理</el-button>
-            </template>
+            </template> -->
         </Breadcrumb>
         <LeftSidebar class="m-dark-sidebar" :open="isOpen">
             <CJNav class="m-nav" />

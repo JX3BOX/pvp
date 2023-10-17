@@ -56,7 +56,7 @@ export default {
     name: "SpecialSkill",
     data() {
         return {
-            isCollapse: false,
+            isCollapse: true,
 
             types: [],
             type: "",
@@ -98,10 +98,13 @@ export default {
         subtype() {
             this.loadGroup();
         },
-        isCollapse(val) {
-            if (val) {
-                this.loadGroup();
-            }
+        isCollapse: {
+            immediate: true,
+            handler(val) {
+                if (val) {
+                    this.loadGroup();
+                }
+            },
         },
     },
     methods: {

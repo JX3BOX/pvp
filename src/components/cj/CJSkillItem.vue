@@ -16,13 +16,13 @@
                 </template>
                 <jx3-skill :data="data"></jx3-skill>
             </el-popover>
-            <div v-if="source?.Skill?.Name" class="u-item-name">
+            <div v-if="source?.Skill?.Name" class="u-item-name" :class="`isQuality-${source?.nQuality}`">
                 {{ source.Skill.Name }}
             </div>
         </div>
-        <div class="u-td">
+        <!-- <div class="u-td">
             {{ source.szQualityDesc }}
-        </div>
+        </div> -->
         <div class="u-td">
             {{ source.szSkillTypeDesc }}
         </div>

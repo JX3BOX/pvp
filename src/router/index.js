@@ -5,13 +5,17 @@ import { createRouter, createWebHistory } from "vue-router";
 const Index = () => import("@/views/Index.vue");
 const Sandbox = () => import("@/views/Sandbox.vue");
 const CJ = () => import("@/views/CJ.vue");
+const ChangeLog = () => import("@/views/ChangeLog.vue");
+const Post = () => import("@/views/Post.vue");
 
 // 3.Routes
 const routes = [
     { path: "/", name: "index", component: Index },
     { path: "/sandbox", name: "sandbox", component: Sandbox },
     { path: "/desert", name: "desert", component: CJ },
-    { name: "post", path: "/:id(\\d+)", component: () => import("@/views/Single.vue") },
+    { path: "/changelog", name: "changelog", component: ChangeLog },
+    { path: "/post", name: "post", component: Post },
+    { name: "single", path: "/:id(\\d+)", component: () => import("@/views/Single.vue") },
 ];
 
 // 4.Build An Instance
