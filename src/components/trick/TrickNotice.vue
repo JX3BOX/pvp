@@ -6,7 +6,7 @@
         <div class="m-notice-top__content">
             <div class="m-notice-top__item" v-for="item in data" :key="item.id">
                 <div class="m-item_left">
-                    <a class="u-title" v-html="item"></a>
+                    <span class="u-title" v-html="item"></span>
                 </div>
             </div>
         </div>
