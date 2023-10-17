@@ -42,7 +42,7 @@ export default {
         return {
             page: 1,
             pages: 1,
-            per: 5,
+            per: 1,
             total: 0,
             loading: false,
             list: [],
