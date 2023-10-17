@@ -44,7 +44,6 @@
 </template>
 
 <script>
-import { markRaw } from "vue";
 import { useStore } from "@/store";
 import { getSpecialSkillGroup } from "@/service/raw";
 import { iconLink, getLink } from "@jx3box/jx3box-common/js/utils";
@@ -60,24 +59,6 @@ export default {
 
             types: [],
             type: "",
-            icons: markRaw({
-                jianshang: "Sugar",
-                diyu: "Dessert",
-                wudi: "IceCream",
-                kongzhi: "HotWater",
-                jiekong: "ColdDrink",
-                qusan: "Watermelon",
-                jianliao: "Grape",
-                daduan: "Cherry",
-                weiyi: "Apple",
-                jixing: "MilkTea",
-                jiansu: "Lollipop",
-                chaofeng: "IceCreamRound",
-                huifu: "IceDrink",
-                chuantou: "KnifeFork",
-                chuanci: "Scissor",
-                guanti: "ForkSpoon",
-            }),
         };
     },
     computed: {
@@ -123,7 +104,7 @@ export default {
                     .map((item) => {
                         return {
                             ...item,
-                            icon: this.icons[item.name],
+                            icon: item.extend,
                             key: item.name,
                         };
                     })
