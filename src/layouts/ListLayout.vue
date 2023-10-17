@@ -90,6 +90,7 @@ export default {
 .c-main {
     .mt(48px);
     padding: 0;
+    background-color: #fff;
     .m-extend {
         .pointer;
     }
