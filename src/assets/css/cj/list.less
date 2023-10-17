@@ -160,12 +160,12 @@
 
 // 分页
 .m-strategy-pages {
+    .flex;
+    justify-content: center;
+    margin-top: 20px;
     overflow-x: auto;
-}
-@media screen and (max-width: @phone) {
-    .m-strategy-pages {
-        .el-pagination__jump {
-            .none !important;
-        }
+    text-align: center;
+    .el-pager li.is-active {
+        background-color: @activeColorDark !important;
     }
 }

@@ -1,5 +1,5 @@
 <template>
-    <div v-loading="loading" class="m-map-index" @click="cancelRightMenu">
+    <div class="m-map-wrap" v-loading="loading" @click="cancelRightMenu">
         <div class="m-map-op">
             <div class="m-select">
                 <el-select style="width: 120px" v-model="map" @change="mapChange">
@@ -41,256 +41,258 @@
                 ></el-checkbox>
             </div>
         </div>
-        <div v-if="map" ref="map" class="m-map" :class="isEditMode && 'is-point'" @contextmenu.prevent="showMenu">
-            <!-- 地图 -->
-            <img class="u-map" :src="getMapImage(map)" />
+        <div class="m-map-index">
+            <div v-if="map" ref="map" class="m-map" :class="isEditMode && 'is-point'" @contextmenu.prevent="showMenu">
+                <!-- 地图 -->
+                <img class="u-map" :src="getMapImage(map)" />
 
-            <!-- the point right-click menu -->
-            <div
-                v-if="pointMenuVisible || contextMenuVisible"
-                class="u-context-menu"
-                ref="contextMenu"
-                :style="{ top: contextMenuPosition.y + 'px', left: contextMenuPosition.x + 'px' }"
-            >
-                <ul v-if="contextMenuVisible">
-                    <li @click="menuItemClicked('add')">
-                        <el-icon size="16"><CirclePlus /></el-icon>
-                        <span>新增</span>
-                        <!-- <img v-if="getLegendSrc()" :src="getLegendSrc()" class="u-legend" /> -->
-                    </li>
-                </ul>
-                <ul v-if="pointMenuVisible">
-                    <li v-if="currentRightClickPoint.id && currentRightClickPoint.belongToMe" @click="toEdit(null)">
-                        <el-icon size="16"><Edit /></el-icon>
-                        <span>编辑</span>
-                    </li>
-                    <li
-                        v-if="currentRightClickPoint.id && currentRightClickPoint.status === 1"
-                        @click="toOpenComment(null)"
-                    >
-                        <el-icon size="16"><ChatDotRound /></el-icon>
-                        <span>评论</span>
-                    </li>
-                    <li
-                        v-if="isEditor && currentRightClickPoint.id && currentRightClickPoint.status !== 1"
-                        @click="toReview(1)"
-                    >
-                        <el-icon size="16"><CircleCheck /></el-icon>
-                        <span class="u-success">通过</span>
-                    </li>
-                    <li
-                        v-if="isEditor && currentRightClickPoint.id && currentRightClickPoint.status === 0"
-                        @click="toReview(2)"
-                    >
-                        <el-icon size="16"><CircleClose /></el-icon>
-                        <span class="u-danger">拒绝</span>
-                    </li>
-                    <li
-                        v-if="currentRightClickPoint.id && currentRightClickPoint.belongToMe"
-                        @click="toDel(currentRightClickPoint.id)"
-                    >
-                        <el-icon size="16"><Delete /></el-icon>
-                        <span class="u-danger">删除</span>
-                    </li>
-                    <!-- 已通过的标点重新打回 -->
-                    <li
-                        v-if="isEditor && currentRightClickPoint.id && currentRightClickPoint.status === 1"
-                        @click="toReview(0)"
-                    >
-                        <el-icon size="16"><Remove /></el-icon>
-                        <span class="u-danger">弃用</span>
-                    </li>
-                </ul>
-            </div>
-
-            <!-- 示例点 -->
-            <img
-                v-if="!pointForm.id && legend && ((!pointMenuVisible && contextMenuVisible) || showDialog)"
-                class="u-point__0"
-                :src="getPointInfo(legend)"
-                :style="{
-                    top: contextMenuPositionSave.y - legendSize + 'px',
-                    left: contextMenuPositionSave.x - legendSize / 2 + 'px',
-                }"
-            />
-
-            <!-- 点位 -->
-            <div class="m-points">
+                <!-- the point right-click menu -->
                 <div
-                    class="u-point"
-                    :class="[point.belongToMe ? 'is-my-point' : '', point.isMark ? 'is-mark' : '']"
-                    v-for="point in showPoints"
-                    :key="point.id"
-                    :style="{
-                        width: legendSize + 'px',
-                        height: legendSize + 'px',
-                        top: point.point.y - legendSize + 'px',
-                        left: point.point.x - legendSize / 2 + 'px',
-                    }"
+                    v-if="pointMenuVisible || contextMenuVisible"
+                    class="u-context-menu"
+                    ref="contextMenu"
+                    :style="{ top: contextMenuPosition.y + 'px', left: contextMenuPosition.x + 'px' }"
                 >
-                    <el-popover
-                        v-if="point.id === visiblePopId"
-                        placement="top"
-                        :width="210"
-                        trigger="manual"
-                        :content="point.desc"
-                        v-model:visible="visiblePop"
-                        popper-class="u-point-pop"
-                        effect="dark"
-                    >
-                        <template #reference>
-                            <img
-                                class="u-point__img"
-                                :style="{
-                                    width: legendSize + 'px',
-                                    height: legendSize + 'px',
-                                }"
-                                :src="point.pointImg"
-                                :alt="point.pointName"
-                                :custom-data="
-                                    JSON.stringify({
-                                        id: point.id,
-                                        status: point.status,
-                                        belongToMe: point.belongToMe,
-                                    })
-                                "
-                                @click="handlerPop(point.id)"
-                                @contextmenu.prevent.stop="showMenu"
-                            />
-                        </template>
-                        <div class="u-header">
-                            <div class="u-info">
-                                <img :src="point.pointImg" :alt="point.pointName" />
-                                <span class="u-title" :class="`u-legend__${point.meta.type}`">{{
-                                    point.pointName
-                                }}</span>
-                            </div>
-                            <el-tag
-                                v-if="point.belongToMe"
-                                size="small"
-                                effect="dark"
-                                :type="point.status === 1 ? 'success' : point.status === 2 ? 'danger' : ''"
-                                >{{ statusMap[point.status] }}</el-tag
-                            >
-                        </div>
-                        <div class="u-content">
-                            {{ point.desc }}
-                        </div>
-                        <div v-if="point.belongToMe" class="u-footer">
-                            <el-button size="small" type="primary" @click="toEdit(point)">编辑</el-button>
-                            <el-button size="small" type="danger" @click="toDel(point.id)">删除</el-button>
-                            <el-button
-                                v-if="point.status === 1"
-                                size="small"
-                                plain
-                                icon="ChatDotRound"
-                                @click="toOpenComment(point)"
-                                >评论</el-button
-                            >
-                        </div>
-                        <div v-else class="u-footer u-footer-info">
-                            <div class="u-user">
-                                <img class="u-avatar" :src="point.avatar" :alt="point.name" />
-                                <a :href="authorLink(point.post_author)" target="_blank">{{ point.name }}</a>
-                            </div>
-                            <div class="u-time">
-                                {{ formatTime(point.updated_at) }}
-                            </div>
-                        </div>
-                    </el-popover>
-                    <img
-                        v-else
-                        class="u-point__img"
+                    <ul v-if="contextMenuVisible">
+                        <li @click="menuItemClicked('add')">
+                            <el-icon size="16"><CirclePlus /></el-icon>
+                            <span>新增</span>
+                            <!-- <img v-if="getLegendSrc()" :src="getLegendSrc()" class="u-legend" /> -->
+                        </li>
+                    </ul>
+                    <ul v-if="pointMenuVisible">
+                        <li v-if="currentRightClickPoint.id && currentRightClickPoint.belongToMe" @click="toEdit(null)">
+                            <el-icon size="16"><Edit /></el-icon>
+                            <span>编辑</span>
+                        </li>
+                        <li
+                            v-if="currentRightClickPoint.id && currentRightClickPoint.status === 1"
+                            @click="toOpenComment(null)"
+                        >
+                            <el-icon size="16"><ChatDotRound /></el-icon>
+                            <span>评论</span>
+                        </li>
+                        <li
+                            v-if="isEditor && currentRightClickPoint.id && currentRightClickPoint.status !== 1"
+                            @click="toReview(1)"
+                        >
+                            <el-icon size="16"><CircleCheck /></el-icon>
+                            <span class="u-success">通过</span>
+                        </li>
+                        <li
+                            v-if="isEditor && currentRightClickPoint.id && currentRightClickPoint.status === 0"
+                            @click="toReview(2)"
+                        >
+                            <el-icon size="16"><CircleClose /></el-icon>
+                            <span class="u-danger">拒绝</span>
+                        </li>
+                        <li
+                            v-if="currentRightClickPoint.id && currentRightClickPoint.belongToMe"
+                            @click="toDel(currentRightClickPoint.id)"
+                        >
+                            <el-icon size="16"><Delete /></el-icon>
+                            <span class="u-danger">删除</span>
+                        </li>
+                        <!-- 已通过的标点重新打回 -->
+                        <li
+                            v-if="isEditor && currentRightClickPoint.id && currentRightClickPoint.status === 1"
+                            @click="toReview(0)"
+                        >
+                            <el-icon size="16"><Remove /></el-icon>
+                            <span class="u-danger">弃用</span>
+                        </li>
+                    </ul>
+                </div>
+
+                <!-- 示例点 -->
+                <img
+                    v-if="!pointForm.id && legend && ((!pointMenuVisible && contextMenuVisible) || showDialog)"
+                    class="u-point__0"
+                    :src="getPointInfo(legend)"
+                    :style="{
+                        top: contextMenuPositionSave.y - legendSize + 'px',
+                        left: contextMenuPositionSave.x - legendSize / 2 + 'px',
+                    }"
+                />
+
+                <!-- 点位 -->
+                <div class="m-points">
+                    <div
+                        class="u-point"
+                        :class="[point.belongToMe ? 'is-my-point' : '', point.isMark ? 'is-mark' : '']"
+                        v-for="point in showPoints"
+                        :key="point.id"
                         :style="{
                             width: legendSize + 'px',
                             height: legendSize + 'px',
+                            top: point.point.y - legendSize + 'px',
+                            left: point.point.x - legendSize / 2 + 'px',
                         }"
-                        :src="point.pointImg"
-                        :alt="point.pointName"
-                        :custom-data="
-                            JSON.stringify({
-                                id: point.id,
-                                status: point.status,
-                                belongToMe: point.belongToMe,
-                            })
-                        "
-                        @click="handlerPop(point.id)"
-                        @contextmenu.prevent.stop="showMenu"
+                    >
+                        <el-popover
+                            v-if="point.id === visiblePopId"
+                            placement="top"
+                            :width="210"
+                            trigger="manual"
+                            :content="point.desc"
+                            v-model:visible="visiblePop"
+                            popper-class="u-point-pop"
+                            effect="dark"
+                        >
+                            <template #reference>
+                                <img
+                                    class="u-point__img"
+                                    :style="{
+                                        width: legendSize + 'px',
+                                        height: legendSize + 'px',
+                                    }"
+                                    :src="point.pointImg"
+                                    :alt="point.pointName"
+                                    :custom-data="
+                                        JSON.stringify({
+                                            id: point.id,
+                                            status: point.status,
+                                            belongToMe: point.belongToMe,
+                                        })
+                                    "
+                                    @click="handlerPop(point.id)"
+                                    @contextmenu.prevent.stop="showMenu"
+                                />
+                            </template>
+                            <div class="u-header">
+                                <div class="u-info">
+                                    <img :src="point.pointImg" :alt="point.pointName" />
+                                    <span class="u-title" :class="`u-legend__${point.meta.type}`">{{
+                                        point.pointName
+                                    }}</span>
+                                </div>
+                                <el-tag
+                                    v-if="point.belongToMe"
+                                    size="small"
+                                    effect="dark"
+                                    :type="point.status === 1 ? 'success' : point.status === 2 ? 'danger' : ''"
+                                    >{{ statusMap[point.status] }}</el-tag
+                                >
+                            </div>
+                            <div class="u-content">
+                                {{ point.desc }}
+                            </div>
+                            <div v-if="point.belongToMe" class="u-footer">
+                                <el-button size="small" type="primary" @click="toEdit(point)">编辑</el-button>
+                                <el-button size="small" type="danger" @click="toDel(point.id)">删除</el-button>
+                                <el-button
+                                    v-if="point.status === 1"
+                                    size="small"
+                                    plain
+                                    icon="ChatDotRound"
+                                    @click="toOpenComment(point)"
+                                    >评论</el-button
+                                >
+                            </div>
+                            <div v-else class="u-footer u-footer-info">
+                                <div class="u-user">
+                                    <img class="u-avatar" :src="point.avatar" :alt="point.name" />
+                                    <a :href="authorLink(point.post_author)" target="_blank">{{ point.name }}</a>
+                                </div>
+                                <div class="u-time">
+                                    {{ formatTime(point.updated_at) }}
+                                </div>
+                            </div>
+                        </el-popover>
+                        <img
+                            v-else
+                            class="u-point__img"
+                            :style="{
+                                width: legendSize + 'px',
+                                height: legendSize + 'px',
+                            }"
+                            :src="point.pointImg"
+                            :alt="point.pointName"
+                            :custom-data="
+                                JSON.stringify({
+                                    id: point.id,
+                                    status: point.status,
+                                    belongToMe: point.belongToMe,
+                                })
+                            "
+                            @click="handlerPop(point.id)"
+                            @contextmenu.prevent.stop="showMenu"
+                        />
+                    </div>
+                </div>
+
+                <!-- <img class="u-path" src="../../assets/img/1_x653_y140.png" /> -->
+                <!-- 在现有地图的基础上，往右 70px为基准点，往下40像素为基准点 -->
+                <!-- 路线 -->
+                <div class="m-paths" v-if="map && paths.length">
+                    <img
+                        class="u-path"
+                        :class="`u-path__${path.key}`"
+                        :style="{ left: path.x + 70 + 'px', top: path.y + 40 + 'px' }"
+                        v-for="path in paths"
+                        :key="path.key"
+                        :src="path.url"
                     />
                 </div>
             </div>
 
-            <!-- <img class="u-path" src="../../assets/img/1_x653_y140.png" /> -->
-            <!-- 在现有地图的基础上，往右 70px为基准点，往下40像素为基准点 -->
-            <!-- 路线 -->
-            <div class="m-paths" v-if="map && paths.length">
-                <img
-                    class="u-path"
-                    :class="`u-path__${path.key}`"
-                    :style="{ left: path.x + 70 + 'px', top: path.y + 40 + 'px' }"
-                    v-for="path in paths"
-                    :key="path.key"
-                    :src="path.url"
-                />
-            </div>
-        </div>
-
-        <el-dialog
-            v-if="showDialog"
-            v-model="showDialog"
-            :title="dialogTitle"
-            append-to-body
-            width="560"
-            class="m-desert-point-pop"
-        >
-            <el-form
-                ref="pointForm"
-                class="m-desert-form"
-                :model="pointForm"
-                :rules="rules"
-                label-position="right"
-                label-width="60"
+            <el-dialog
+                v-if="showDialog"
+                v-model="showDialog"
+                :title="dialogTitle"
+                append-to-body
+                width="560"
+                class="m-desert-point-pop"
             >
-                <el-form-item label="类型" prop="type">
-                    <el-select v-model="pointForm.type" style="width: 100%" @change="legendChange">
-                        <el-option
-                            v-for="legend in legends"
-                            :key="legend.value"
-                            :value="legend.value"
-                            :label="legend.label"
-                        ></el-option>
-                    </el-select>
-                </el-form-item>
-                <el-form-item label="短评" prop="desc">
-                    <el-input type="textarea" v-model="pointForm.desc" :rows="4" maxlength="50" show-word-limit />
-                </el-form-item>
-            </el-form>
-            <template #footer>
-                <div class="m-footer">
-                    <el-button @click="onCancel">取消</el-button>
-                    <el-button type="primary" :loading="btnLoading" @click="onConfirm">保存</el-button>
-                </div>
-            </template>
-        </el-dialog>
+                <el-form
+                    ref="pointForm"
+                    class="m-desert-form"
+                    :model="pointForm"
+                    :rules="rules"
+                    label-position="right"
+                    label-width="60"
+                >
+                    <el-form-item label="类型" prop="type">
+                        <el-select v-model="pointForm.type" style="width: 100%" @change="legendChange">
+                            <el-option
+                                v-for="legend in legends"
+                                :key="legend.value"
+                                :value="legend.value"
+                                :label="legend.label"
+                            ></el-option>
+                        </el-select>
+                    </el-form-item>
+                    <el-form-item label="短评" prop="desc">
+                        <el-input type="textarea" v-model="pointForm.desc" :rows="4" maxlength="50" show-word-limit />
+                    </el-form-item>
+                </el-form>
+                <template #footer>
+                    <div class="m-footer">
+                        <el-button @click="onCancel">取消</el-button>
+                        <el-button type="primary" :loading="btnLoading" @click="onConfirm">保存</el-button>
+                    </div>
+                </template>
+            </el-dialog>
 
-        <!-- review points drawer -->
-        <review-point
-            v-if="map"
-            v-model:visible="reviewVisible"
-            :map="map"
-            @init="initData"
-            @mark="toMark"
-        ></review-point>
+            <!-- review points drawer -->
+            <review-point
+                v-if="map"
+                v-model:visible="reviewVisible"
+                :map="map"
+                @init="initData"
+                @mark="toMark"
+            ></review-point>
 
-        <!-- map introduce -->
-        <!-- <CJIntro v-if="map" :map="map"></CJIntro> -->
+            <!-- map introduce -->
+            <!-- <CJIntro v-if="map" :map="map"></CJIntro> -->
 
-        <!-- point comment -->
-        <PointComment
-            v-if="commentVisible && commentPoint.id"
-            :point="commentPoint"
-            v-model:visible="commentVisible"
-        ></PointComment>
+            <!-- point comment -->
+            <PointComment
+                v-if="commentVisible && commentPoint.id"
+                :point="commentPoint"
+                v-model:visible="commentVisible"
+            ></PointComment>
+        </div>
     </div>
 </template>
 

@@ -1,25 +1,17 @@
-.m-map-index {
-    position: relative;
-    .flex;
-    justify-content: center;
-    gap: 20px;
-    width: @darkMapW;
-    height: calc(@darkMapH - @darkImgPadding * 2);
-    border: 10px solid #111827;
-    .r(4px);
-    overflow: hidden;
-    flex: none;
-    @media screen and (max-width: @ipad) {
-        flex: auto;
-    }
+.m-map-wrap {
     .m-map-op {
-        position: absolute;
-        left: 10px;
-        top: 10px;
-        width: calc(@darkMapW - 20px);
+        // position: absolute;
+        // left: 10px;
+        // top: 10px;
+        // width: calc(@darkMapW - 20px);
+        width: calc(100% - 20px);
+        padding: 10px 10px 0;
         .flex;
         justify-content: space-between;
         z-index: 401;
+        background-color: @bgColorDark1;
+        border-top-left-radius: 5px;
+        border-top-right-radius: 5px;
     }
     .m-select {
         .flex;
@@ -33,7 +25,6 @@
             }
         }
     }
-
     .m-legends {
         .flex;
         align-items: center;
@@ -75,7 +66,32 @@
         position: relative;
         z-index: 402;
         .r(5px);
-        background-color: rgba(#fff, 0.5);
+        // background-color: rgba(#fff, 0.5);
+        .el-checkbox__input.is-checked + .el-checkbox__label {
+            color: @activeColorDark !important;
+        }
+        .el-checkbox.is-bordered.is-checked {
+            border-color: @activeColorDark !important;
+        }
+        .el-checkbox__input.is-checked .el-checkbox__inner {
+            background-color: @activeColorDark !important;
+            border-color: @activeColorDark !important;
+        }
+    }
+}
+.m-map-index {
+    position: relative;
+    .flex;
+    justify-content: center;
+    gap: 20px;
+    width: @darkMapW;
+    height: calc(@darkMapH - @darkImgPadding * 2);
+    border: 10px solid #111827;
+    .r(4px);
+    overflow: hidden;
+    flex: none;
+    @media screen and (max-width: @ipad) {
+        flex: auto;
     }
     .m-map {
         position: relative;

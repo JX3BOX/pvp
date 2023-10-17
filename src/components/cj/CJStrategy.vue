@@ -14,25 +14,15 @@
             show-icon
         ></el-alert>
 
-        <!-- 下一页 -->
-        <el-button
-            class="m-strategy-more"
-            v-show="hasNextPage"
-            type="primary"
-            @click="appendPage"
-            :loading="loading"
-            icon="el-icon-arrow-down"
-            >加载更多</el-button
-        >
-
         <!-- 分页 -->
         <el-pagination
             class="m-strategy-pages"
             background
             layout="total, prev, pager, next"
-            :hide-on-single-page="true"
             :total="total"
             :current-page="page"
+            small
+            hide-on-single-page
             @current-change="changePage"
         ></el-pagination>
     </div>
@@ -52,17 +42,13 @@ export default {
         return {
             page: 1,
             pages: 1,
-            per: 5,
+            per: 10,
             total: 0,
             loading: false,
             list: [],
         };
     },
     computed: {
-        // 是否显示加载更多
-        hasNextPage: function () {
-            return this.pages > 1 && this.page < this.pages;
-        },
         params() {
             return {
                 page: this.page,

@@ -3,7 +3,7 @@
         <TrickNotice></TrickNotice>
 
         <div class="m-search">
-            <a :href="publishLink" class="u-publish el-button el-button--primary">+ 发布作品</a>
+            <a :href="publishLink('pvp')" class="u-publish el-button el-button--primary">+ 发布作品</a>
         </div>
 
         <div class="m-competitive-trick" v-loading="loading">
@@ -52,9 +52,7 @@ export default {
         },
     },
     methods: {
-        publishLink() {
-            return publishLink("pvp");
-        },
+        publishLink,
         loadData() {
             this.loading = true;
             getPosts({ type: "pvp", subtype: this.subtype, client: this.client, sticky: 1 })

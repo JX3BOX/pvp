@@ -17,8 +17,8 @@
                     </el-icon>
                     <b>{{ tab.label }}</b>
                 </div>
-                <div v-if="activeTab === 'point'" class="u-filter">
-                    <el-select class="u-select" v-model="pointStatus" style="width: 100px">
+                <div class="u-filter">
+                    <el-select v-if="activeTab === 'point'" class="u-select" v-model="pointStatus" style="width: 100px">
                         <el-option
                             :label="status.label"
                             :value="status.value"
@@ -26,6 +26,7 @@
                             :key="status.value"
                         ></el-option>
                     </el-select>
+                    <el-button v-if="activeTab === 'strategy'" icon="Plus" @click="toPublish">发布攻略</el-button>
                 </div>
             </div>
             <div class="m-tab-content">
@@ -44,6 +45,7 @@ import CJIntro from "./CJIntro.vue";
 import CJStrategy from "./CJStrategy.vue";
 import CJPoints from "./CJPoints.vue";
 import { statusMap } from "@/assets/data/desertPoints";
+import { publishLink } from "@jx3box/jx3box-common/js/utils";
 export default {
     name: "CJExtra",
     components: {
@@ -102,7 +104,12 @@ export default {
             return list;
         },
     },
-    methods: {},
+    methods: {
+        toPublish() {
+            const url = publishLink("pvp");
+            window.open(url, "_blank");
+        },
+    },
 };
 </script>
 
