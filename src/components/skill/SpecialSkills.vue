@@ -12,7 +12,7 @@
         </div>
 
         <div class="m-special-skill__content" v-if="isCollapse">
-            <el-tabs v-model="type" type="card">
+            <el-tabs v-model="type">
                 <el-tab-pane :label="item.label" :name="item.key" v-for="(item, i) in types" :key="i">
                     <template #label>
                         <span class="u-tab-icon">

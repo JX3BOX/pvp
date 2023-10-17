@@ -18,7 +18,7 @@
         <el-tab-pane label="技改历史" name="changelog">
             <template #label
                 ><el-icon>
-                    <notebook />
+                    <Notification />
                 </el-icon>
                 <b>技改历史</b>
             </template>

@@ -8,15 +8,18 @@
                 <el-icon v-if="isEditor" class="u-edit-icon" @click="onSettingIconClick"><Setting /></el-icon>
             </h3>
         </div> -->
-        <ul class="m-news-list m-sideblock-list" v-if="showData">
-            <li v-for="(item, i) in showData" :key="i">
-                <el-icon><Notification /></el-icon>
-                <!-- <em v-if="item.time">{{ dateFormat(item.time) }}</em> -->
-                <a :href="item.link" target="_blank" rel="noopener noreferrer">{{ item.label }}</a>
+        <ul class="m-changelog-list m-news-list m-sideblock-list" v-if="showData">
+            <li class="u-item" v-for="(item, i) in showData" :key="i">
+                <span class="u-item-content">
+                    <el-icon><Notification /></el-icon>
+                    <em>{{ item.icon }}</em>
+                    <a :href="item.link" target="_blank" rel="noopener noreferrer">{{ item.label }}</a>
+                </span>
+                <span class="u-item-misc">{{ item.color }}</span>
             </li>
         </ul>
 
-        <el-dialog v-model="showDialog" title="管理技改历史" append-to-body width="700px" class="m-skill-change-pop">
+        <!-- <el-dialog v-model="showDialog" title="管理技改历史" append-to-body width="700px" class="m-skill-change-pop">
             <div class="m-content-item m-content-header">
                 <span class="u-rank-icon"></span>
                 <span class="u-label">标题</span>
@@ -43,7 +46,7 @@
                     <el-button @click="onCancel">取消</el-button>
                 </div>
             </template>
-        </el-dialog>
+        </el-dialog> -->
     </div>
 </template>
 
@@ -51,14 +54,14 @@
 import User from "@jx3box/jx3box-common/js/user.js";
 import { getMenu, updateMenu } from "@/service/raw.js";
 import dateFormat from "@/assets/js/dateFormat.js";
-import draggable from "vuedraggable";
+// import draggable from "vuedraggable";
 import cloneDeep from "lodash/cloneDeep";
 import { useStore } from "@/store";
 
 export default {
     name: "SkillChange",
     components: {
-        draggable,
+        // draggable,
     },
     data() {
         return {

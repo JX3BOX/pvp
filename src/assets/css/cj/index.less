@@ -4,14 +4,20 @@
         // left: 10px;
         // top: 10px;
         // width: calc(@darkMapW - 20px);
-        width: calc(100% - 20px);
-        padding: 10px 10px 0;
+        // width: calc(100% - 20px);
+        padding: 15px 15px 0;
+        box-sizing: border-box;
         .flex;
         justify-content: space-between;
         z-index: 401;
         background-color: @bgColorDark1;
         border-top-left-radius: 5px;
         border-top-right-radius: 5px;
+
+        .u-mode {
+            border-color: #606266;
+            font-weight: normal;
+        }
     }
     .m-select {
         .flex;
@@ -86,8 +92,10 @@
     gap: 20px;
     width: @darkMapW;
     height: calc(@darkMapH - @darkImgPadding * 2);
-    border: 10px solid #111827;
+    border: 15px solid #111827;
     .r(4px);
+    border-top-left-radius: 0;
+    border-top-right-radius: 0;
     overflow: hidden;
     flex: none;
     @media screen and (max-width: @ipad) {
@@ -99,6 +107,8 @@
         width: 1024px;
         height: calc(@darkMapH - @darkImgPadding * 2);
         flex: none;
+        .r(4px);
+        overflow: hidden;
         // overflow: hidden;
         &.is-point {
             cursor: crosshair;

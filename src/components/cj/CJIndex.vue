@@ -2,7 +2,8 @@
     <div class="m-map-wrap" v-loading="loading" @click="cancelRightMenu">
         <div class="m-map-op">
             <div class="m-select">
-                <el-select style="width: 120px" v-model="map" @change="mapChange">
+                <el-select style="width: 150px" v-model="map" @change="mapChange">
+                    <template #prefix>地图</template>
                     <el-option
                         v-for="item in maps"
                         :key="item.value"
