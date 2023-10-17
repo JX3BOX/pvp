@@ -13,8 +13,27 @@
             img {
                 filter: invert(85%) sepia(0%) saturate(0%) hue-rotate(137deg) brightness(98%) contrast(85%);
             }
+            &:hover {
+                img {
+                    filter: invert(100%) sepia(100%) saturate(100%) hue-rotate(0) brightness(100%) contrast(100%);
+                }
+            }
         }
-        .u-channel span {
+        .u-channel {
+            margin-right: 5px;
+            span {
+                color: @colorDark;
+            }
+            &:hover {
+                span {
+                    color: #fff;
+                }
+            }
+        }
+        .u-breadcrumb-title {
+            .flex;
+            align-items: center;
+            gap: 5px;
             color: @colorDark;
         }
     }
