@@ -62,6 +62,9 @@ export default {
         if (window.innerWidth < 1024) {
             this.isOpen = false;
         }
+
+        // 设置body背景色为黑色
+        document.body.style.backgroundColor = "#1d2530";
     },
 };
 </script>
