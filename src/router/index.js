@@ -15,7 +15,7 @@ const routes = [
     { path: "/desert", name: "desert", component: CJ },
     { path: "/changelog", name: "changelog", component: ChangeLog },
     { path: "/post", name: "post", component: Post },
-    { name: "single", path: "/:id(\\d+)", component: () => import("@/views/Single.vue") },
+    { path: "/:id(\\d+)", name: "single", component: () => import("@/views/Single.vue") },
 ];
 
 // 4.Build An Instance
