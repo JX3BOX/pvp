@@ -10,7 +10,7 @@
                 @keydown.enter="onSearch"
             >
                 <template v-slot:prepend>
-                    <span>
+                    <span class="u-search">
                         <el-icon> <Search /></el-icon> <span class="u-search">关键词</span></span
                     >
                 </template>
