@@ -4,8 +4,17 @@
             <router-link to="/"
                 ><el-icon><Collection /></el-icon
             ></router-link>
+            <router-link to="/post"
+                ><el-icon><notebook /></el-icon
+            ></router-link>
+            <router-link to="/changelog"
+                ><el-icon><Notification /></el-icon
+            ></router-link>
             <router-link to="/sandbox"
                 ><el-icon><Compass /></el-icon
+            ></router-link>
+            <router-link to="/desert"
+                ><el-icon><Chicken /></el-icon
             ></router-link>
         </div>
     </div>
