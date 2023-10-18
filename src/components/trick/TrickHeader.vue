@@ -10,10 +10,12 @@
                 @keydown.enter="onSearch"
             >
                 <template v-slot:prepend>
-                    <span><i class="el-icon-search"></i> <span class="u-search">关键词</span></span>
+                    <span>
+                        <el-icon> <Search /></el-icon> <span class="u-search">关键词</span></span
+                    >
                 </template>
                 <template v-slot:append>
-                    <el-button icon="el-icon-position" class="u-btn" @click="onSearch"></el-button>
+                    <el-button icon="Position" class="u-btn" @click="onSearch"></el-button>
                 </template>
             </el-input>
         </div>

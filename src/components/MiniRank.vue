@@ -297,7 +297,6 @@ export default {
         loadRankItem() {
             getRankItem(this.active)
                 .then((res) => {
-                    console.log(res);
                     this.data = res.data;
                 })
                 .catch((err) => {

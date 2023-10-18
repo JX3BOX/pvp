@@ -8,22 +8,22 @@
             @search="onSearch"
         ></TrickHeader>
 
-        <div class="m-competitive-trick" v-loading="loading">
+        <div v-if="data.length" class="m-competitive-trick" v-loading="loading">
             <CompetitiveTrickItemVue v-for="item in data" :key="item.id" :data="item" :preset="presetConfig" />
         </div>
+        <el-alert v-else class="m-strategy-null" title="没有找到相关条目" type="info" center show-icon></el-alert>
     </div>
 </template>
 
 <script>
-import { useStore } from "@/store";
-import { getPosts, getBoxcoinStatus, getPostBoxcoinConfig } from "@/service/post";
-import User from "@jx3box/jx3box-common/js/user.js";
+import { getPosts } from "@/service/post";
 
 import CompetitiveTrickItemVue from "./trick/CompetitiveTrickItem.vue";
 import TrickNotice from "./trick/TrickNotice.vue";
 import TrickHeader from "./trick/TrickHeader.vue";
 import { publishLink } from "@jx3box/jx3box-common/js/utils";
 import { cloneDeep } from "lodash";
+import { removeEmpty } from "@/utils";
 
 export default {
     name: "CompetitiveTrick",
@@ -35,6 +35,8 @@ export default {
     data() {
         return {
             data: [],
+            search: "",
+            client: "",
 
             presetConfig: {},
             loading: false,
@@ -44,8 +46,14 @@ export default {
         subtype() {
             return this.$route.query?.subtype || "冰心诀";
         },
-        client() {
-            return useStore().client;
+        mark() {
+            return this.$route.query?.mark || "";
+        },
+        order() {
+            return this.$route.query?.order || "";
+        },
+        zlp() {
+            return this.$route.query?.zlp || "";
         },
         query: function () {
             return {
@@ -61,8 +69,9 @@ export default {
         },
     },
     watch: {
-        subtype: {
+        query: {
             immediate: true,
+            deep: true,
             handler() {
                 this.loadData();
             },
@@ -72,7 +81,7 @@ export default {
         publishLink,
         loadData() {
             this.loading = true;
-            const params = cloneDeep(this.query);
+            const params = removeEmpty(cloneDeep(this.query));
             getPosts(params)
                 .then((res) => {
                     this.data = res.data.data.list || [];
@@ -81,34 +90,8 @@ export default {
                     this.loading = false;
                 });
         },
-        async init() {
-            if (!User.isLogin()) return;
-            await getBoxcoinStatus().then((res) => {
-                this.presetConfig.boxcoin_enable = !!~~res.data.data.val;
-            });
-            await getPostBoxcoinConfig(this.postType).then((res) => {
-                this.presetConfig.admin_max = res.data.data.limit.admin_max || 0;
-                this.presetConfig.admin_min = res.data.data.limit.admin_min || 0;
-                this.presetConfig.admin_points = res.data.data.limit.admin_points || [10, 1000];
-                this.presetConfig.admin_left = res.data.data.asManagerBoxCoinRemain || 0;
-                this.presetConfig.admin_total = res.data.data.asManagerBoxCoinTotal || 0;
-
-                this.presetConfig.user_points = res.data.data.limit.user_points || [10, 1000];
-                // 根据多端展示剩余币
-                // 作品是n端，接受n端币+all币
-                if (this.client == "origin") {
-                    this.presetConfig.user_left =
-                        res.data.data.asUserBoxCoinRemainOrigin + res.data.data.asUserBoxCoinRemainAll;
-                } else if (this.client == "std") {
-                    this.presetConfig.user_left =
-                        res.data.data.asUserBoxCoinRemainStd + res.data.data.asUserBoxCoinRemainAll;
-                } else {
-                    this.presetConfig.user_left =
-                        res.data.data.asUserBoxCoinRemainAll +
-                        res.data.data.asUserBoxCoinRemainStd +
-                        res.data.data.asUserBoxCoinRemainOrigin;
-                }
-            });
+        onSearch: function (search) {
+            this.search = search;
         },
         // 条件过滤（不附加路由）
         filterImperceptibly: function (o) {
@@ -116,7 +99,7 @@ export default {
         },
         // 条件过滤
         filterMeta: function (o) {
-            this.replaceRoute({ [o["type"]]: o["val"], page: 1 });
+            this.replaceRoute({ [o["type"]]: o["val"] });
         },
         // 路由绑定
         replaceRoute: function (extend) {
