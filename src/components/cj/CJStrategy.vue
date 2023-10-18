@@ -21,6 +21,7 @@
             layout="total, prev, pager, next"
             :total="total"
             :current-page="page"
+            :page-size="per"
             small
             hide-on-single-page
             @current-change="changePage"
@@ -42,7 +43,7 @@ export default {
         return {
             page: 1,
             pages: 1,
-            per: 1,
+            per: 10,
             total: 0,
             loading: false,
             list: [],

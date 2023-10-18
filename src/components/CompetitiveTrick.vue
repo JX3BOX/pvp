@@ -2,9 +2,11 @@
     <div class="m-competitive-trick">
         <TrickNotice></TrickNotice>
 
-        <div class="m-search">
-            <a :href="publishLink('pvp')" class="u-publish el-button el-button--primary">+ 发布作品</a>
-        </div>
+        <TrickHeader
+            @filterImperceptibly="filterImperceptibly"
+            @filterMeta="filterMeta"
+            @search="onSearch"
+        ></TrickHeader>
 
         <div class="m-competitive-trick" v-loading="loading">
             <CompetitiveTrickItemVue v-for="item in data" :key="item.id" :data="item" :preset="presetConfig" />
@@ -19,13 +21,16 @@ import User from "@jx3box/jx3box-common/js/user.js";
 
 import CompetitiveTrickItemVue from "./trick/CompetitiveTrickItem.vue";
 import TrickNotice from "./trick/TrickNotice.vue";
+import TrickHeader from "./trick/TrickHeader.vue";
 import { publishLink } from "@jx3box/jx3box-common/js/utils";
+import { cloneDeep } from "lodash";
 
 export default {
     name: "CompetitiveTrick",
     components: {
         CompetitiveTrickItemVue,
         TrickNotice,
+        TrickHeader,
     },
     data() {
         return {
@@ -42,6 +47,18 @@ export default {
         client() {
             return useStore().client;
         },
+        query: function () {
+            return {
+                type: "pvp",
+                sticky: 1,
+                subtype: this.subtype,
+                order: this.order,
+                mark: this.mark,
+                client: this.client,
+                search: this.search,
+                zlp: this.zlp,
+            };
+        },
     },
     watch: {
         subtype: {
@@ -55,7 +72,8 @@ export default {
         publishLink,
         loadData() {
             this.loading = true;
-            getPosts({ type: "pvp", subtype: this.subtype, client: this.client, sticky: 1 })
+            const params = cloneDeep(this.query);
+            getPosts(params)
                 .then((res) => {
                     this.data = res.data.data.list || [];
                 })
@@ -91,6 +109,23 @@ export default {
                         res.data.data.asUserBoxCoinRemainOrigin;
                 }
             });
+        },
+        // 条件过滤（不附加路由）
+        filterImperceptibly: function (o) {
+            this[o["type"]] = o["val"];
+        },
+        // 条件过滤
+        filterMeta: function (o) {
+            this.replaceRoute({ [o["type"]]: o["val"], page: 1 });
+        },
+        // 路由绑定
+        replaceRoute: function (extend) {
+            return this.$router
+                .push({ name: this.$route.name, query: Object.assign({}, this.$route.query, extend) })
+                .then(() => {
+                    window.scrollTo(0, 0);
+                })
+                .catch(() => {});
         },
     },
 };
