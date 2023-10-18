@@ -1,13 +1,14 @@
 <template>
     <div class="c-macro__header">
         <div class="m-archive-search">
-            <a :href="publish_link" class="u-publish el-button el-button--primary">+ 发布作品</a>
+            <a :href="publish_link" class="u-publish el-button el-button--primary el-button--large">+ 发布作品</a>
             <el-input
                 placeholder="请输入搜索内容"
                 v-model.trim.lazy="search"
                 clearable
                 @clear="onSearch"
                 @keydown.enter="onSearch"
+                size="large"
             >
                 <template v-slot:prepend>
                     <span class="u-search">
