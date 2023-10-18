@@ -36,4 +36,13 @@ async function delRankList(id) {
         });
 }
 
-export { createRankItem, getRankList, putRankList, delRankList };
+// 获取热门门派排行榜
+async function getRankItem(id) {
+    return $cms()
+        .get(`/api/cms/pvp/ladder/${id}`)
+        .then((res) => {
+            return res.data;
+        });
+}
+
+export { createRankItem, getRankList, putRankList, delRankList, getRankItem };

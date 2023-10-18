@@ -106,7 +106,6 @@ import { getPost } from "@/service/post";
 import { getStat, postStat } from "@jx3box/jx3box-common/js/stat";
 import JX3BOX from "@jx3box/jx3box-common/data/jx3box.json";
 import xfmap from "@jx3box/jx3box-data/data/xf/xf.json";
-import { __visibleMap } from "@jx3box/jx3box-common/data/jx3box.json";
 import SETTING from "@/../setting.json";
 const appKey = SETTING.appKey;
 
@@ -178,7 +177,7 @@ export default {
         },
         null_tip: function () {
             let str = "作者设置了【";
-            str += __visibleMap[this.post?.visible];
+            str += JX3BOX.__visibleMap[this.post?.visible];
             str += "】";
             return str;
         },

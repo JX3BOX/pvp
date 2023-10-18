@@ -1,5 +1,6 @@
 import { $cms, $node } from "@jx3box/jx3box-common/js/https_v2";
-import { __imgPath } from "@jx3box/jx3box-common/data/jx3box.json";
+import JX3BOX from "@jx3box/jx3box-common/data/jx3box.json";
+const { __imgPath } = JX3BOX;
 import axios from "axios";
 // 地图列表
 function getMapList() {

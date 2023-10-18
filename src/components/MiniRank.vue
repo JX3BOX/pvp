@@ -171,7 +171,7 @@
 import { markRaw } from "vue";
 import { mapState } from "pinia";
 import { useStore } from "@/store";
-import { getRankList, createRankItem, putRankList, delRankList } from "@/service/rank.js";
+import { getRankList, createRankItem, putRankList, delRankList, getRankItem } from "@/service/rank.js";
 import schoolid from "@jx3box/jx3box-data/data/xf/schoolid.json";
 import xfid from "@jx3box/jx3box-data/data/xf/xfid.json";
 import mountGroup from "@jx3box/jx3box-data/data/xf/mount_group.json";
@@ -201,6 +201,7 @@ export default {
             active: "",
             rankList: [],
             loading: false,
+            data: {},
 
             showDialog: false,
 
@@ -229,12 +230,9 @@ export default {
         isEditor() {
             return User.isEditor();
         },
-        selectedRank() {
-            return this.rankList.find((item) => item.id == this.active) || null;
-        },
         content() {
             try {
-                const content = JSON.parse(this.selectedRank?.content);
+                const content = this.data.content ? JSON.parse(this.data.content) : [];
                 const hps = mountGroup.mount_group["治疗"];
                 return {
                     dps: content.filter((item) => !hps.includes(~~item.id)),
@@ -290,9 +288,20 @@ export default {
                     } else {
                         this.active = this.rankList[0]?.id;
                     }
+                    this.loadRankItem();
                 })
                 .finally(() => {
                     this.loading = false;
+                });
+        },
+        loadRankItem() {
+            getRankItem(this.active)
+                .then((res) => {
+                    console.log(res);
+                    this.data = res.data;
+                })
+                .catch((err) => {
+                    console.log(err);
                 });
         },
         showSchoolIcon,
