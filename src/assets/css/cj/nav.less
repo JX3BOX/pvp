@@ -47,7 +47,26 @@
                 gap: 5px;
                 margin-top: 0;
                 margin-bottom: 10px;
-                border-bottom: 1px solid #333;
+            }
+            .u-buff {
+                .flex;
+                gap: 10px;
+                img {
+                    flex: 1;
+                    .size(48px);
+                    cursor: pointer;
+                }
+                .u-name {
+                    font-weight: bold;
+                }
+                .u-desc {
+                    font-size: 12px;
+                    color: #999;
+                }
+            }
+            .u-no-buff {
+                font-size: 12px;
+                color: #666;
             }
         }
     }
@@ -55,7 +74,7 @@
         position: relative;
         margin-top: 20px;
         overflow: hidden;
-        height: calc(100vh - 310px);
+        height: calc(100vh - 350px);
         background-color: @bgColorDark1;
         .r(10px);
         overflow-y: auto;

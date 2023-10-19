@@ -20,6 +20,20 @@ function getPosts(params) {
         params: query,
     });
 }
+// buff
+function getBuff(id, level, client) {
+    const params = {
+        strict: false,
+        page: 1,
+        per: 10,
+        client,
+        level,
+    };
+    return $node().get(`/buff/id/${id}`, {
+        params,
+    });
+}
+
 // 吃鸡技能枚举类型
 function getDesertTypes(params) {
     return $node().get("/desert/enums", {
@@ -79,4 +93,5 @@ export {
     getMyPoints,
     reviewPoint,
     getUnAuditedPoints,
+    getBuff,
 };
