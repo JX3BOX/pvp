@@ -1,4 +1,4 @@
-import { $cms, $node } from "@jx3box/jx3box-common/js/https_v2";
+import { $cms, $node, $helper } from "@jx3box/jx3box-common/js/https_v2";
 import JX3BOX from "@jx3box/jx3box-common/data/jx3box.json";
 const { __imgPath } = JX3BOX;
 import axios from "axios";
@@ -30,6 +30,29 @@ function getBuff(id, level, client) {
         level,
     };
     return $node().get(`/buff/id/${id}`, {
+        params,
+    });
+}
+// 获取物品
+function getItem(item_id, client) {
+    if (!item_id) return;
+    let options = {
+        url: `/api/item/${item_id}`,
+        params: {
+            client,
+        },
+    };
+    return $helper({ mute: true })(options);
+}
+
+// 批量获取物品
+function getItems(ids, client) {
+    const per = ids.split(",").length || 15;
+    const params = {
+        client,
+        per,
+    };
+    return $node().get(`/item_merged/id/${ids}`, {
         params,
     });
 }
@@ -94,4 +117,6 @@ export {
     reviewPoint,
     getUnAuditedPoints,
     getBuff,
+    getItem,
+    getItems,
 };

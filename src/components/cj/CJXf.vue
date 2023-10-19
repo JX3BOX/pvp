@@ -38,9 +38,9 @@
                         <div class="u-desc">{{ data.Desc }}</div>
                     </div>
                 </div>
-                <div v-else class="u-no-buff">当前心法没有加成。</div>
+                <div v-else class="u-no-data">当前心法没有加成。</div>
             </div>
-            <div v-else class="u-no-buff">缘起暂无心法加成。</div>
+            <div v-else class="u-no-data">缘起暂无心法加成。</div>
         </div>
     </div>
 </template>
@@ -51,8 +51,8 @@ import desertXfMap from "@/assets/data/desertXf.json";
 import { iconLink } from "@jx3box/jx3box-common/js/utils";
 import { showMountIcon } from "@jx3box/jx3box-common/js/utils";
 import { getBuff } from "@/service/cj";
-import { useStore } from "@/store";
 import { __Root } from "@jx3box/jx3box-common/data/jx3box.json";
+import { useStore } from "@/store";
 const $store = useStore();
 
 export default {

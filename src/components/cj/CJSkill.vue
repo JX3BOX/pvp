@@ -1,5 +1,5 @@
 <template>
-    <div class="m-cj-skill">
+    <div v-if="client === 'std'" class="m-cj-skill">
         <div class="m-search">
             <el-input class="u-input" v-model="search" placeholder="请输入 技能名称 查询" clearable></el-input>
             <el-select class="u-select" v-model="quality">
@@ -23,11 +23,14 @@
         </div>
         <div v-else class="u-no-data">暂无技能</div>
     </div>
+    <div v-else class="u-no-data">缘起暂无技能拾取。</div>
 </template>
 
 <script>
 import { getDeserts } from "@/service/cj";
 import SkillItem from "./CJSkillItem.vue";
+import { useStore } from "@/store";
+const $store = useStore();
 export default {
     name: "CJSkill",
     components: {
@@ -48,7 +51,7 @@ export default {
     },
     computed: {
         client() {
-            return "origin";
+            return $store.client;
         },
         params() {
             return {
