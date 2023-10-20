@@ -12,7 +12,7 @@
                         <span class="u-txt">全部心法</span>
                     </div>
                 </el-option>
-                <el-option v-for="(item, i) in xfmaps" :key="i" :value="item.name">
+                <el-option v-for="(item, i) in xfMaps" :key="i" :value="item.name">
                     <div class="u-xf-option">
                         <img class="u-pic" :src="showMountIcon(item.id)" :alt="item.name" />
                         <span class="u-txt">{{ item.name }}</span>
@@ -20,18 +20,38 @@
                 </el-option>
             </el-select>
         </div>
-        <div v-if="client === 'std'" class="m-xf-buff">
+        <!-- origin没有，std有 -->
+        <div class="m-xf-buff">
             <h4 class="u-title">
                 <el-icon><ZoomIn /></el-icon>心法加成
             </h4>
-            <div class="u-buff">+1</div>
+            <div v-if="client === 'std'" class="u-buff">
+                <div class="u-buff" v-if="data.BuffID">
+                    <img
+                        :title="`IconID:${data.IconID}`"
+                        :src="iconLink(data.IconID)"
+                        :alt="data.Name"
+                        @click="getUrl"
+                    />
+                    <div class="u-name-desc">
+                        <div class="u-name">{{ data.Name }}</div>
+                        <div class="u-desc">{{ data.Desc }}</div>
+                    </div>
+                </div>
+                <div v-else class="u-no-data">当前心法没有加成。</div>
+            </div>
+            <div v-else class="u-no-data">缘起暂无心法加成。</div>
         </div>
     </div>
 </template>
 
 <script>
-import xfmap from "@jx3box/jx3box-data/data/xf/xf.json";
+import xfMap from "@jx3box/jx3box-data/data/xf/xf.json";
+import desertXfMap from "@/assets/data/desertXf.json";
+import { iconLink } from "@jx3box/jx3box-common/js/utils";
 import { showMountIcon } from "@jx3box/jx3box-common/js/utils";
+import { getBuff } from "@/service/cj";
+import { __Root } from "@jx3box/jx3box-common/data/jx3box.json";
 import { useStore } from "@/store";
 const $store = useStore();
 
@@ -40,6 +60,7 @@ export default {
     data() {
         return {
             subtype: "",
+            data: {},
         };
     },
     computed: {
@@ -49,15 +70,28 @@ export default {
         tab: function () {
             return this.$route.query.tab;
         },
-        xfmaps() {
-            delete xfmap["山居剑意"];
-            return Object.values(xfmap).filter((item) => item.client.includes(this.client));
+        xfMaps() {
+            delete xfMap["山居剑意"];
+            return Object.values(xfMap).filter((item) => item.client.includes(this.client));
+        },
+        // computedXfMaps() {
+        //     return this.xfMaps.map((item) => {
+        //         return {
+        //             ...item,
+        //             ...(desertXfMap?.[item.name] || {}),
+        //         };
+        //     });
+        // },
+        // 当前心法加成id
+        currentXf() {
+            const obj = this.subtype !== "" ? desertXfMap[this.subtype] || {} : {};
+            return obj;
         },
         currentLogo() {
-            const id = this.subtype !== "" ? xfmap[this.subtype].id : null;
+            const id = this.subtype !== "" ? xfMap[this.subtype].id : null;
             return {
                 src: id !== null ? this.showMountIcon(id) : require("@/assets/img/logo.svg"),
-                alt: id !== null ? xfmap[this.subtype].name : "门派心法",
+                alt: id !== null ? xfMap[this.subtype].name : "门派心法",
             };
         },
     },
@@ -68,10 +102,15 @@ export default {
             handler(query) {
                 const { subtype } = query;
                 this.subtype = subtype || "";
+                this.data = {};
+                if (subtype) {
+                    this.loadBuff();
+                }
             },
         },
     },
     methods: {
+        iconLink,
         showMountIcon,
         toRoute(subtype) {
             this.$router.push({
@@ -80,6 +119,32 @@ export default {
                     tab: this.tab,
                 },
             });
+        },
+        loadBuff() {
+            // 读取本地数据
+            const { client } = this;
+            const { desertBuffId, desertBuffLevel } = this.currentXf;
+            if (!desertBuffId) return;
+            const cache = sessionStorage.getItem(`buff-${client}-${desertBuffId}-${desertBuffLevel}`);
+            if (cache) {
+                this.data = JSON.parse(cache);
+                // 没有缓存则发起请求获取数据
+            } else {
+                getBuff(desertBuffId, desertBuffLevel, client).then((res) => {
+                    let newData = res.data?.list?.[0] || {};
+                    this.data = newData;
+                    // 将数据放入 sessionStorage
+                    sessionStorage.setItem(
+                        `buff-${client}-${desertBuffId}-${desertBuffLevel}`,
+                        JSON.stringify(newData)
+                    );
+                });
+            }
+        },
+        getUrl() {
+            const domain = process.env.NODE_ENV === "development" ? __Root : location.origin + "/";
+            const url = domain + `app/database/?type=buff&query=${this.data.BuffID}&level=${this.data.Level}`;
+            window.open(url, "_blank");
         },
     },
 };

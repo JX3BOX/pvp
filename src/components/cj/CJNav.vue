@@ -55,7 +55,7 @@ export default {
                 {
                     label: "技能查询",
                     value: "skill",
-                    // client: ["origin"],
+                    // client: ["origin"], tab都显示，在组件里面额外说明
                     client: ["std", "origin"],
                     icon: "Search",
                     component: "CJSkill",

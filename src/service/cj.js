@@ -1,4 +1,4 @@
-import { $cms, $node } from "@jx3box/jx3box-common/js/https_v2";
+import { $cms, $node, $helper } from "@jx3box/jx3box-common/js/https_v2";
 import JX3BOX from "@jx3box/jx3box-common/data/jx3box.json";
 const { __imgPath } = JX3BOX;
 import axios from "axios";
@@ -20,6 +20,53 @@ function getPosts(params) {
         params: query,
     });
 }
+// buff
+function getBuff(id, level, client) {
+    const params = {
+        strict: false,
+        page: 1,
+        per: 10,
+        client,
+        level,
+    };
+    return $node().get(`/buff/id/${id}`, {
+        params,
+    });
+}
+// 获取物品
+function getItem(item_id, client) {
+    if (!item_id) return;
+    let options = {
+        url: `/api/item/${item_id}`,
+        params: {
+            client,
+        },
+    };
+    return $helper({ mute: true })(options);
+}
+// 正则匹配物品列表
+function getItemsByReg(regexp) {
+    return $node().get(`/item/search`, {
+        params: {
+            regexp,
+        },
+    });
+}
+
+// 批量获取物品
+function getItems(ids, client) {
+    const per = ids.length || 15;
+    const params = {
+        client,
+        per,
+    };
+    const idString = ids.join(",");
+    if (!idString) return;
+    return $node().get(`/item_merged/id/${idString}`, {
+        params,
+    });
+}
+
 // 吃鸡技能枚举类型
 function getDesertTypes(params) {
     return $node().get("/desert/enums", {
@@ -79,4 +126,8 @@ export {
     getMyPoints,
     reviewPoint,
     getUnAuditedPoints,
+    getBuff,
+    getItem,
+    getItems,
+    getItemsByReg,
 };
