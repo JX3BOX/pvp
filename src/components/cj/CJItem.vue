@@ -1,7 +1,7 @@
 <template>
     <div v-if="data.length" class="m-cj-item">
         <div class="u-item" v-for="item in data" :key="item.id" @click="getUrl(item.id)">
-            <ItemSimple :item="item" :with-name="true" :no-pop="true" iconSize="32px" />
+            <ItemSimple :item="item" effect="dark" iconSize="32px" />
         </div>
     </div>
     <div v-else class="u-no-data">暂无道具。</div>
