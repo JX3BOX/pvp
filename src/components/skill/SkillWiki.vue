@@ -113,7 +113,8 @@ const $store = useStore();
 import { getWikiToSkill, getVersions, getWikiById } from "@/service/raw.js";
 import { publishLink, getLink, authorLink, ts2str, showAvatar } from "@jx3box/jx3box-common/js/utils";
 import dayjs from "dayjs";
-import { __Root, __OriginRoot } from "@jx3box/jx3box-common/data/jx3box.json";
+import JX3BOX from "@jx3box/jx3box-common/data/jx3box.json";
+const { __Root, __OriginRoot } = JX3BOX;
 import User from "@jx3box/jx3box-common/js/user.js";
 import SimpleThx from "@jx3box/jx3box-vue3-ui/src/single/SimpleThx.vue";
 

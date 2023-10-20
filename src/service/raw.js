@@ -65,14 +65,14 @@ export function getSandboxLogs(params) {
 
 // 获取所有特殊技能分组
 export function getSpecialSkillGroup(params) {
-    return $cms().get(`/api/cms/pvp/specialskill/group`, {
+    return $cms().get(`/api/cms/pvp/collection/group`, {
         params,
     });
 }
 
 // 获取特殊技能列表
 export function getSpecialSkillList(params) {
-    return $cms().get(`/api/cms/pvp/specialskill`, {
+    return $cms().get(`/api/cms/pvp/collection`, {
         params,
     });
 }

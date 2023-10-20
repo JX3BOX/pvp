@@ -305,7 +305,7 @@ import { markRaw } from "vue";
 import ReviewPoint from "./ReviewPoint.vue";
 import PointComment from "./PointComment.vue";
 import { getMapList, getPoints, addPoint, getMyPoints, delPoint, updatePoint, reviewPoint } from "@/service/cj";
-import { __imgPath } from "@jx3box/jx3box-common/data/jx3box.json";
+const { __imgPath } = require("@jx3box/jx3box-common/data/jx3box.json");
 import mapPath from "@/assets/data/mapPath.json";
 import { cloneDeep, pick } from "lodash";
 import User from "@jx3box/jx3box-common/js/user.js";

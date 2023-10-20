@@ -40,7 +40,7 @@
 </template>
 
 <script>
-import { appKey } from "@/../setting.json";
+const { appKey } = require("@/../setting.json");
 import { publishLink } from "@jx3box/jx3box-common/js/utils";
 import { useStore } from "@/store";
 export default {
