@@ -244,6 +244,7 @@
                 append-to-body
                 width="560"
                 class="m-desert-point-pop"
+                :before-close="onCancel"
             >
                 <el-form
                     ref="pointForm"
@@ -447,6 +448,7 @@ export default {
             $store.map = mapId;
         },
         editPoint(point) {
+            if (!point) return;
             this.toEdit(point);
         },
         delPointId(id) {
@@ -830,6 +832,7 @@ export default {
                 desc: "",
                 client: useStore().client,
             };
+            $store.editPoint = null;
             this.showDialog = false;
         },
         /**

@@ -6,12 +6,12 @@
                 <img :src="currentLogo.src" :alt="currentLogo.alt" />
             </div>
             <el-select class="u-select" v-model="subtype" filterable @change="toRoute">
-                <el-option label="全部心法" value="">
+                <!-- <el-option label="全部心法" value="">
                     <div class="u-xf-option">
                         <img class="u-pic" src="@/assets/img/logo.svg" alt="全部心法" />
                         <span class="u-txt">全部心法</span>
                     </div>
-                </el-option>
+                </el-option> -->
                 <el-option v-for="(item, i) in xfMaps" :key="i" :value="item.name">
                     <div class="u-xf-option">
                         <img class="u-pic" :src="showMountIcon(item.id)" :alt="item.name" />
@@ -22,10 +22,10 @@
         </div>
         <!-- origin没有，std有 -->
         <div class="m-xf-buff">
-            <h4 class="u-title">
+            <h4 class="u-xf-title">
                 <el-icon><ZoomIn /></el-icon>心法加成
             </h4>
-            <div v-if="client === 'std'" class="u-buff">
+            <div v-if="client === 'std'" class="u-buff-wrap">
                 <div class="u-buff" v-if="data.BuffID">
                     <img
                         :title="`IconID:${data.IconID}`"
@@ -59,7 +59,7 @@ export default {
     name: "CJXf",
     data() {
         return {
-            subtype: "",
+            subtype: "冰心诀",
             data: {},
         };
     },
@@ -105,6 +105,8 @@ export default {
                 this.data = {};
                 if (subtype) {
                     this.loadBuff();
+                } else {
+                    this.toRoute("冰心诀");
                 }
             },
         },
