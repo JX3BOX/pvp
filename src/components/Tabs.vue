@@ -4,7 +4,6 @@
             <template #label>
                 <el-icon><Collection /></el-icon>
                 <b>武学研习</b>
-                <em class="u-secret">竞技全指南</em>
             </template>
         </el-tab-pane>
         <el-tab-pane label="连招技巧" name="post">
@@ -13,6 +12,7 @@
                     <notebook />
                 </el-icon>
                 <b>连招技巧</b>
+                <em class="u-secret">竞技指南</em>
             </template>
         </el-tab-pane>
         <el-tab-pane label="技改历史" name="changelog">
