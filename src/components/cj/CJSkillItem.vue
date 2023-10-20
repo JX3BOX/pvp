@@ -32,7 +32,7 @@
 <script>
 import { iconLink } from "@jx3box/jx3box-common/js/utils";
 import Jx3Skill from "./Skill.vue";
-import { __Root } from "@jx3box/jx3box-common/data/jx3box.json";
+const { __Root } = require("@jx3box/jx3box-common/data/jx3box.json");
 export default {
     name: "SkillItem",
     props: {
