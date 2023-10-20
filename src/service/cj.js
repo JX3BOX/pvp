@@ -44,15 +44,25 @@ function getItem(item_id, client) {
     };
     return $helper({ mute: true })(options);
 }
+// 正则匹配物品列表
+function getItemsByReg(regexp) {
+    return $node().get(`/item/search`, {
+        params: {
+            regexp,
+        },
+    });
+}
 
 // 批量获取物品
 function getItems(ids, client) {
-    const per = ids.split(",").length || 15;
+    const per = ids.length || 15;
     const params = {
         client,
         per,
     };
-    return $node().get(`/item_merged/id/${ids}`, {
+    const idString = ids.join(",");
+    if (!idString) return;
+    return $node().get(`/item_merged/id/${idString}`, {
         params,
     });
 }
@@ -119,4 +129,5 @@ export {
     getBuff,
     getItem,
     getItems,
+    getItemsByReg,
 };

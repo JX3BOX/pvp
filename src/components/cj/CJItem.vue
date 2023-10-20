@@ -1,7 +1,7 @@
 <template>
     <div v-if="data.length" class="m-cj-item">
         <div class="u-item" v-for="item in data" :key="item.id" @click="getUrl(item.id)">
-            <ItemSimple :item="item" effect="dark" iconSize="32px" />
+            <ItemSimple :item="item" :with-name="true" :no-pop="true" iconSize="32px" />
         </div>
     </div>
     <div v-else class="u-no-data">暂无道具。</div>
@@ -9,6 +9,7 @@
 
 <script>
 import { getItems } from "@/service/cj";
+import { getBread } from "@/service/raw";
 import { __Root } from "@jx3box/jx3box-common/data/jx3box.json";
 import { useStore } from "@/store";
 const $store = useStore();
@@ -16,33 +17,31 @@ export default {
     name: "CJItem",
     data() {
         return {
-            visible: false,
-            list: [
-                {
-                    Name: "月影沙",
-                    id: "5_32265",
-                },
-                {
-                    Name: "宽叶草伪装",
-                    id: "5_32654",
-                },
-                {
-                    Name: "沧溟石伪装",
-                    id: "5_32647",
-                },
-            ],
             data: [],
+            items: [],
+            mapId: 0,
         };
     },
     computed: {
+        currentMapId() {
+            return $store.map || 0;
+        },
         ids() {
-            return this.list.map((item) => item.id).join(",");
+            const commonIds = this.items.find((item) => item.mapId === 0)?.items || [];
+            const mapIds = this.items.find((item) => item.mapId === this.mapId)?.items || [];
+            return commonIds.concat(mapIds);
         },
         client() {
             return $store.client;
         },
     },
     watch: {
+        currentMapId: {
+            immediate: true,
+            handler(id) {
+                this.mapId = id;
+            },
+        },
         ids: {
             immediate: true,
             handler() {
@@ -51,11 +50,26 @@ export default {
         },
     },
     methods: {
+        loadMapItems() {
+            // 读取本地数据
+            const { client } = this;
+            const cache = sessionStorage.getItem(`desert_item_ids_${client}`);
+            if (cache) {
+                this.items = JSON.parse(cache);
+                // 没有缓存则发起请求获取数据
+            } else {
+                getBread({ key: "pvp_desert_items" }).then((res) => {
+                    const arr = res.data?.data?.[0]?.html || "[]";
+                    sessionStorage.setItem(`desert_item_ids_${client}`, arr);
+                    this.items = JSON.parse(arr);
+                });
+            }
+        },
         loadItems() {
             // 读取本地数据
-            const { client, ids } = this;
-            if (!ids) return;
-            const cache = sessionStorage.getItem(`desert_items_${client}`);
+            const { client, ids, mapId } = this;
+            if (!ids.length) return;
+            const cache = sessionStorage.getItem(`desert_items_${client}_${mapId}`);
             if (cache) {
                 this.data = JSON.parse(cache);
                 // 没有缓存则发起请求获取数据
@@ -64,7 +78,7 @@ export default {
                     let newData = res.data?.list || [];
                     this.data = newData;
                     // 将数据放入 sessionStorage
-                    sessionStorage.setItem(`desert_items_${client}`, JSON.stringify(newData));
+                    sessionStorage.setItem(`desert_items_${client}_${mapId}`, JSON.stringify(newData));
                 });
             }
         },
@@ -73,6 +87,9 @@ export default {
             const url = domain + `item/view/${id}`;
             window.open(url, "_blank");
         },
+    },
+    mounted() {
+        this.loadMapItems();
     },
 };
 </script>
