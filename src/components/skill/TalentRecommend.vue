@@ -124,7 +124,7 @@ export default {
             if (!this.mount) return;
             getTalentRecommendList({ mount: this.mount, client: this.client, subtype: "pvp" })
                 .then((res) => {
-                    this.list = res.data.data || [];
+                    this.list = res.data.data?.list || [];
                     this.active = this.list[0]?.id || "";
                 })
                 .finally(() => {
