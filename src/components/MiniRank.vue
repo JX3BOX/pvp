@@ -279,7 +279,7 @@ export default {
         },
         loadRankList() {
             this.loading = true;
-            getRankList({ client: this.client })
+            getRankList({ client: this.client, status: 1 })
                 .then((res) => {
                     this.rankList = res.data || [];
                     // 如果激活的榜单不存在，就默认选中第一个
