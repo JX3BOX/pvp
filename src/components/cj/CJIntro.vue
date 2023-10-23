@@ -98,6 +98,33 @@ export default {
 </script>
 <style lang="less">
 .m-cj-intro {
+    margin-top: 20px;
+    max-width: 2120px;
+    // height: @darksideTopHeight;
+    .scrollbar(4px, #F9EACC, #333);
+    overflow-y: auto;
+    background-color: @bgColorDark1;
+    border-radius: 10px;
+    padding: 20px;
+    box-sizing: border-box;
+    color: @colorDark;
+    @media screen and (max-width: 1680px) {
+        max-width: calc(@darkMapW + 20px);
+    }
+    .u-title {
+        .flex;
+        gap: 5px;
+        align-items: center;
+        justify-content: flex-start;
+        padding-bottom: 10px;
+        border-bottom: 1px dashed #333;
+    }
+    .u-info {
+        font-size: 12px;
+        // p {
+        //     text-indent: 2em;
+        // }
+    }
     .el-tabs__nav {
         .flex;
     }

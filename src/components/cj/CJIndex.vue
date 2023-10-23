@@ -359,7 +359,7 @@ export default {
             currentRightClickPoint: {}, // current right-click img point
             commentVisible: false, // comment control
             commentPoint: {},
-            isEditMode: false, // 是否是编辑模式
+            isEditMode: true, // 是否是编辑模式
         };
     },
     computed: {
@@ -853,6 +853,9 @@ export default {
         },
     },
     mounted() {
+        if (!this.isLogin) {
+            this.isEditMode = false;
+        }
         this.getMapList();
         this.initData();
         // reviewPoint(3).then((res) => {

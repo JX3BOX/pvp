@@ -61,7 +61,8 @@ export default {
                 this.items = JSON.parse(cache);
                 // 没有缓存则发起请求获取数据
             } else {
-                getBread({ key: "pvp_desert_items" }).then((res) => {
+                const key = this.client === "origin" ? "pvp_desert_items_origin" : "pvp_desert_items";
+                getBread({ key }).then((res) => {
                     const arr = res.data?.data?.[0]?.html || "[]";
                     sessionStorage.setItem(`desert_item_ids_${client}`, arr);
                     this.items = JSON.parse(arr);

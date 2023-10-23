@@ -167,7 +167,8 @@ export default {
                 this[key] = JSON.parse(cache);
                 // 没有缓存则发起请求获取数据
             } else {
-                getBread({ key }).then((res) => {
+                const clientKey = this.client === "origin" ? key + "_origin" : key;
+                getBread({ key: clientKey }).then((res) => {
                     const obj = res.data?.data?.[0]?.html || "{}";
                     sessionStorage.setItem(key, obj);
                     this[key] = JSON.parse(obj);

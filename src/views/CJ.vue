@@ -28,10 +28,13 @@ export default {
     mounted() {},
 };
 </script>
-<style lang="less" scoped>
+<style lang="less">
 .m-cj-content {
-    .flex;
-    flex-wrap: wrap;
-    gap: 20px;
+    .m-cj-content__top {
+        .flex;
+        align-items: flex-start;
+        flex-wrap: wrap;
+        gap: 20px;
+    }
 }
 </style>

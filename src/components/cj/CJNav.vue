@@ -55,8 +55,7 @@ export default {
                 {
                     label: "技能查询",
                     value: "skill",
-                    // client: ["origin"], tab都显示，在组件里面额外说明
-                    client: ["std", "origin"],
+                    client: ["origin"],
                     icon: "Search",
                     component: "CJSkill",
                 },
@@ -91,4 +90,7 @@ export default {
 
 <style lang="less">
 @import "~@/assets/css/cj/nav.less";
+.m-simple-item-popup {
+    padding: 0 !important;
+}
 </style>

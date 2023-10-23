@@ -11,6 +11,7 @@
                     class="u-author-avatar"
                     :src="showAvatar(item.author_info)"
                     :alt="showNickname(item.author_info)"
+                    @error="setDefaultAvatar"
                 />
                 <!-- <span class="u-author-name">{{ showNickname(item.author_info) }}</span> -->
             </a>
@@ -55,6 +56,9 @@ export default {
     },
     watch: {},
     methods: {
+        setDefaultAvatar(e) {
+            e.target.src = jx3boxData.default_avatar;
+        },
         getBanner: function (item) {
             if (item.post_banner) {
                 return showBanner(item.post_banner);
