@@ -232,7 +232,7 @@ export default {
         },
         content() {
             try {
-                const content = this.data.content ? JSON.parse(this.data.content) : [];
+                const content = this.data.content ? this.data.content : [];
                 const hps = mountGroup.mount_group["治疗"];
                 return {
                     dps: content.filter((item) => !hps.includes(~~item.id)),
@@ -279,7 +279,7 @@ export default {
         },
         loadRankList() {
             this.loading = true;
-            getRankList({ client: this.client })
+            getRankList({ client: this.client, status: 1 })
                 .then((res) => {
                     this.rankList = res.data || [];
                     // 如果激活的榜单不存在，就默认选中第一个
@@ -320,7 +320,7 @@ export default {
                 this.form.status = rank.status;
                 this.form.client = rank.client;
                 this.form.label = rank.label;
-                this.form.content = JSON.parse(rank.content);
+                this.form.content = rank.content;
             }
         },
         onCancel() {
