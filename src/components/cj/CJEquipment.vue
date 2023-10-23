@@ -1,7 +1,7 @@
 <template>
     <div class="m-cj-equipment">
         <div class="u-equipment-item" v-for="item in list" :key="item.key">
-            <div class="u-title">
+            <div class="u-equipment-title">
                 {{ item.key }}
                 <span v-if="item.values?.[0]?.name.split('·')?.[0]">
                     · {{ item.values?.[0]?.name.split("·")?.[0] }}</span
@@ -14,14 +14,31 @@
                         :only-icon="true"
                         effect="dark"
                         :with-name="false"
-                        :no-pop="true"
+                        :no-pop="false"
                         iconSize="32px"
                     />
                 </div>
-                <span class="u-link" @click="toCompare(item.values)">对比</span>
+                <el-popover placement="right-start" effect="dark" :width="740" trigger="click">
+                    <template #reference>
+                        <span class="u-link" @click="toCompare(item.values)">对比</span>
+                    </template>
+                    <div class="m-desert-compare">
+                        <div class="u-compare-item" v-for="equipment in compares" :key="equipment.id">
+                            <ItemSimple
+                                :item="getItemData(equipment.id)"
+                                :only-icon="true"
+                                effect="dark"
+                                :with-name="true"
+                                :no-pop="true"
+                                iconSize="32px"
+                            />
+                            <Item :item_id="equipment.id"></Item>
+                        </div>
+                    </div>
+                </el-popover>
             </div>
         </div>
-        <el-dialog
+        <!-- <el-dialog
             v-if="showDialog"
             v-model="showDialog"
             title="装备对比"
@@ -47,7 +64,7 @@
                     <el-button @click="showDialog = false">取消</el-button>
                 </div>
             </template>
-        </el-dialog>
+        </el-dialog> -->
     </div>
 </template>
 
@@ -196,7 +213,7 @@ export default {
         padding: 4px 10px;
         .r(4px);
         font-size: 13px;
-        .u-title {
+        .u-equipment-title {
             // color: #999;
             span {
                 color: @colorDark;
@@ -223,18 +240,16 @@ export default {
         }
     }
 }
-.m-desert-compare-pop {
-    .m-desert-compare {
+.m-desert-compare {
+    .flex;
+    gap: 10px;
+    justify-content: center;
+    .u-compare-item {
         .flex;
-        gap: 20px;
-        justify-content: center;
-        .u-compare-item {
-            .flex;
-            gap: 10px;
-            flex-direction: column;
-            justify-content: flex-start;
-            align-items: center;
-        }
+        gap: 10px;
+        flex-direction: column;
+        justify-content: flex-start;
+        align-items: center;
     }
 }
 </style>

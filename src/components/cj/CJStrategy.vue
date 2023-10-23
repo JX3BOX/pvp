@@ -58,7 +58,7 @@ export default {
         },
         query() {
             return {
-                subtype: this.$route.query.subtype,
+                // subtype: this.$route.query.subtype,
                 client: useStore().client,
                 order: "update",
             };
