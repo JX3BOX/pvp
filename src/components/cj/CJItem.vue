@@ -10,7 +10,7 @@
 <script>
 import { getItems } from "@/service/cj";
 import { getBread } from "@/service/raw";
-import { __Root } from "@jx3box/jx3box-common/data/jx3box.json";
+import jx3boxData from "@jx3box/jx3box-common/data/jx3box.json";
 import { useStore } from "@/store";
 const $store = useStore();
 export default {
@@ -33,6 +33,9 @@ export default {
         },
         client() {
             return $store.client;
+        },
+        baseUrl() {
+            return this.client == "origin" ? jx3boxData.__OriginRoot : jx3boxData.__Root;
         },
     },
     watch: {
@@ -83,8 +86,7 @@ export default {
             }
         },
         getUrl(id) {
-            const domain = process.env.NODE_ENV === "development" ? __Root : location.origin + "/";
-            const url = domain + `item/view/${id}`;
+            const url = this.baseUrl + `item/view/${id}`;
             window.open(url, "_blank");
         },
     },

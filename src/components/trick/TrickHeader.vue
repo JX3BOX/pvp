@@ -40,7 +40,7 @@
 </template>
 
 <script>
-import { appKey } from "@/../setting.json";
+import setting from "@/../setting.json";
 import { publishLink } from "@jx3box/jx3box-common/js/utils";
 import { useStore } from "@/store";
 export default {
@@ -60,7 +60,7 @@ export default {
     computed: {
         // 发布按钮链接
         publish_link: function () {
-            return publishLink(appKey);
+            return publishLink(setting.appKey);
         },
     },
     methods: {

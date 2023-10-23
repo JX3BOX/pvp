@@ -33,10 +33,9 @@
 
 <script>
 import { showAvatar, authorLink, showBanner, buildTarget, getLink } from "@jx3box/jx3box-common/js/utils";
-import { __imgPath } from "@jx3box/jx3box-common/data/jx3box";
-import { cms as mark_map } from "@jx3box/jx3box-common/data/mark.json";
+import mark_map from "@jx3box/jx3box-common/data/mark.json";
 import { showDate } from "@jx3box/jx3box-common/js/moment.js";
-import { __Root, __OriginRoot } from "@jx3box/jx3box-common/data/jx3box.json";
+import jx3boxData from "@jx3box/jx3box-common/data/jx3box.json";
 export default {
     name: "ListItem",
     props: ["item", "order", "caller"],
@@ -51,7 +50,7 @@ export default {
             return this.item?.client;
         },
         rootLink() {
-            return this.client !== "std" ? __OriginRoot : __Root;
+            return this.client !== "std" ? jx3boxData.__OriginRoot : jx3boxData.__Root;
         },
     },
     watch: {},
@@ -60,7 +59,7 @@ export default {
             if (item.post_banner) {
                 return showBanner(item.post_banner);
             } else {
-                return __imgPath + "image/fb_map_thumbnail/null.png";
+                return jx3boxData.__imgPath + "image/fb_map_thumbnail/null.png";
             }
         },
         format: function (item, key) {
@@ -86,7 +85,7 @@ export default {
             return val ? `color:${val};font-weight:600;` : "";
         },
         showMark: function (val) {
-            return mark_map[val] || val;
+            return mark_map.cms[val] || val;
         },
         showAvatar: function (userinfo) {
             return showAvatar(userinfo?.user_avatar);

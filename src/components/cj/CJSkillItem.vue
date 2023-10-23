@@ -32,7 +32,7 @@
 <script>
 import { iconLink } from "@jx3box/jx3box-common/js/utils";
 import Jx3Skill from "./Skill.vue";
-import { __Root } from "@jx3box/jx3box-common/data/jx3box.json";
+import jx3boxData from "@jx3box/jx3box-common/data/jx3box.json";
 export default {
     name: "SkillItem",
     props: {
@@ -70,8 +70,7 @@ export default {
     methods: {
         iconLink,
         getUrl(id) {
-            const domain = process.env.NODE_ENV === "development" ? __Root : location.origin + "/";
-            const url = domain + `app/database/?type=skill&client=${this.client}&query=${id}`;
+            const url = jx3boxData.__OriginRoot + `app/database/?type=skill&client=${this.client}&query=${id}`;
             window.open(url, "_blank");
         },
     },

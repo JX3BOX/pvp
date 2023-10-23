@@ -1,8 +1,8 @@
 <template>
     <div class="m-cj-extra">
-        <div class="m-extra-info">
+        <!-- <div class="m-extra-info">
             <CJIntro></CJIntro>
-        </div>
+        </div> -->
         <div class="m-extra-bottom">
             <div class="m-extra-tabs">
                 <div
@@ -41,7 +41,7 @@ import { markRaw } from "vue";
 import { useStore } from "@/store";
 const $store = useStore();
 
-import CJIntro from "./CJIntro.vue";
+// import CJIntro from "./CJIntro.vue";
 import CJStrategy from "./CJStrategy.vue";
 import CJPoints from "./CJPoints.vue";
 import { statusMap } from "@/assets/data/desertPoints";
@@ -50,7 +50,7 @@ export default {
     name: "CJExtra",
     components: {
         CJStrategy,
-        CJIntro,
+        // CJIntro,
         CJPoints,
     },
     data() {

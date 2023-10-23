@@ -306,7 +306,7 @@ import { markRaw } from "vue";
 import ReviewPoint from "./ReviewPoint.vue";
 import PointComment from "./PointComment.vue";
 import { getMapList, getPoints, addPoint, getMyPoints, delPoint, updatePoint, reviewPoint } from "@/service/cj";
-import { __imgPath } from "@jx3box/jx3box-common/data/jx3box.json";
+import jx3boxData from "@jx3box/jx3box-common/data/jx3box.json";
 import mapPath from "@/assets/data/mapPath.json";
 import { cloneDeep, pick } from "lodash";
 import User from "@jx3box/jx3box-common/js/user.js";
@@ -328,7 +328,7 @@ export default {
             // paths data
             mapPath: markRaw(mapPath),
             // img cdn
-            imgRoot: __imgPath + "pve/desert/",
+            imgRoot: jx3boxData.__imgPath + "pve/desert/",
             pointMenuVisible: false, // point right-click visible
             contextMenuVisible: false, // map ...
             contextMenuPosition: { x: 0, y: 0 },
@@ -677,7 +677,7 @@ export default {
          * return map image
          */
         getMapImage(mapId) {
-            return `${__imgPath}map/maps/map_${mapId}_0.png`;
+            return `${jx3boxData.__imgPath}map/maps/map_${mapId}_0.png`;
         },
         /**
          * return all points which is approved, it means status is 1

@@ -57,8 +57,12 @@ export default {
             };
         },
         query() {
+            let subtype = this.$route.query.subtype;
+            if (subtype === "通用") {
+                subtype = "";
+            }
             return {
-                // subtype: this.$route.query.subtype,
+                subtype: subtype,
                 client: useStore().client,
                 order: "update",
             };

@@ -71,7 +71,7 @@
 <script>
 import { getBread } from "@/service/raw";
 import { getItems, getItem } from "@/service/cj";
-import { __Root } from "@jx3box/jx3box-common/data/jx3box.json";
+import jx3boxData from "@jx3box/jx3box-common/data/jx3box.json";
 import { useStore } from "@/store";
 const $store = useStore();
 
@@ -98,6 +98,9 @@ export default {
         },
         client() {
             return $store.client;
+        },
+        baseUrl() {
+            return this.client == "origin" ? jx3boxData.__OriginRoot : jx3boxData.__Root;
         },
         // 根据心法组合后的装备
         list() {
@@ -147,8 +150,8 @@ export default {
             this.showDialog = true;
         },
         getItemData(id) {
-            const item = this.allList.find((item) => item.id === id);
-            if (item.id) {
+            const item = this.allList.find((item) => item?.id === id);
+            if (item?.id) {
                 return item;
             }
             getItem(id).then((res) => {
@@ -188,8 +191,7 @@ export default {
             }
         },
         getUrl(id) {
-            const domain = process.env.NODE_ENV === "development" ? __Root : location.origin + "/";
-            const url = domain + `item/view/${id}`;
+            const url = this.baseUrl + `item/view/${id}`;
             window.open(url, "_blank");
         },
     },
