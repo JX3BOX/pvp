@@ -5,36 +5,12 @@
     color: @colorDark;
     flex: 1;
     @opH: 42px; // 地图操作栏高度
-    .m-cj-intro {
-        height: @darksideTopHeight;
-        .scrollbar(4px, #F9EACC, #333);
-        overflow-y: auto;
-        background-color: @bgColorDark1;
-        border-radius: 10px;
-        padding: 20px;
-        box-sizing: border-box;
-        .u-title {
-            .flex;
-            gap: 5px;
-            align-items: center;
-            justify-content: center;
-            padding-bottom: 10px;
-            border-bottom: 1px dashed #333;
-        }
-        .u-info {
-            font-size: 12px;
-            p {
-                text-indent: 2em;
-            }
-        }
-    }
     .m-extra-bottom {
         border-radius: 10px;
         padding: 20px;
         box-sizing: border-box;
-        margin-top: 20px;
         background-color: @bgColorDark1;
-        height: calc(@darkMapH + @opH - @darksideTopHeight - @darkImgPadding - 20px);
+        height: calc(@darkMapH + 10px);
 
         .m-extra-tabs {
             position: relative;

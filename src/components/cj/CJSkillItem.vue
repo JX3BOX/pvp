@@ -2,7 +2,7 @@
     <div class="u-skill-item">
         <div class="u-td">
             <el-popover
-                class="u-skill-popover"
+                popper-class="u-skill-popover m-simple-item-popup"
                 placement="right-start"
                 trigger="hover"
                 :visible-arrow="false"
@@ -32,7 +32,7 @@
 <script>
 import { iconLink } from "@jx3box/jx3box-common/js/utils";
 import Jx3Skill from "./Skill.vue";
-const { __Root } = require("@jx3box/jx3box-common/data/jx3box.json");
+import jx3boxData from "@jx3box/jx3box-common/data/jx3box.json";
 export default {
     name: "SkillItem",
     props: {
@@ -70,8 +70,7 @@ export default {
     methods: {
         iconLink,
         getUrl(id) {
-            const domain = process.env.NODE_ENV === "development" ? __Root : location.origin + "/";
-            const url = domain + `app/database/?type=skill&client=${this.client}&query=${id}`;
+            const url = jx3boxData.__OriginRoot + `app/database/?type=skill&client=${this.client}&query=${id}`;
             window.open(url, "_blank");
         },
     },

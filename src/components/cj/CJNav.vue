@@ -43,20 +43,19 @@ export default {
     },
     data() {
         return {
-            activeTab: "equipment",
+            activeTab: location.href.includes("origin") ? "skill" : "equipment",
             originTabs: [
                 {
                     label: "装备对比",
                     value: "equipment",
-                    client: ["std", "origin"],
+                    client: ["std"],
                     icon: "scale-to-original",
                     component: "CJEquipment",
                 },
                 {
                     label: "技能查询",
                     value: "skill",
-                    // client: ["origin"], tab都显示，在组件里面额外说明
-                    client: ["std", "origin"],
+                    client: ["origin"],
                     icon: "Search",
                     component: "CJSkill",
                 },
@@ -91,4 +90,9 @@ export default {
 
 <style lang="less">
 @import "~@/assets/css/cj/nav.less";
+.m-simple-item-popup {
+    padding: 0 !important;
+    background: none !important;
+    border: none !important;
+}
 </style>

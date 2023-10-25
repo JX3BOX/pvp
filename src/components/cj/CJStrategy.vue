@@ -43,7 +43,7 @@ export default {
         return {
             page: 1,
             pages: 1,
-            per: 10,
+            per: 15,
             total: 0,
             loading: false,
             list: [],
@@ -57,8 +57,12 @@ export default {
             };
         },
         query() {
+            // let subtype = this.$route.query.subtype;
+            // if (subtype === "通用") {
+            //     subtype = "";
+            // }
             return {
-                // subtype: this.$route.query.subtype,
+                // subtype: subtype,
                 client: useStore().client,
                 order: "update",
             };
@@ -79,11 +83,11 @@ export default {
                 ...cloneDeep(this.params),
                 ...cloneDeep(this.query),
             };
-            if (params.subtype) {
-                params.sticky = 1;
-            } else {
-                delete params.subtype;
-            }
+            // if (params.subtype) {
+            params.sticky = 1;
+            // } else {
+            //     delete params.subtype;
+            // }
             this.loading = true;
             getPosts(params)
                 .then((res) => {

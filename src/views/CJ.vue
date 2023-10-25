@@ -1,8 +1,13 @@
 <template>
     <DarkLayout>
         <div class="m-cj-content">
-            <CJIndex></CJIndex>
-            <CJExtra></CJExtra>
+            <div class="m-cj-content__top">
+                <CJIndex></CJIndex>
+                <CJExtra></CJExtra>
+            </div>
+            <div class="m-cj-content__bottom">
+                <CJIntro></CJIntro>
+            </div>
         </div>
     </DarkLayout>
 </template>
@@ -11,9 +16,10 @@
 import DarkLayout from "@/layouts/DarkLayout.vue";
 import CJIndex from "@/components/cj/CJIndex.vue";
 import CJExtra from "@/components/cj/CJExtra.vue";
+import CJIntro from "@/components/cj/CJIntro.vue";
 export default {
     name: "CJ",
-    components: { DarkLayout, CJIndex, CJExtra },
+    components: { DarkLayout, CJIndex, CJExtra, CJIntro },
     data: function () {
         return {};
     },
@@ -22,10 +28,13 @@ export default {
     mounted() {},
 };
 </script>
-<style lang="less" scoped>
+<style lang="less">
 .m-cj-content {
-    .flex;
-    flex-wrap: wrap;
-    gap: 20px;
+    .m-cj-content__top {
+        .flex;
+        align-items: flex-start;
+        flex-wrap: wrap;
+        gap: 20px;
+    }
 }
 </style>

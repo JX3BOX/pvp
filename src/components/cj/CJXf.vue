@@ -6,12 +6,12 @@
                 <img :src="currentLogo.src" :alt="currentLogo.alt" />
             </div>
             <el-select class="u-select" v-model="subtype" filterable @change="toRoute">
-                <!-- <el-option label="全部心法" value="">
+                <el-option label="全部心法" value="">
                     <div class="u-xf-option">
                         <img class="u-pic" src="@/assets/img/logo.svg" alt="全部心法" />
                         <span class="u-txt">全部心法</span>
                     </div>
-                </el-option> -->
+                </el-option>
                 <el-option v-for="(item, i) in xfMaps" :key="i" :value="item.name">
                     <div class="u-xf-option">
                         <img class="u-pic" :src="showMountIcon(item.id)" :alt="item.name" />
@@ -46,12 +46,13 @@
 </template>
 
 <script>
+import { getBread } from "@/service/raw";
 import xfMap from "@jx3box/jx3box-data/data/xf/xf.json";
 import desertXfMap from "@/assets/data/desertXf.json";
 import { iconLink } from "@jx3box/jx3box-common/js/utils";
 import { showMountIcon } from "@jx3box/jx3box-common/js/utils";
 import { getBuff } from "@/service/cj";
-import { __Root } from "@jx3box/jx3box-common/data/jx3box.json";
+import jx3boxData from "@jx3box/jx3box-common/data/jx3box.json";
 import { useStore } from "@/store";
 const $store = useStore();
 
@@ -59,13 +60,18 @@ export default {
     name: "CJXf",
     data() {
         return {
-            subtype: "冰心诀",
+            // 冰心诀
+            subtype: "",
             data: {},
+            desertXfMap: {},
         };
     },
     computed: {
         client() {
             return $store.client;
+        },
+        baseUrl() {
+            return this.client == "origin" ? jx3boxData.__OriginRoot : jx3boxData.__Root;
         },
         tab: function () {
             return this.$route.query.tab;
@@ -84,7 +90,7 @@ export default {
         // },
         // 当前心法加成id
         currentXf() {
-            const obj = this.subtype !== "" ? desertXfMap[this.subtype] || {} : {};
+            const obj = this.subtype !== "" ? this.desertXfMap[this.subtype] || {} : {};
             return obj;
         },
         currentLogo() {
@@ -106,7 +112,7 @@ export default {
                 if (subtype) {
                     this.loadBuff();
                 } else {
-                    this.toRoute("冰心诀");
+                    // this.toRoute("冰心诀");
                 }
             },
         },
@@ -143,11 +149,34 @@ export default {
                 });
             }
         },
+        loadKey() {
+            // 读取本地数据
+            const key = "pvp_desert_mount";
+            const cache = sessionStorage.getItem(key);
+            if (cache) {
+                this.desertXfMap = JSON.parse(cache);
+                // 没有缓存则发起请求获取数据
+            } else {
+                getBread({ key })
+                    .then((res) => {
+                        const obj = res.data?.data?.[0]?.html;
+                        if (obj) {
+                            sessionStorage.setItem(key, obj);
+                            this.desertXfMap = JSON.parse(obj);
+                        }
+                    })
+                    .catch(() => {
+                        this.desertXfMap = desertXfMap;
+                    });
+            }
+        },
         getUrl() {
-            const domain = process.env.NODE_ENV === "development" ? __Root : location.origin + "/";
-            const url = domain + `app/database/?type=buff&query=${this.data.BuffID}&level=${this.data.Level}`;
+            const url = this.baseUrl + `app/database/?type=buff&query=${this.data.BuffID}&level=${this.data.Level}`;
             window.open(url, "_blank");
         },
+    },
+    mounted() {
+        this.loadKey();
     },
 };
 </script>

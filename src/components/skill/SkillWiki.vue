@@ -113,8 +113,7 @@ const $store = useStore();
 import { getWikiToSkill, getVersions, getWikiById } from "@/service/raw.js";
 import { publishLink, getLink, authorLink, ts2str, showAvatar } from "@jx3box/jx3box-common/js/utils";
 import dayjs from "dayjs";
-import JX3BOX from "@jx3box/jx3box-common/data/jx3box.json";
-const { __Root, __OriginRoot } = JX3BOX;
+import jx3boxData from "@jx3box/jx3box-common/data/jx3box.json";
 import User from "@jx3box/jx3box-common/js/user.js";
 import SimpleThx from "@jx3box/jx3box-vue3-ui/src/single/SimpleThx.vue";
 
@@ -149,7 +148,7 @@ export default {
             return location.href.includes("classic") || location.href.includes("origin") ? "origin" : "std";
         },
         baseUrl: function () {
-            return this.client == "origin" ? __OriginRoot : __Root;
+            return this.client == "origin" ? jx3boxData.__OriginRoot : jx3boxData.__Root;
         },
         userId() {
             return User.getInfo()?.uid;

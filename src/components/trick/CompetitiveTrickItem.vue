@@ -97,7 +97,7 @@ import "@jx3box/jx3box-talent/talent.css";
 import SimpleThx from "@jx3box/jx3box-vue3-ui/src/single/SimpleThx.vue";
 import Comment from "@jx3box/jx3box-vue3-ui/src/single/Comment.vue";
 import Avatar from "@jx3box/jx3box-vue3-ui/src/author/Avatar.vue";
-import { cms as mark_map } from "@jx3box/jx3box-common/data/mark.json";
+import mark_map from "@jx3box/jx3box-common/data/mark.json";
 export default {
     name: "CompetitiveTrickItem",
     components: {
@@ -187,7 +187,7 @@ export default {
             return str.replace(/\n/g, "<br/>");
         },
         showMark: function (val) {
-            return mark_map[val] || val;
+            return mark_map.cms[val] || val;
         },
     },
 };
