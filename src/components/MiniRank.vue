@@ -3,7 +3,7 @@
         <div class="m-ladder-carousel">
             <el-carousel height="125px" autoplay>
                 <el-carousel-item v-for="(item, index) in slideList" :key="index">
-                    <a :href="item.link">
+                    <a class="u-link" :href="item.link">
                         <img class="u-cover" :src="item.icon" alt="" />
                     </a>
                 </el-carousel-item>

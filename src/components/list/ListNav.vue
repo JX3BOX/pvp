@@ -38,6 +38,11 @@
                 <span>战斗统计分析</span>
                 <em>JX3 Combat Log</em>
             </a>
+            <a href="https://www.jx3box.com/collection/451" target="_blank">
+                <img class="u-icon" :src="getAppIcon('jcl', true)" />
+                <span>PVP监控下载</span>
+                <em>JX3 Combat Log</em>
+            </a>
         </div>
     </div>
 </template>
