@@ -1,5 +1,14 @@
 <template>
     <div class="m-rank-ladder-mini" v-loading="loading">
+        <div class="m-ladder-carousel">
+            <el-carousel height="125px" autoplay>
+                <el-carousel-item v-for="(item, index) in slideList" :key="index">
+                    <a :href="item.link">
+                        <img class="u-cover" :src="item.icon" alt="" />
+                    </a>
+                </el-carousel-item>
+            </el-carousel>
+        </div>
         <div class="m-ladder-header">
             <h3 class="m-ladder-title">
                 <span class="u-title">
@@ -176,9 +185,11 @@ import schoolid from "@jx3box/jx3box-data/data/xf/schoolid.json";
 import xfid from "@jx3box/jx3box-data/data/xf/xfid.json";
 import mountGroup from "@jx3box/jx3box-data/data/xf/mount_group.json";
 import { showSchoolIcon, showMountIcon } from "@jx3box/jx3box-common/js/utils";
+import { getMenu } from "@/service/raw.js";
 import User from "@jx3box/jx3box-common/js/user.js";
 import draggable from "vuedraggable";
 import rankMap from "@/assets/data/rankMap.json";
+import cloneDeep from "lodash/cloneDeep";
 
 const default_content = {
     id: "",
@@ -220,6 +231,8 @@ export default {
             tmpName: "",
 
             quickInput: "",
+
+            slideList: [],
         };
     },
     computed: {
@@ -269,6 +282,7 @@ export default {
     },
     mounted() {
         this.loadRankList();
+        this.loadMenu();
     },
     methods: {
         showSchoolName(id) {
@@ -312,7 +326,11 @@ export default {
             this.form.client = this.client;
             this.showDialog = true;
         },
-
+        loadMenu() {
+            getMenu("pvp_sidebar_slider").then((res) => {
+                this.slideList = cloneDeep(res);
+            });
+        },
         // 弹窗  ==================
         onLabelChange() {
             const rank = this.rankList.find((item) => item.id == this.activeName);
