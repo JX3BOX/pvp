@@ -175,6 +175,9 @@
                                     <span class="u-title" :class="`u-legend__${point.meta.type}`">{{
                                         point.pointName
                                     }}</span>
+                                    <span class="u-tip">
+                                        {{ `(X: ${point.point.x}, Y: ${point.point.y})` }}
+                                    </span>
                                 </div>
                                 <el-tag
                                     v-if="point.belongToMe"
