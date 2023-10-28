@@ -43,10 +43,20 @@
             </div>
         </div>
         <div class="m-map-index">
-            <div v-if="map" ref="map" class="m-map" :class="isEditMode && 'is-point'" @contextmenu.prevent="showMenu">
+            <div
+                v-if="map"
+                ref="map"
+                class="m-map"
+                :class="isEditMode && 'is-point'"
+                @contextmenu.prevent="showMenu"
+                @mousemove.prevent="handleMouseMove"
+            >
                 <!-- 地图 -->
                 <img class="u-map" :src="getMapImage(map)" />
-
+                <!-- 坐标提示 -->
+                <div class="u-context-tip" v-if="!contextMenuVisible" :style="tipStyle">
+                    {{ `X: ${coordinates.x}, Y: ${coordinates.y}` }}
+                </div>
                 <!-- the point right-click menu -->
                 <div
                     v-if="pointMenuVisible || contextMenuVisible"
@@ -104,7 +114,6 @@
                         </li>
                     </ul>
                 </div>
-
                 <!-- 示例点 -->
                 <img
                     v-if="!pointForm.id && legend && ((!pointMenuVisible && contextMenuVisible) || showDialog)"
@@ -325,6 +334,10 @@ export default {
             loading: false,
             maps: [],
             map: null,
+            //coordinates
+            showCoordinates: true,
+            animationFrameId: null,
+            coordinates: { x: 0, y: 0 },
             // paths data
             mapPath: markRaw(mapPath),
             // img cdn
@@ -428,6 +441,9 @@ export default {
         },
         delPointId() {
             return $store.delPointId;
+        },
+        tipStyle() {
+            return { top: this.coordinates.y + "px", left: this.coordinates.x + "px" };
         },
     },
     watch: {
@@ -607,6 +623,7 @@ export default {
                     ? JSON.parse(event.target.getAttribute("custom-data"))
                     : {};
                 this.currentRightClickPoint = data;
+                this.pointMenuVisible = true;
                 this.pointMenuVisible = true;
                 this.adjustMenuPosition(mapW, mapH);
                 return false;
@@ -854,6 +871,18 @@ export default {
             this.getPoints();
             this.getMyPoints();
         },
+        handleMouseMove(event) {
+            if (this.animationFrameId) return;
+            this.animationFrameId = requestAnimationFrame(() => {
+                event.preventDefault();
+                const mapRect = this.$refs.map.getBoundingClientRect();
+                this.coordinates = {
+                    x: event.clientX - mapRect.left,
+                    y: event.clientY - mapRect.top,
+                };
+                this.animationFrameId = null;
+            });
+        },
     },
     mounted() {
         if (!this.isLogin) {
@@ -865,6 +894,7 @@ export default {
         //     console.log(res);
         // });
     },
+    created() {},
 };
 </script>
 
