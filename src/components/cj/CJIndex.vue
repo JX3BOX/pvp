@@ -363,6 +363,9 @@ export default {
         };
     },
     computed: {
+        client() {
+            return $store.client;
+        },
         reviewVisible: {
             get() {
                 return $store.reviewVisible;
@@ -677,7 +680,7 @@ export default {
          * return map image
          */
         getMapImage(mapId) {
-            return `${jx3boxData.__imgPath}map/maps/map_${mapId}_0.png`;
+            return `${jx3boxData.__imgPath}map/${this.client == "std" ? "maps" : "maps_origin"}/map_${mapId}_0.png`;
         },
         /**
          * return all points which is approved, it means status is 1
