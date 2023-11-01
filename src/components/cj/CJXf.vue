@@ -6,12 +6,6 @@
                 <img :src="currentLogo.src" :alt="currentLogo.alt" />
             </div>
             <el-select class="u-select" v-model="subtype" filterable @change="toRoute">
-                <el-option label="全部心法" value="">
-                    <div class="u-xf-option">
-                        <img class="u-pic" src="@/assets/img/logo.svg" alt="全部心法" />
-                        <span class="u-txt">全部心法</span>
-                    </div>
-                </el-option>
                 <el-option v-for="(item, i) in xfMaps" :key="i" :value="item.name">
                     <div class="u-xf-option">
                         <img class="u-pic" :src="showMountIcon(item.id)" :alt="item.name" />
@@ -61,7 +55,7 @@ export default {
     data() {
         return {
             // 冰心诀
-            subtype: "",
+            subtype: "通用",
             data: {},
             desertXfMap: {},
         };
@@ -78,7 +72,14 @@ export default {
         },
         xfMaps() {
             delete xfMap["山居剑意"];
-            return Object.values(xfMap).filter((item) => item.client.includes(this.client));
+            const defense = ["云裳心经", "离经易道", "补天诀", "相知", "灵素"];
+            const healing = ["铁牢律", "洗髓经", "明尊琉璃体", "铁骨衣"];
+            return Object.values(xfMap)
+                .filter((item) => item.client.includes(this.client))
+                .filter((item) => {
+                    return ![...defense, ...healing].includes(item.name);
+                })
+                .reverse();
         },
         // computedXfMaps() {
         //     return this.xfMaps.map((item) => {
@@ -107,7 +108,7 @@ export default {
             deep: true,
             handler(query) {
                 const { subtype } = query;
-                this.subtype = subtype || "";
+                this.subtype = subtype || "通用";
                 this.data = {};
                 if (subtype) {
                     this.loadBuff();
