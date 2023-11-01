@@ -5,10 +5,10 @@
                 <el-select style="width: 150px" v-model="map" @change="mapChange">
                     <template #prefix>地图</template>
                     <el-option
-                        v-for="item in maps"
-                        :key="item.value"
-                        :label="item.label"
-                        :value="item.value"
+                        v-for="item in mapPath"
+                        :key="item.mapId"
+                        :label="item.name"
+                        :value="item.mapId"
                     ></el-option>
                 </el-select>
             </div>
@@ -320,6 +320,7 @@ import PointComment from "./PointComment.vue";
 import { getMapList, getPoints, addPoint, getMyPoints, delPoint, updatePoint, reviewPoint } from "@/service/cj";
 import jx3boxData from "@jx3box/jx3box-common/data/jx3box.json";
 import mapPath from "@/assets/data/mapPath.json";
+import mapPath_origin from "@/assets/data/mapPath_origin.json";
 import { cloneDeep, pick } from "lodash";
 import User from "@jx3box/jx3box-common/js/user.js";
 import { formatTime } from "@/utils";
@@ -341,8 +342,6 @@ export default {
             showCoordinates: true,
             animationFrameId: null,
             coordinates: { x: 0, y: 0 },
-            // paths data
-            mapPath: markRaw(mapPath),
             // img cdn
             imgRoot: jx3boxData.__imgPath + "pve/desert/",
             pointMenuVisible: false, // point right-click visible
@@ -381,6 +380,10 @@ export default {
     computed: {
         client() {
             return $store.client;
+        },
+        // paths data
+        mapPath() {
+            return markRaw(this.client === "origin" ? mapPath_origin : mapPath);
         },
         reviewVisible: {
             get() {
