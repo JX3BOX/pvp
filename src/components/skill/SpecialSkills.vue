@@ -93,13 +93,7 @@ export default {
             return iconLink(id);
         },
         loadGroup() {
-            const params = {
-                client: this.client,
-            };
-            if (this.school !== "") {
-                params.school = this.school;
-            }
-            getSpecialSkillGroup(params).then((res) => {
+            getSpecialSkillGroup().then((res) => {
                 this.types = res.data.data
                     .map((item) => {
                         return {
@@ -113,7 +107,12 @@ export default {
                         return {
                             ...item,
                             skills: item.skills
-                                .filter((skill) => skill?.mount == this.mount || !skill?.mount)
+                                .filter(
+                                    (skill) =>
+                                        (skill?.mount == this.mount || !skill?.mount) &&
+                                        skill?.school == this.school &&
+                                        skill?.client == this.client
+                                )
                                 .sort((a, b) => a.idKey - b.idKey),
                         };
                     });
