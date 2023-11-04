@@ -201,7 +201,7 @@
 import { markRaw, ref } from "vue";
 import { useStore } from "@/store";
 import xfmap from "@jx3box/jx3box-data/data/xf/xf.json";
-import { getSkills, getTalents, getTalentVersions, getSkill, getBread, getSkillAudios } from "../service/raw";
+import { getSkills, getTalents, getSkill, getBread, getSkillAudios } from "../service/raw";
 import { iconLink, showMountIcon } from "@jx3box/jx3box-common/js/utils";
 import { getRecipe } from "@/service/node";
 import relation from "@jx3box/jx3box-data/data/xf/relation.json";
@@ -526,12 +526,12 @@ export default {
         installTalent: async function () {
             await getBread({ key: "pvp_talent_version" }).then((res) => {
                 this.version = res.data?.data?.[0]?.html;
-            });
-            await getTalentVersions().then((res) => {
-                this.version = this.version || res.data?.[0]?.version;
                 this.talentDriver = new JX3_QIXUE({ version: this.version });
                 this.reloadTalent();
             });
+            // await getTalentVersions().then((res) => {
+            //     this.version = this.version || res.data?.[0]?.version;
+            // });
         },
         reloadTalent() {
             if (!this.subtype || this.subtype == "通用") return;
