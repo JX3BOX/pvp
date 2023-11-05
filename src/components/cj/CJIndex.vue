@@ -951,8 +951,8 @@ export default {
                 const mapRect = this.$refs.map.getBoundingClientRect();
                 if (this.isEditMode) {
                     this.coordinates = {
-                        x: (event.clientX - mapRect.left) / this.coefficient,
-                        y: (event.clientY - mapRect.top) / this.coefficient,
+                        x: parseInt((event.clientX - mapRect.left) / this.coefficient),
+                        y: parseInt((event.clientY - mapRect.top) / this.coefficient),
                     };
                 }
                 this.animationFrameId = null;
