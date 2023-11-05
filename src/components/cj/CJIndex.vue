@@ -16,7 +16,7 @@
             <div class="m-legends">
                 <div
                     class="u-legend"
-                    :class="(!selectedLegends.length || selectedLegends.length === legends.length) && 'is-active'"
+                    :class="selectedLegends.length === legends.length && 'is-active'"
                     @click="handleClickAll"
                 >
                     <label class="u-label">全部</label>
@@ -27,7 +27,7 @@
                     :key="legend.value"
                     :class="
                         selectedLegends.includes(legend.value) &&
-                        selectedLegends.length !== legends.length &&
+                        // selectedLegends.length !== legends.length &&
                         'is-active'
                     "
                     @click="setLegend(legend)"
@@ -180,7 +180,7 @@
                                         point.pointName
                                     }}</span>
                                     <span class="u-tip">
-                                        {{ `(X: ${point.point.x}, Y: ${point.point.y})` }}
+                                        {{ `(X: ${Math.floor(point.point.x)}, Y: ${Math.floor(point.point.y)})` }}
                                     </span>
                                 </div>
                                 <el-tag
@@ -383,9 +383,9 @@ export default {
             // originMyPoints: [],
             // myPoints: [],
             points: [],
-            selectedLegends: [], // 标点图例
             legendSize: 30, // legend show size
             legends: markRaw(legends),
+            selectedLegends: [markRaw(legends).find(({ value }) => value === "goods").value], // 标点图例，默认大量物资
             // point status map
             statusMap: markRaw(statusMap),
             pointForm: {
@@ -463,7 +463,7 @@ export default {
             const points = $store.myPoints
                 .filter((item) => item.status !== 1) // points includes  status 0 2 of myPoints
                 .concat(this.points, this.markPoints)
-                .filter((item) => !this.selectedLegends.length || this.selectedLegends.includes(item.meta.type)) // filter legend
+                .filter((item) => this.selectedLegends.includes(item.meta.type)) // filter legend
                 .map((item) => {
                     return {
                         ...item,
@@ -674,20 +674,22 @@ export default {
         showMenu(event) {
             event.preventDefault();
             // get the location of container
-            const mapRect = this.$refs.map.getBoundingClientRect();
-            const mapW = mapRect.width;
-            const mapH = mapRect.height;
+            // const mapRect = this.$refs.map.getBoundingClientRect();
+            // const mapW = mapRect.width;
+            // const mapH = mapRect.height;
 
             // calculate the location of the right-click menu
-            this.contextMenuPosition = {
-                x: event.clientX - mapRect.left,
-                y: event.clientY - mapRect.top,
-            };
+            // this.contextMenuPosition = {
+            //     x: event.clientX - mapRect.left,
+            //     y: event.clientY - mapRect.top,
+            // };
+            this.contextMenuPosition = this.coordinates;
             // use to formData
-            this.contextMenuPositionSave = {
-                x: event.clientX - mapRect.left,
-                y: event.clientY - mapRect.top,
-            };
+            // this.contextMenuPositionSave = {
+            //     x: event.clientX - mapRect.left,
+            //     y: event.clientY - mapRect.top,
+            // };
+            this.contextMenuPositionSave = this.coordinates;
             if (event.target.className === "u-point__img") {
                 // the mouse click on the existing point
                 const data = event.target.getAttribute("custom-data")
@@ -696,14 +698,14 @@ export default {
                 this.currentRightClickPoint = data;
                 this.pointMenuVisible = true;
                 this.pointMenuVisible = true;
-                this.adjustMenuPosition(mapW, mapH);
+                // this.adjustMenuPosition(mapW, mapH);
                 return false;
             }
             this.pointMenuVisible = false;
             if (!this.isEditMode) return;
 
             this.contextMenuVisible = true;
-            this.adjustMenuPosition(mapW, mapH);
+            // this.adjustMenuPosition(mapW, mapH);
         },
         adjustMenuPosition(mapW, mapH) {
             this.$nextTick(() => {
@@ -814,8 +816,8 @@ export default {
                 // add
                 formData.map = this.map;
                 formData.point = {
-                    x: this.contextMenuPositionSave.x / this.coefficient,
-                    y: this.contextMenuPositionSave.y / this.coefficient,
+                    x: this.contextMenuPositionSave.x,
+                    y: this.contextMenuPositionSave.y,
                 };
             } else {
                 // update
@@ -951,8 +953,8 @@ export default {
                 const mapRect = this.$refs.map.getBoundingClientRect();
                 if (this.isEditMode) {
                     this.coordinates = {
-                        x: parseInt((event.clientX - mapRect.left) / this.coefficient),
-                        y: parseInt((event.clientY - mapRect.top) / this.coefficient),
+                        x: Math.floor((event.clientX - mapRect.left) / this.coefficient),
+                        y: Math.floor((event.clientY - mapRect.top) / this.coefficient),
                     };
                 }
                 this.animationFrameId = null;
@@ -964,8 +966,8 @@ export default {
                 return;
             }
             const length = this.selectedLegends.length;
-            if (length === this.legends.length) {
-                this.selectedLegends = [this.legends[0].value];
+            if (length < this.legends.length) {
+                this.selectedLegends = this.legends.map(({ value }) => value);
             } else {
                 this.selectedLegends = [];
             }

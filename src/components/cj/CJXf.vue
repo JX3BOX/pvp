@@ -55,7 +55,7 @@ export default {
     data() {
         return {
             // 冰心诀
-            subtype: "通用",
+            subtype: "冰心诀",
             data: {},
             desertXfMap: {},
         };
@@ -78,8 +78,7 @@ export default {
                 .filter((item) => item.client.includes(this.client))
                 .filter((item) => {
                     return ![...defense, ...healing].includes(item.name);
-                })
-                .reverse();
+                });
         },
         // computedXfMaps() {
         //     return this.xfMaps.map((item) => {
@@ -104,11 +103,11 @@ export default {
     },
     watch: {
         "$route.query": {
-            immediate: true,
+            immediate: false,
             deep: true,
             handler(query) {
                 const { subtype } = query;
-                this.subtype = subtype || "通用";
+                this.subtype = subtype || "冰心诀";
                 this.data = {};
                 if (subtype) {
                     this.loadBuff();
@@ -150,7 +149,7 @@ export default {
                 });
             }
         },
-        loadKey() {
+        async loadKey() {
             // 读取本地数据
             const key = "pvp_desert_mount";
             const cache = sessionStorage.getItem(key);
@@ -158,17 +157,16 @@ export default {
                 this.desertXfMap = JSON.parse(cache);
                 // 没有缓存则发起请求获取数据
             } else {
-                getBread({ key })
-                    .then((res) => {
-                        const obj = res.data?.data?.[0]?.html;
-                        if (obj) {
-                            sessionStorage.setItem(key, obj);
-                            this.desertXfMap = JSON.parse(obj);
-                        }
-                    })
-                    .catch(() => {
-                        this.desertXfMap = desertXfMap;
-                    });
+                try {
+                    const res = await getBread({ key });
+                    const obj = res.data?.data?.[0]?.html;
+                    if (obj) {
+                        sessionStorage.setItem(key, obj);
+                        this.desertXfMap = JSON.parse(obj);
+                    }
+                } catch (error) {
+                    this.desertXfMap = desertXfMap;
+                }
             }
         },
         getUrl() {
@@ -176,8 +174,16 @@ export default {
             window.open(url, "_blank");
         },
     },
-    mounted() {
-        this.loadKey();
+    async mounted() {
+        await this.loadKey();
+        const { subtype = "" } = this.$route.query || {};
+        this.subtype = subtype || "冰心诀";
+        this.data = {};
+        if (subtype) {
+            this.loadBuff();
+        } else {
+            this.toRoute("冰心诀");
+        }
     },
 };
 </script>
