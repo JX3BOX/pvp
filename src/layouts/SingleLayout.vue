@@ -23,7 +23,7 @@
             <slot></slot>
             <RightSidebar>
                 <!-- <Side :id="id" class="m-extend" /> -->
-                <PostTopic type="pvp" :id="postId"></PostTopic>
+                <PostTopic type="pvp" :id="postId" :post-banner="post_banner"></PostTopic>
             </RightSidebar>
             <Footer></Footer>
         </Main>
@@ -59,6 +59,9 @@ export default {
         },
         title() {
             return useStore().post?.title || document.title;
+        },
+        post_banner() {
+            return useStore().post?.post_banner || "";
         },
     },
     methods: {},
