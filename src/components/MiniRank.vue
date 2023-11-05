@@ -1,6 +1,6 @@
 <template>
     <div class="m-rank-ladder-mini" v-loading="loading">
-        <div class="m-ladder-carousel">
+        <!-- <div class="m-ladder-carousel">
             <el-carousel height="125px" autoplay>
                 <el-carousel-item v-for="(item, index) in slideList" :key="index">
                     <a class="u-link" :href="item.link">
@@ -8,7 +8,7 @@
                     </a>
                 </el-carousel-item>
             </el-carousel>
-        </div>
+        </div> -->
         <div class="m-ladder-header">
             <h3 class="m-ladder-title">
                 <span class="u-title">
@@ -248,8 +248,16 @@ export default {
                 const content = this.data.content ? this.data.content : [];
                 const hps = mountGroup.mount_group["治疗"];
                 return {
-                    dps: content.filter((item) => !hps.includes(~~item.id)),
-                    hps: content.filter((item) => hps.includes(~~item.id)),
+                    dps: content
+                        .filter((item) => !hps.includes(~~item.id))
+                        .sort((a, b) => {
+                            return b.num - a.num;
+                        }),
+                    hps: content
+                        .filter((item) => hps.includes(~~item.id))
+                        .sort((a, b) => {
+                            return b.num - a.num;
+                        }),
                 };
             } catch (error) {
                 return {

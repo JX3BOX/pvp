@@ -244,7 +244,7 @@
                 <div class="m-paths" v-if="map && paths.length">
                     <img
                         class="u-path"
-                        :class="`u-path__${path.key}`"
+                        :class="`u-path__${client}_${path.key}`"
                         :style="generatePathStyle(path)"
                         v-for="path in paths"
                         :key="path.key"
@@ -450,7 +450,9 @@ export default {
                 return paths.map((item) => {
                     return {
                         ...item,
-                        url: `${this.imgRoot}${this.map === 297 ? 296 : this.map}/${item.key}.png`,
+                        url: `${this.imgRoot}${this.client === "origin" ? "origin_" : ""}${
+                            this.map === 297 ? 296 : this.map
+                        }/${item.key}.png`,
                     };
                 });
             }
@@ -949,8 +951,8 @@ export default {
                 const mapRect = this.$refs.map.getBoundingClientRect();
                 if (this.isEditMode) {
                     this.coordinates = {
-                        x: (event.clientX - mapRect.left) / this.coefficient,
-                        y: (event.clientY - mapRect.top) / this.coefficient,
+                        x: parseInt((event.clientX - mapRect.left) / this.coefficient),
+                        y: parseInt((event.clientY - mapRect.top) / this.coefficient),
                     };
                 }
                 this.animationFrameId = null;
