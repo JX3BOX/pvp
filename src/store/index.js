@@ -3,7 +3,7 @@ import { defineStore } from "pinia";
 export const useStore = defineStore({
     id: "store",
     state: () => ({
-        client: location.href.includes("origin") ? "origin" : "std", //"std",
+        client: location.href.includes("origin") ? "origin" : "origin", //"std",
         activeSkill: "",
 
         userId: 0,

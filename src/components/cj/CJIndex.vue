@@ -238,10 +238,11 @@
                 <!-- 在现有地图的基础上，往右 70px为基准点，往下40像素为基准点 -->
                 <!-- 路线 -->
                 <div class="m-paths" v-if="map && paths.length">
+                    <!-- + 70 + 40 -->
                     <img
                         class="u-path"
                         :class="`u-path__${path.key}`"
-                        :style="{ left: path.x + 70 + 'px', top: path.y + 40 + 'px' }"
+                        :style="{ left: getPosition(path.x, 'left') + 'px', top: getPosition(path.y, 'top') + 'px' }"
                         v-for="path in paths"
                         :key="path.key"
                         :src="path.url"
@@ -417,7 +418,9 @@ export default {
                 return paths.map((item) => {
                     return {
                         ...item,
-                        url: `${this.imgRoot}${this.map === 297 ? 296 : this.map}/${item.key}.png`,
+                        url: `${this.imgRoot}${this.client === "origin" ? "origin_" : ""}${
+                            this.map === 297 ? 296 : this.map
+                        }/${item.key}.png`,
                     };
                 });
             }
@@ -486,6 +489,15 @@ export default {
         getLegendSrc() {
             if (!this.legend) return "";
             return this.legends.find((item) => item.value === this.legend)?.src || "";
+        },
+        getPosition(val, type) {
+            const offset = {
+                std_left: 70,
+                std_top: 40,
+                origin_left: 80,
+                origin_top: 0,
+            };
+            return val + offset[`${this.client}_${type}`];
         },
         /**
          * @params {reviewStatus} 1 is pass, 2 is refuse, 0 is reviewing

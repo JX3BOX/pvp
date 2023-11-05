@@ -105,11 +105,21 @@ export default {
                 this.list = this.allList.filter((item) => item.dwSkillID);
                 this.loading = false;
             } else {
-                await getDeserts()
+                await getDeserts({ client: this.client })
                     .then((res) => {
-                        this.allList = res.data.data;
-                        this.getTypes();
-                        this.list = this.allList.filter((item) => item.dwSkillID);
+                        if (this.client === "std") {
+                            this.allList = res.data.data.map((item) => {
+                                return {
+                                    ...item.Skill[0],
+                                };
+                            });
+                            this.list = this.allList;
+                            console.log(this.list);
+                        } else {
+                            this.allList = res.data.data;
+                            this.getTypes();
+                            this.list = this.allList.filter((item) => item.dwSkillID);
+                        }
                         sessionStorage.setItem(`deserts_${this.client}`, JSON.stringify(this.allList));
                     })
                     .finally(() => {
