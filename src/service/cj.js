@@ -87,7 +87,7 @@ function getPoints(params) {
     });
 }
 function getMyPoints(params) {
-    return $cms().get("/api/cms/pvp/desert/point/my", {
+    return $cms().get("/api/cms/pvp/desert/point/mine", {
         params,
     });
 }

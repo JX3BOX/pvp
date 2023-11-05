@@ -14,14 +14,22 @@
             </div>
             <!-- 图例 -->
             <div class="m-legends">
-                <div class="u-legend" :class="!this.legend && 'is-active'" @click="legend = ''">
+                <div
+                    class="u-legend"
+                    :class="(!selectedLegends.length || selectedLegends.length === legends.length) && 'is-active'"
+                    @click="handleClickAll"
+                >
                     <label class="u-label">全部</label>
                 </div>
                 <div
                     class="u-legend"
                     v-for="legend in legends"
                     :key="legend.value"
-                    :class="legend.value === this.legend && 'is-active'"
+                    :class="
+                        selectedLegends.includes(legend.value) &&
+                        selectedLegends.length !== legends.length &&
+                        'is-active'
+                    "
                     @click="setLegend(legend)"
                 >
                     <el-tooltip effect="dark" :content="legend.label" placement="top">
@@ -54,7 +62,7 @@
                 <!-- 地图 -->
                 <img class="u-map" :src="getMapImage(map)" />
                 <!-- 坐标提示 -->
-                <div class="u-context-tip" v-if="!contextMenuVisible" :style="tipStyle">
+                <div class="u-context-tip" v-if="!contextMenuVisible && isEditMode" :style="tipStyle">
                     {{ `X: ${coordinates.x}, Y: ${coordinates.y}` }}
                 </div>
                 <!-- the point right-click menu -->
@@ -62,7 +70,7 @@
                     v-if="pointMenuVisible || contextMenuVisible"
                     class="u-context-menu"
                     ref="contextMenu"
-                    :style="{ top: contextMenuPosition.y + 'px', left: contextMenuPosition.x + 'px' }"
+                    :style="generateContextMenuStyle()"
                 >
                     <ul v-if="contextMenuVisible">
                         <li @click="menuItemClicked('add')">
@@ -116,13 +124,14 @@
                 </div>
                 <!-- 示例点 -->
                 <img
-                    v-if="!pointForm.id && legend && ((!pointMenuVisible && contextMenuVisible) || showDialog)"
+                    v-if="
+                        !pointForm.id &&
+                        selectedLegends.length &&
+                        ((!pointMenuVisible && contextMenuVisible) || showDialog)
+                    "
                     class="u-point__0"
-                    :src="getPointInfo(legend)"
-                    :style="{
-                        top: contextMenuPositionSave.y - legendSize + 'px',
-                        left: contextMenuPositionSave.x - legendSize / 2 + 'px',
-                    }"
+                    :src="getPointInfo(selectedLegends[0])"
+                    :style="generateExamplePointStyle()"
                 />
 
                 <!-- 点位 -->
@@ -132,12 +141,7 @@
                         :class="[point.belongToMe ? 'is-my-point' : '', point.isMark ? 'is-mark' : '']"
                         v-for="point in showPoints"
                         :key="point.id"
-                        :style="{
-                            width: legendSize + 'px',
-                            height: legendSize + 'px',
-                            top: point.point.y - legendSize + 'px',
-                            left: point.point.x - legendSize / 2 + 'px',
-                        }"
+                        :style="generatePointStyle(point)"
                     >
                         <el-popover
                             v-if="point.id === visiblePopId"
@@ -153,8 +157,8 @@
                                 <img
                                     class="u-point__img"
                                     :style="{
-                                        width: legendSize + 'px',
-                                        height: legendSize + 'px',
+                                        width: '100%',
+                                        height: '100%',
                                     }"
                                     :src="point.pointImg"
                                     :alt="point.pointName"
@@ -216,8 +220,8 @@
                             v-else
                             class="u-point__img"
                             :style="{
-                                width: legendSize + 'px',
-                                height: legendSize + 'px',
+                                width: '100%',
+                                height: '100%',
                             }"
                             :src="point.pointImg"
                             :alt="point.pointName"
@@ -242,7 +246,7 @@
                     <img
                         class="u-path"
                         :class="`u-path__${path.key}`"
-                        :style="{ left: getPosition(path.x, 'left') + 'px', top: getPosition(path.y, 'top') + 'px' }"
+                        :style="generatePathStyle(path)"
                         v-for="path in paths"
                         :key="path.key"
                         :src="path.url"
@@ -327,6 +331,33 @@ import User from "@jx3box/jx3box-common/js/user.js";
 import { formatTime } from "@/utils";
 import { legends, statusMap, getPointInfo } from "@/assets/data/desertPoints";
 import { authorLink } from "@jx3box/jx3box-common/js/utils";
+
+function computeScale(width) {
+    let _coefficient = 1;
+    switch (true) {
+        case width >= 3420: {
+            _coefficient = 2.5;
+            break;
+        }
+        case width >= 3000: {
+            _coefficient = 2;
+            break;
+        }
+        case width >= 2560: {
+            _coefficient = 1.5;
+            break;
+        }
+        case width >= 2200: {
+            _coefficient = 1.25;
+            break;
+        }
+        default: {
+            _coefficient = 1;
+        }
+    }
+    return _coefficient;
+}
+
 export default {
     name: "CJIndex",
     components: {
@@ -353,7 +384,7 @@ export default {
             // originMyPoints: [],
             // myPoints: [],
             points: [],
-            legend: "", // 标点图例
+            selectedLegends: [], // 标点图例
             legendSize: 30, // legend show size
             legends: markRaw(legends),
             // point status map
@@ -375,7 +406,9 @@ export default {
             currentRightClickPoint: {}, // current right-click img point
             commentVisible: false, // comment control
             commentPoint: {},
-            isEditMode: true, // 是否是编辑模式
+            isEditMode: false, // 是否是编辑模式
+            windowInnerWidth: window.innerWidth,
+            coefficient: 1, //
         };
     },
     computed: {
@@ -431,7 +464,7 @@ export default {
             const points = $store.myPoints
                 .filter((item) => item.status !== 1) // points includes  status 0 2 of myPoints
                 .concat(this.points, this.markPoints)
-                .filter((item) => !this.legend || item.meta.type === this.legend) // filter legend
+                .filter((item) => !this.selectedLegends.length || this.selectedLegends.includes(item.meta.type)) // filter legend
                 .map((item) => {
                     return {
                         ...item,
@@ -452,7 +485,10 @@ export default {
             return $store.delPointId;
         },
         tipStyle() {
-            return { top: this.coordinates.y + "px", left: this.coordinates.x + "px" };
+            return {
+                top: this.coordinates.y * this.coefficient + "px",
+                left: this.coordinates.x * this.coefficient + "px",
+            };
         },
     },
     watch: {
@@ -470,6 +506,15 @@ export default {
         isEditMode(bol) {
             if (!bol) {
                 this.cancelRightMenu();
+                this.coordinates = {
+                    x: 0,
+                    y: 0,
+                };
+            } else {
+                const { length } = this.selectedLegends;
+                if (length > 1 || length === 0) {
+                    this.selectedLegends = [this.legends[0].value];
+                }
             }
         },
         map(mapId) {
@@ -482,10 +527,14 @@ export default {
         delPointId(id) {
             this.toDel(id);
         },
+        windowInnerWidth(width) {
+            this.coefficient = computeScale(width);
+        },
     },
     methods: {
         authorLink,
         // get current legend src
+        // unused
         getLegendSrc() {
             if (!this.legend) return "";
             return this.legends.find((item) => item.value === this.legend)?.src || "";
@@ -556,7 +605,7 @@ export default {
         // set mark points
         toMark(point) {
             // reset legend
-            this.legend = point.meta.type;
+            this.selectedLegends = [point.meta.type];
             // if in myPoints
             const myPointIndex = $store.myPoints.findIndex((item) => item.id === point.id);
             if (myPointIndex !== -1) {
@@ -601,10 +650,23 @@ export default {
          * legend setting
          */
         setLegend(legend) {
-            if (this.legend === legend.value) {
-                this.legend = "";
+            const { value } = legend;
+            const _index = this.selectedLegends.indexOf(value);
+            const isLegendSelected = _index !== -1;
+            const { length } = this.selectedLegends;
+            // single selection in edit mode
+            if (this.isEditMode) {
+                this.selectedLegends = [value];
             } else {
-                this.legend = legend.value;
+                if (isLegendSelected) {
+                    // chose at least one
+                    if (length === 1) {
+                        return;
+                    }
+                    this.selectedLegends.splice(_index, 1);
+                } else {
+                    this.selectedLegends.push(value);
+                }
             }
         },
         /**
@@ -612,7 +674,8 @@ export default {
          */
         legendChange(value) {
             if (!this.pointForm.id) {
-                this.legend = value;
+                // single selection in edit mode
+                this.selectedLegends = [value];
             }
         },
         /**
@@ -680,7 +743,7 @@ export default {
                         type: "warning",
                         message: "请先登录",
                     });
-                this.pointForm.type = this.legend;
+                this.pointForm.type = this.selectedLegends[0];
                 this.showDialog = true;
             }
             this.cancelRightMenu();
@@ -760,7 +823,10 @@ export default {
             if (!id) {
                 // add
                 formData.map = this.map;
-                formData.point = this.contextMenuPositionSave;
+                formData.point = {
+                    x: this.contextMenuPositionSave.x / this.coefficient,
+                    y: this.contextMenuPositionSave.y / this.coefficient,
+                };
             } else {
                 // update
                 formData = pick(formData, ["map", "point", "meta", "desc", "client", "status"]);
@@ -803,7 +869,6 @@ export default {
                 $store.myPoints.unshift(newData);
             }
             $store.originMyPoints = cloneDeep($store.myPoints);
-            this.legend = "";
             this.onClose();
         },
         /**
@@ -894,12 +959,58 @@ export default {
             this.animationFrameId = requestAnimationFrame(() => {
                 event.preventDefault();
                 const mapRect = this.$refs.map.getBoundingClientRect();
-                this.coordinates = {
-                    x: event.clientX - mapRect.left,
-                    y: event.clientY - mapRect.top,
-                };
+                if (this.isEditMode) {
+                    this.coordinates = {
+                        x: (event.clientX - mapRect.left) / this.coefficient,
+                        y: (event.clientY - mapRect.top) / this.coefficient,
+                    };
+                }
                 this.animationFrameId = null;
             });
+        },
+        handleClickAll() {
+            // can't select all in edit mode
+            if (this.isEditMode) {
+                return;
+            }
+            const length = this.selectedLegends.length;
+            if (length === this.legends.length) {
+                this.selectedLegends = [this.legends[0].value];
+            } else {
+                this.selectedLegends = [];
+            }
+        },
+        generatePathStyle(path) {
+            return {
+                left: (path.x + 70) * this.coefficient + "px",
+                top: (path.y + 40) * this.coefficient + "px",
+                transform: `scale(${this.coefficient})`,
+            };
+        },
+        generatePointStyle(point) {
+            return {
+                width: this.legendSize * this.coefficient + "px",
+                height: this.legendSize * this.coefficient + "px",
+                top: (point.point.y - this.legendSize) * this.coefficient + "px",
+                left: (point.point.x - this.legendSize / 2) * this.coefficient + "px",
+            };
+        },
+        generateExamplePointStyle() {
+            return {
+                width: this.legendSize * this.coefficient + "px",
+                height: this.legendSize * this.coefficient + "px",
+                top: (this.contextMenuPositionSave.y - this.legendSize) * this.coefficient + "px",
+                left: (this.contextMenuPositionSave.x - this.legendSize / 2) * this.coefficient + "px",
+            };
+        },
+        generateContextMenuStyle() {
+            return {
+                top: this.contextMenuPosition.y * this.coefficient + "px",
+                left: this.contextMenuPosition.x * this.coefficient + "px",
+            };
+        },
+        handleResize() {
+            this.windowInnerWidth = window.innerWidth;
         },
     },
     mounted() {
@@ -911,6 +1022,11 @@ export default {
         // reviewPoint(3).then((res) => {
         //     console.log(res);
         // });
+        this.coefficient = computeScale(window.innerWidth);
+        window.addEventListener("resize", this.handleResize);
+    },
+    unmounted() {
+        window.removeEventListener("resize", this.handleResize);
     },
     created() {},
 };

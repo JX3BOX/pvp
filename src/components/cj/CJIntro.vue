@@ -99,7 +99,7 @@ export default {
 <style lang="less">
 .m-cj-intro {
     margin-top: 20px;
-    max-width: 2120px;
+    // max-width: 2120px;
     // height: @darksideTopHeight;
     .scrollbar(4px, #F9EACC, #333);
     overflow-y: auto;

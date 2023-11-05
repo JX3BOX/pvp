@@ -104,8 +104,6 @@
     .flex;
     justify-content: center;
     gap: 20px;
-    width: @darkMapW;
-    height: calc(@darkMapH - @darkImgPadding * 2);
     border: 15px solid #111827;
     .r(4px);
     border-top-left-radius: 0;
@@ -118,20 +116,50 @@
     .m-map {
         position: relative;
         text-align: center;
-        width: 1024px;
         height: calc(@darkMapH - @darkImgPadding * 2);
         flex: none;
         .r(4px);
         overflow: hidden;
-        // overflow: hidden;
         &.is-point {
             cursor: crosshair;
         }
         .u-map {
-            position: absolute;
+            position: relative;
             left: 0;
             top: -@darkImgPadding;
             .size(100%, @darkMapH);
+        }
+        @media screen and (min-width: 2200px) {
+            height: calc((@darkMapH - @darkImgPadding * 2) * 1.25);
+            .u-map {
+                width: calc(@darkMapW * 1.25);
+                height: calc(@darkMapH * 1.25);
+                top: -@darkImgPadding * 1.25;
+            }
+        }
+        @media screen and (min-width: 2560px) {
+            height: calc((@darkMapH - @darkImgPadding * 2) * 1.5);
+            .u-map {
+                width: calc(@darkMapW * 1.5);
+                height: calc(@darkMapH * 1.5);
+                top: -@darkImgPadding * 1.5;
+            }
+        }
+        @media screen and (min-width: 3000px) {
+            height: calc((@darkMapH - @darkImgPadding * 2) * 2);
+            .u-map {
+                width: calc(@darkMapW * 2);
+                height: calc(@darkMapH * 2);
+                top: -@darkImgPadding * 2;
+            }
+        }
+        @media screen and (min-width: 3420px) {
+            height: calc((@darkMapH - @darkImgPadding * 2) * 2.5);
+            .u-map {
+                width: calc(@darkMapW * 2.5);
+                height: calc(@darkMapH * 2.5);
+                top: -@darkImgPadding * 2.5;
+            }
         }
         .m-points {
             .u-point {
@@ -178,7 +206,7 @@
                 -webkit-user-drag: none;
                 -moz-user-drag: none;
                 position: absolute;
-                transform: scale(1.1);
+                transform-origin: top left;
                 &.u-path__c3 {
                     transform: scale(0.76);
                 }

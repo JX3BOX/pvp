@@ -13,10 +13,10 @@
     },
     "dependencies": {
         "@element-plus/icons-vue": "^2.1.0",
-        "@jx3box/jx3box-common": "^8.0.1",
-        "@jx3box/jx3box-data": "^3.5.2",
+        "@jx3box/jx3box-common": "^8.0.3",
+        "@jx3box/jx3box-data": "^3.5.4",
         "@jx3box/jx3box-talent": "^1.1.9",
-        "@jx3box/jx3box-vue3-ui": "^0.4.9",
+        "@jx3box/jx3box-vue3-ui": "^0.4.20",
         "@vueuse/core": "^9.13.0",
         "@vueuse/head": "^0.7.6",
         "axios": "^1.3.4",
