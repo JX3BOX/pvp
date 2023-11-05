@@ -242,10 +242,9 @@
                 <!-- 在现有地图的基础上，往右 70px为基准点，往下40像素为基准点 -->
                 <!-- 路线 -->
                 <div class="m-paths" v-if="map && paths.length">
-                    <!-- + 70 + 40 -->
                     <img
                         class="u-path"
-                        :class="`u-path__${path.key}`"
+                        :class="`u-path__${client}_${path.key}`"
                         :style="generatePathStyle(path)"
                         v-for="path in paths"
                         :key="path.key"
@@ -538,15 +537,6 @@ export default {
         getLegendSrc() {
             if (!this.legend) return "";
             return this.legends.find((item) => item.value === this.legend)?.src || "";
-        },
-        getPosition(val, type) {
-            const offset = {
-                std_left: 70,
-                std_top: 40,
-                origin_left: 80,
-                origin_top: 0,
-            };
-            return val + offset[`${this.client}_${type}`];
         },
         /**
          * @params {reviewStatus} 1 is pass, 2 is refuse, 0 is reviewing
