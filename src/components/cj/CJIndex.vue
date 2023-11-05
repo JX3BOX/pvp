@@ -824,11 +824,7 @@ export default {
                 formData = pick(formData, ["map", "point", "meta", "desc", "client", "status"]);
                 formData.status = 0;
             }
-            // this.btnLoading = true;
-            if (formData) {
-                console.log("formData", formData);
-                return;
-            }
+            this.btnLoading = true;
             const fn = id ? updatePoint(formData, id) : addPoint(formData);
             fn.then((res) => {
                 this.handlerPoint(id ? { ...formData, id } : res.data.data, id);
