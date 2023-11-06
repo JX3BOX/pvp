@@ -63,7 +63,6 @@
                 <span>当前技能暂无百科，我要</span
                 ><a
                     class="s-link el-button el-button--small is-round el-button--primary"
-                    target="_blank"
                     :href="publish_url(`skill/${activeSkill}`)"
                     >完善百科</a
                 >
