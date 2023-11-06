@@ -8,11 +8,7 @@
                         技能百科
                         <em class="u-skill-ID">(技能ID: {{ activeSkill }})</em>
                     </span>
-                    <a
-                        class="u-button el-button el-button--primary"
-                        :href="publish_url(`skill/${activeSkill}`)"
-                        target="_blank"
-                    >
+                    <a class="u-button el-button el-button--primary" :href="publish_url(`skill/${activeSkill}`)">
                         <el-icon><Edit /></el-icon>
                         <span>完善技能百科</span>
                     </a>
