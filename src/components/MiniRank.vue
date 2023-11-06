@@ -288,6 +288,14 @@ export default {
                 .filter((item) => item.id != 0 && !tank.includes(~~item.id));
         },
     },
+    watch: {
+        active: {
+            // deep: true,
+            handler() {
+                this.loadRankItem();
+            },
+        },
+    },
     mounted() {
         this.loadRankList();
         this.loadMenu();
@@ -310,7 +318,7 @@ export default {
                     } else {
                         this.active = this.rankList[0]?.id;
                     }
-                    this.loadRankItem();
+                    // this.loadRankItem();
                 })
                 .finally(() => {
                     this.loading = false;

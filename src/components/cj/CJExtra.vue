@@ -106,7 +106,7 @@ export default {
     },
     methods: {
         toPublish() {
-            const url = publishLink("pvp");
+            const url = publishLink("dps");
             window.open(url, "_blank");
         },
     },

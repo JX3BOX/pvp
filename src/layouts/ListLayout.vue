@@ -5,7 +5,6 @@
             name="竞技专栏"
             slug="pvp"
             root="/pvp"
-            :publishEnable="true"
             :adminEnable="false"
             :feedbackEnable="true"
             :crumbEnable="true"
