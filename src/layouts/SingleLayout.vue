@@ -15,6 +15,14 @@
                     {{ title }}
                 </span>
             </template>
+            <template #op-prepend>
+                <AdminDirectMessage
+                    class="u-admin-direct"
+                    :user-id="user_id"
+                    :sourceId="String(postId)"
+                    :sourceType="postType"
+                ></AdminDirectMessage>
+            </template>
         </Breadcrumb>
         <LeftSidebar :uid="user_id">
             <Nav :id="id" class="m-nav" />
@@ -37,6 +45,7 @@ import { getAppID } from "@jx3box/jx3box-common/js/utils";
 
 import Nav from "@/components/single/SingleNav.vue";
 import PostTopic from "@jx3box/jx3box-vue3-ui/src/single/PostTopic.vue";
+import AdminDirectMessage from "@jx3box/jx3box-vue3-ui/src/bread/AdminDirectMessage.vue";
 export default {
     name: "SingleLayout",
     props: {
@@ -63,11 +72,15 @@ export default {
         post_banner() {
             return useStore().post?.post_banner || "";
         },
+        postType() {
+            return useStore().post?.post_type || "";
+        },
     },
     methods: {},
     components: {
         Nav,
         PostTopic,
+        AdminDirectMessage,
     },
 };
 </script>
@@ -77,5 +90,10 @@ export default {
 .c-main {
     .mt(48px);
     padding: 0;
+}
+.u-admin-direct {
+    .pr;
+    top: -2px;
+    margin-right: 12px;
 }
 </style>
