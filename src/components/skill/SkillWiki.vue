@@ -16,8 +16,8 @@
                 <div class="m-panel-body">
                     <div class="m-wiki-meta">
                         <div class="u-meta">
-                            <em class="u-label">参与贡献</em
-                            ><a
+                            <em class="u-label">参与贡献</em>
+                            <a
                                 target="_blank"
                                 :href="`/author/${item.id}`"
                                 class="u-value u-creator"
