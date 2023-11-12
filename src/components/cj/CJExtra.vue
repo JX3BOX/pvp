@@ -106,7 +106,7 @@ export default {
     },
     methods: {
         toPublish() {
-            const url = publishLink("dps");
+            const url = publishLink("bps/?tags=PVP&topics=吃鸡");
             window.open(url, "_blank");
         },
     },
