@@ -100,12 +100,16 @@ export function getBread(params) {
     });
 }
 
+export function getBreadcrumb(key) {
+    return $cms().get(`/api/cms/breadcrumb/${key}`);
+}
+
 // 菜单
 export function getMenu(key) {
     return $cms()
         .get(`/api/cms/menu-group/${key}`)
         .then((res) => {
-            return res.data.data.menus || [];
+            return res.data?.data?.menus || [];
         });
 }
 
