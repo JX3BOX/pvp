@@ -201,7 +201,7 @@
 import { markRaw, ref } from "vue";
 import { useStore } from "@/store";
 import xfmap from "@jx3box/jx3box-data/data/xf/xf.json";
-import { getSkills, getTalents, getSkill, getBread, getSkillAudios } from "../service/raw";
+import { getSkills, getTalents, getSkill, getBreadcrumb, getSkillAudios } from "../service/raw";
 import { iconLink, showMountIcon } from "@jx3box/jx3box-common/js/utils";
 import { getRecipe } from "@/service/node";
 import relation from "@jx3box/jx3box-data/data/xf/relation.json";
@@ -524,8 +524,8 @@ export default {
         },
         // 初始化奇穴模拟器（此时渲染使用空奇穴模板）
         installTalent: async function () {
-            await getBread({ key: "pvp_talent_version" }).then((res) => {
-                this.version = res.data?.data?.[0]?.html;
+            await getBreadcrumb("pvp_talent_version").then((res) => {
+                this.version = res.data?.data?.html;
                 this.talentDriver = new JX3_QIXUE({ version: this.version });
                 this.reloadTalent();
             });
