@@ -290,7 +290,6 @@ export default {
     },
     watch: {
         active: {
-            // deep: true,
             handler() {
                 this.loadRankItem();
             },
