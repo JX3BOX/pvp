@@ -311,7 +311,7 @@ export default {
             this.loading = true;
             getRankList({ client: this.client, status: 1 })
                 .then((res) => {
-                    this.rankList = res.data || [];
+                    this.rankList = res.data ? res.data.reverse().slice(0, 10) : [];
                     // 如果激活的榜单不存在，就默认选中第一个
                     if (!this.rankList?.find((item) => item.id == this.active)) {
                         this.active = this.rankList.filter((item) => item.status)[0]?.id;
