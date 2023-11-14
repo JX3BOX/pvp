@@ -1,5 +1,5 @@
 <template>
-    <div class="p-dark-layout">
+    <div class="p-dark-layout" :class="'p-' + pageName">
         <Header></Header>
         <Breadcrumb
             name="竞技专栏"
@@ -51,6 +51,9 @@ export default {
         },
         isEditor() {
             return User.isEditor();
+        },
+        pageName() {
+            return this.$route.name;
         },
     },
     methods: {

@@ -30,6 +30,8 @@ export default {
 </script>
 <style lang="less">
 .m-cj-content {
+    min-width: 1080px;
+    overflow: auto;
     .m-cj-content__top {
         .flex;
         align-items: flex-start;
