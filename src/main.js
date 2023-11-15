@@ -34,5 +34,8 @@ for (const [key, component] of Object.entries(ElementPlusIconsVue)) {
 import { install } from "@jx3box/jx3box-vue3-ui";
 install(app);
 
+import reporter from "@jx3box/jx3box-common/js/reporter";
+reporter.installVue3(app);
+
 // 3.Mount DOM
 app.mount("#app");

@@ -32,6 +32,7 @@
             <RightSidebar>
                 <!-- <Side :id="id" class="m-extend" /> -->
                 <PostTopic type="pvp" :id="postId" :post-banner="post_banner"></PostTopic>
+                <div id="directory" class="m-pvp-directory"></div>
             </RightSidebar>
             <Footer></Footer>
         </Main>
@@ -95,5 +96,8 @@ export default {
     .pr;
     top: -2px;
     margin-right: 12px;
+}
+.m-pvp-directory {
+    margin: 15px;
 }
 </style>

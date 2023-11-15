@@ -65,6 +65,9 @@
                         </div>
                     </div>
                 </div>
+
+                <el-divider content-position="left">正文</el-divider>
+                <Article :content="post_content" @directoryRendered="updateDirectory" />
             </div>
             <div class="m-single-null" v-else>
                 <el-alert :title="null_tip" type="warning" show-icon></el-alert>
@@ -117,6 +120,7 @@ import SingleLayout from "@/layouts/SingleLayout.vue";
 import PostHeader from "@jx3box/jx3box-vue3-ui/src/single/PostHeader.vue";
 import Thx from "@jx3box/jx3box-vue3-ui/src/single/Thx.vue";
 import Comment from "@jx3box/jx3box-vue3-ui/src/single/Comment.vue";
+import Article from "@jx3box/jx3box-vue3-ui/src/editor/Article.vue";
 export default {
     name: "PvpSingle",
     components: {
@@ -124,6 +128,7 @@ export default {
         PostHeader,
         Thx,
         Comment,
+        Article,
     },
     data() {
         return {
@@ -132,6 +137,7 @@ export default {
             loading: false,
             talentDriver: null,
             authors: [],
+            directory: false,
         };
     },
     computed: {
@@ -143,6 +149,9 @@ export default {
         },
         post_title: function () {
             return this.post?.post_title;
+        },
+        post_content: function () {
+            return this.post?.post_content;
         },
         author_id: function () {
             return this.post?.post_author;
@@ -242,6 +251,9 @@ export default {
                 editable: false,
                 sq: this.talent.sq,
             });
+        },
+        updateDirectory: function (val) {
+            this.directory = val;
         },
     },
 };

@@ -7,6 +7,9 @@
                 <span class="u-marks" v-if="data.mark && data.mark.length">
                     <i v-for="mark in data.mark" class="u-mark" :key="mark">{{ showMark(mark) }}</i>
                 </span>
+                <span class="u-tv" v-if="data.include_video"
+                    ><img svg-inline class="u-tv-icon" src="@/assets/img/tv.svg" />视频</span
+                >
             </div>
             <div class="m-trick-item__thx">
                 <SimpleThx
