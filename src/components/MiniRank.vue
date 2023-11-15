@@ -1,14 +1,14 @@
 <template>
     <div class="m-rank-ladder-mini" v-loading="loading">
-        <!-- <div class="m-ladder-carousel">
-            <el-carousel height="125px" autoplay>
+        <div class="m-ladder-carousel" v-if="slideList.length">
+            <el-carousel class="m-carousel" autoplay>
                 <el-carousel-item v-for="(item, index) in slideList" :key="index">
                     <a class="u-link" :href="item.link">
-                        <img class="u-cover" :src="item.icon" alt="" />
+                        <el-image class="u-cover" :src="item.img" :alt="item.title" fit="contain" />
                     </a>
                 </el-carousel-item>
             </el-carousel>
-        </div> -->
+        </div>
         <div class="m-ladder-header">
             <h3 class="m-ladder-title">
                 <span class="u-title">
@@ -185,7 +185,7 @@ import schoolid from "@jx3box/jx3box-data/data/xf/schoolid.json";
 import xfid from "@jx3box/jx3box-data/data/xf/xfid.json";
 import mountGroup from "@jx3box/jx3box-data/data/xf/mount_group.json";
 import { showSchoolIcon, showMountIcon } from "@jx3box/jx3box-common/js/utils";
-import { getMenu } from "@/service/raw.js";
+import { getConfigBanner } from "@/service/raw.js";
 import User from "@jx3box/jx3box-common/js/user.js";
 import draggable from "vuedraggable";
 import rankMap from "@/assets/data/rankMap.json";
@@ -342,8 +342,8 @@ export default {
             this.showDialog = true;
         },
         loadMenu() {
-            getMenu("pvp_sidebar_slider").then((res) => {
-                this.slideList = cloneDeep(res);
+            getConfigBanner({ client: this.client, status: 1, per: 5, type: "pvp", subtype: "slider" }).then((res) => {
+                this.slideList = cloneDeep(res.data.data.list);
             });
         },
         // 弹窗  ==================

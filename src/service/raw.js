@@ -113,6 +113,12 @@ export function getMenu(key) {
         });
 }
 
+export function getConfigBanner(params) {
+    return $cms().get(`api/cms/config/banner`, {
+        params,
+    });
+}
+
 // 管理菜单
 export function updateMenu(key, data) {
     return $cms().put(`/api/cms/manage/menu-group/${key}`, data);
