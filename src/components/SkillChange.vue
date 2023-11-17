@@ -1,76 +1,81 @@
 <template>
     <div class="m-skill-change">
-        <!-- <div class="m-skill-change__header">
-            <h3 class="m-title">
-                <span class="m-title__text"
-                    ><img class="u-icon" svg-inline src="@/assets/img/side/history.svg" />技改历史</span
-                >
-                <el-icon v-if="isEditor" class="u-edit-icon" @click="onSettingIconClick"><Setting /></el-icon>
-            </h3>
-        </div> -->
-        <ul class="m-changelog-list m-news-list m-sideblock-list" v-if="showData">
-            <li class="u-item" v-for="(item, i) in showData" :key="i">
-                <span class="u-item-content">
-                    <el-icon><Notification /></el-icon>
-                    <em>{{ item.icon }}</em>
-                    <a :href="item.link" target="_blank" rel="noopener noreferrer">{{ item.label }}</a>
-                </span>
-                <span class="u-item-misc">{{ item.color }}</span>
-            </li>
-        </ul>
-
-        <!-- <el-dialog v-model="showDialog" title="管理技改历史" append-to-body width="700px" class="m-skill-change-pop">
-            <div class="m-content-item m-content-header">
-                <span class="u-rank-icon"></span>
-                <span class="u-label">标题</span>
-                <span class="u-label">链接</span>
-                <span class="u-label">日期</span>
-                <span class="u-rank-icon"></span>
-            </div>
-            <draggable v-model="menus" item-key="index" animation="300" handle=".u-move-icon">
-                <template #item="{ element, index }">
-                    <div class="m-content-item">
-                        <el-icon class="u-move-icon"><Rank /></el-icon>
-                        <el-input v-model="element.label"></el-input>
-                        <el-input v-model="element.link"></el-input>
-                        <el-input v-model="element.icon"></el-input>
-                        <el-icon @click="onRemove(index)" class="u-remove-icon"><Delete /></el-icon>
+        <div class="m-changelog-list">
+            <template v-for="item in data" :key="item.id">
+                <div class="m-changelog-item">
+                    <div class="m-item__left">
+                        <img class="u-zlp-logo" :src="imgLink(item)" alt="" />
+                        <div class="m-item-content">
+                            <div class="m-item__title">
+                                <time>{{ item.date }} / </time>
+                                <a
+                                    :href="item.link ? item.link : getLink('bps', item.post_id)"
+                                    target="_blank"
+                                    class="u-title"
+                                    >{{ item.title }}</a
+                                >
+                            </div>
+                            <div class="m-item__dec" v-html="nl2br(item.desc)"></div>
+                        </div>
                     </div>
-                </template>
-            </draggable>
-            <el-button icon="Plus" class="u-add-btn" @click="onAdd"></el-button>
-
-            <template #footer>
-                <div class="m-footer">
-                    <el-button type="primary" @click="onConfirm">保存</el-button>
-                    <el-button @click="onCancel">取消</el-button>
+                    <div class="m-item__right">
+                        <el-button @click="showDetail(item)" v-if="item.post_id"
+                            >技改详解&nbsp;<el-icon
+                                ><ArrowUp v-if="item.showSub"></ArrowUp><ArrowDown v-else></ArrowDown
+                            ></el-icon>
+                        </el-button>
+                    </div>
                 </div>
+                <ul class="m-changelog-sublist m-news-list m-sideblock-list" v-show="item.showSub">
+                    <template v-if="item.subList && item.subList.length">
+                        <li class="m-sublist-item u-item" v-for="subitem in item.subList" :key="subitem.id">
+                            <span class="u-item-content">
+                                <el-icon><Notification /></el-icon>
+                                <a
+                                    :href="getLink('bps', subitem.post_id)"
+                                    target="_blank"
+                                    class="u-subtitle"
+                                    rel="noopener noreferrer"
+                                    >{{ subitem.post && subitem.post.post_title }}</a
+                                >
+                            </span>
+                        </li>
+                    </template>
+                    <el-alert v-else show-icon type="warning" title="该资料片暂无技改详解" :closable="false"></el-alert>
+                </ul>
             </template>
-        </el-dialog> -->
+            <el-pagination
+                class="m-pages"
+                background
+                layout="total, prev, pager, next,jumper"
+                :hide-on-single-page="true"
+                :page-size="per"
+                :total="total"
+                v-model="page"
+                @current-change="changePage"
+            ></el-pagination>
+        </div>
     </div>
 </template>
 
 <script>
 import User from "@jx3box/jx3box-common/js/user.js";
-import { getMenu, updateMenu } from "@/service/raw.js";
 import dateFormat from "@/assets/js/dateFormat.js";
-// import draggable from "vuedraggable";
-import cloneDeep from "lodash/cloneDeep";
 import { useStore } from "@/store";
+import { getChangelog, getPostMeta } from "@/service/post";
+import { getThumbnail, getLink } from "@jx3box/jx3box-common/js/utils.js";
+import JX3BOX from "@jx3box/jx3box-common/data/jx3box.json";
 
 export default {
     name: "SkillChange",
-    components: {
-        // draggable,
-    },
+    components: {},
     data() {
         return {
             isEditor: User.isEditor(),
             data: [],
-
-            // dialog
-            showDialog: false,
-            menus: [],
+            per: 10,
+            page: 1,
+            total: 0,
         };
     },
     computed: {
@@ -80,63 +85,56 @@ export default {
                 item.type = "skill_change";
                 return item;
             });
-            // .slice(0, 5);
         },
         client() {
             return useStore().client;
-        },
-        bpsType() {
-            return this.client === "origin" ? "bps_skill_change_origin" : "bps_skill_change";
         },
     },
     mounted() {
         this.loadSkillChangeData();
     },
     methods: {
+        getLink,
         dateFormat(val) {
             return dateFormat(val, "-");
         },
-        onSettingIconClick() {
-            this.showDialog = true;
+        changePage(page) {
+            this.page = page;
+            this.loadSkillChangeData();
         },
         loadSkillChangeData() {
-            getMenu(this.bpsType).then((res) => {
-                this.data = cloneDeep(res);
-                this.menus = cloneDeep(res);
+            const params = {
+                client: this.client,
+                per: this.per,
+                page: this.page,
+            };
+            getChangelog(params).then((res) => {
+                this.data = (res.data?.data?.list || []).map((item) => {
+                    item.showSub = false;
+                    item.subList = [];
+                    return item;
+                });
+                this.total = res.data?.data?.total || 0;
             });
         },
-        onConfirm() {
-            // 去除空数据
-            const data = this.menus.filter((item) => {
-                return item.label && item.link && item.icon;
-            });
-            updateMenu(this.bpsType, { menus: data }).then(() => {
-                this.showDialog = false;
-                this.loadSkillChangeData();
-            });
+        imgLink({ zlp }) {
+            return getThumbnail(`${JX3BOX.__imgPath}image/zlp/${zlp}.png`, [200, 200]);
         },
-        onAdd() {
-            this.menus.push({
-                label: "",
-                link: "",
-                icon: "",
-                color: "",
-            });
+        nl2br(str) {
+            return str ? str.replace(/[\r\n]/g, "<br>") : "暂无描述";
         },
-        onRemove(index) {
-            this.$confirm("确定删除该条数据吗？", "提示", {
-                confirmButtonText: "确定",
-                cancelButtonText: "取消",
-                type: "warning",
-            })
-                .then(() => {
-                    this.menus.splice(index, 1);
-                })
-                .catch(() => {});
-        },
-        onCancel() {
-            this.showDialog = false;
-            this.menus = cloneDeep(this.data);
+        async showDetail(item) {
+            if (item.showSub) {
+                item.showSub = false;
+                return;
+            }
+            const params = {
+                key: "link_changelog",
+                val: item.id,
+            };
+            const res = await getPostMeta(params);
+            item.subList = res.data?.data || [];
+            item.showSub = !item.showSub;
         },
     },
 };

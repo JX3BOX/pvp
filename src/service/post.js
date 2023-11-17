@@ -21,3 +21,17 @@ export function getBoxcoinStatus() {
         },
     });
 }
+
+// 获取技改
+export function getChangelog(params) {
+    return $cms().get(`/api/cms/pve/skill/changelog`, {
+        params,
+    });
+}
+
+// 获取关联文章
+export function getPostMeta(params) {
+    return $cms().get(`/api/cms/post/meta`, {
+        params,
+    });
+}
