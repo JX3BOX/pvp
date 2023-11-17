@@ -4,7 +4,9 @@
             <template v-for="item in data" :key="item.id">
                 <div class="m-changelog-item">
                     <div class="m-item__left">
-                        <img class="u-zlp-logo" :src="imgLink(item)" alt="" />
+                        <a :href="item.link ? item.link : getLink('bps', item.post_id)" target="_blank"
+                            ><img class="u-zlp-logo" :src="imgLink(item)" alt=""
+                        /></a>
                         <div class="m-item-content">
                             <div class="m-item__title">
                                 <time>{{ item.date }} / </time>
@@ -19,10 +21,13 @@
                         </div>
                     </div>
                     <div class="m-item__right">
-                        <el-button @click="showDetail(item)" v-if="item.post_id"
-                            >技改详解&nbsp;<el-icon
-                                ><ArrowUp v-if="item.showSub"></ArrowUp><ArrowDown v-else></ArrowDown
-                            ></el-icon>
+                        <el-button
+                            @click="showDetail(item)"
+                            v-if="item.post_id"
+                            size="large"
+                            :icon="item.showSub ? 'ArrowDownBold' : 'ArrowRightBold'"
+                            type="primary"
+                            >技改详解
                         </el-button>
                     </div>
                 </div>
@@ -45,7 +50,7 @@
                 </ul>
             </template>
             <el-pagination
-                class="m-pages"
+                class="m-changelog-pages"
                 background
                 layout="total, prev, pager, next,jumper"
                 :hide-on-single-page="true"

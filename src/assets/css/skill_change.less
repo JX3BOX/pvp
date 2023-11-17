@@ -1,29 +1,33 @@
 .m-changelog-list {
     @zlpWidth: 180px;
 
-    a {
-        &:hover {
-            color: @pink;
-            box-shadow: 0 1px 0 @pink;
-        }
-    }
-
     .m-changelog-item {
         .flex;
         height: 80px;
         border-bottom: 1px dashed #eee;
-        padding: 4px 5px;
+        padding: 10px 5px;
         justify-content: space-between;
 
         font-size: 14px;
+
+        .u-title {
+            &:hover {
+                color: @pink;
+                box-shadow: 0 1px 0 @pink;
+            }
+        }
     }
     .u-zlp-logo {
         width: @zlpWidth;
         height: 100%;
+        background-color: @bg-light;
+        border-radius: 4px;
+        padding: 10px;
+        box-sizing: border-box;
     }
     .m-item__left {
         .flex;
-        gap: 10px;
+        gap: 15px;
         align-items: flex-start;
     }
 
@@ -32,10 +36,12 @@
         flex-direction: column;
         justify-content: space-around;
         height: 100%;
+        padding: 10px 0;
+        box-sizing: border-box;
     }
     .m-item__dec {
         font-size: 12px;
-        color: #555;
+        color: #888;
     }
 
     .m-item__right {
@@ -50,17 +56,26 @@
     }
     .m-sublist-item {
         border-bottom: 1px dashed #eee;
-        padding: 4px 5px !important;
+        padding: 10px !important;
         .flex;
         justify-content: space-between;
         font-size: 14px;
 
         .u-subtitle {
             margin-left: 5px;
+            &:hover {
+                color: @pink;
+            }
         }
     }
     .u-item-content {
         .flex;
         align-items: center;
     }
+}
+
+.m-changelog-pages {
+    .mt(20px);
+    .x;
+    justify-content: center;
 }
