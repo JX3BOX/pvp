@@ -123,7 +123,7 @@ export default {
             });
         },
         imgLink({ zlp }) {
-            return getThumbnail(`${JX3BOX.__imgPath}image/zlp/${zlp}.png`, [200, 200]);
+            return getThumbnail(`${JX3BOX.__cdn}image/zlp/${zlp}.png`, 200);
         },
         nl2br(str) {
             return str ? str.replace(/[\r\n]/g, "<br>") : "暂无描述";
