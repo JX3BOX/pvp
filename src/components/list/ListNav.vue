@@ -23,21 +23,21 @@
 
         <h5 class="u-title">在线应用</h5>
         <div class="m-nav-group">
-            <a href="/pz" target="_blank">
+            <!-- <a href="/pz" target="_blank">
                 <img class="u-icon" :src="getAppIcon('pz', true)" />
                 <span>配装模拟器</span>
                 <em>Assembly Simulator</em>
-            </a>
+            </a> -->
             <!-- <a href="/pvp/sandbox">
                 <img class="u-icon" :src="getAppIcon('sandbox', true)" />
                 <span>阵营沙盘</span>
                 <em>JX3 Sandbox</em>
             </a> -->
-            <a href="/jcl" target="_blank">
+            <!-- <a href="/jcl" target="_blank">
                 <img class="u-icon" :src="getAppIcon('jcl', true)" />
-                <span>战斗统计分析</span>
+                <span>战斗日志分析</span>
                 <em>JX3 Combat Log</em>
-            </a>
+            </a> -->
             <a href="/collection/451" target="_blank">
                 <img class="u-icon" :src="getAppIcon('jx3dat')" />
                 <span>PVP监控下载</span>
