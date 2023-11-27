@@ -208,11 +208,11 @@ import relation from "@jx3box/jx3box-data/data/xf/relation.json";
 import schools from "@jx3box/jx3box-data/data/xf/school.json";
 import JX3BOX from "@jx3box/jx3box-common/data/jx3box.json";
 
-import kungfumap_std from "@/assets/data/martial/kungfu_std.json";
-import kungfumap_origin from "@/assets/data/martial/kungfu_origin.json";
+import kungfumap_std from "@jx3box/jx3box-data/data/martial/kungfu_std.json";
+import kungfumap_origin from "@jx3box/jx3box-data/data/martial/kungfu_origin.json";
+import kungfus from "@jx3box/jx3box-data/data/martial/kungfuid.json";
 import pasvmap from "@/assets/data/martial/pasv.json";
 import zhenfamap from "@/assets/data/martial/zhenfa.json";
-import kungfus from "@/assets/data/martial/kungfuid.json";
 
 import { cloneDeep, flattenDeep } from "lodash";
 // 奇穴
