@@ -31,7 +31,7 @@
             <slot></slot>
             <RightSidebar>
                 <!-- <Side :id="id" class="m-extend" /> -->
-                <PostTopic type="pvp" :id="postId" :post-banner="post_banner"></PostTopic>
+                <PostTopic class="c-pvp-post__topic" type="pvp" :id="postId" :post-banner="post_banner"></PostTopic>
                 <div id="directory" class="m-pvp-directory"></div>
             </RightSidebar>
             <Footer></Footer>
@@ -99,5 +99,13 @@ export default {
 }
 .m-pvp-directory {
     margin: 15px;
+}
+
+@media screen and (max-width: @phone) {
+    .c-pvp-post__topic {
+        .c-topic-bg {
+            width: 100% !important;
+        }
+    }
 }
 </style>
