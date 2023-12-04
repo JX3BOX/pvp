@@ -1,14 +1,5 @@
 <template>
     <div class="m-rank-ladder-mini" v-loading="loading">
-        <div class="m-ladder-carousel" v-if="slideList.length">
-            <el-carousel class="m-carousel" autoplay>
-                <el-carousel-item v-for="(item, index) in slideList" :key="index">
-                    <a class="u-link" :href="item.link">
-                        <el-image class="u-cover" :src="item.img" :alt="item.title" fit="contain" />
-                    </a>
-                </el-carousel-item>
-            </el-carousel>
-        </div>
         <div class="m-ladder-header">
             <h3 class="m-ladder-title">
                 <span class="u-title">
@@ -29,7 +20,7 @@
         <div class="m-ladder-rank">
             <el-tabs v-model="activeTab">
                 <el-tab-pane label="输出" name="dps">
-                    <ul v-if="content?.dps.length">
+                    <ul v-if="content?.dps.length" class="m-ladder-rank__content">
                         <li v-for="(item, index) in content.dps" :key="item.name" class="u-link">
                             <span class="u-order" :class="highlight(index)">{{ index + 1 }}</span>
                             <img :src="showMountIcon(item.id)" alt="" class="u-img" />
@@ -39,7 +30,7 @@
                     </ul>
                 </el-tab-pane>
                 <el-tab-pane label="治疗" name="hps">
-                    <ul v-if="content?.hps.length">
+                    <ul v-if="content?.hps.length" class="m-ladder-rank__content">
                         <li v-for="(item, index) in content.hps" :key="item.name" class="u-link">
                             <span class="u-order" :class="highlight(index)">{{ index + 1 }}</span>
                             <img :src="showMountIcon(item.id)" alt="" class="u-img" />
@@ -49,6 +40,16 @@
                     </ul>
                 </el-tab-pane>
             </el-tabs>
+        </div>
+
+        <div class="m-ladder-carousel" v-if="slideList.length">
+            <el-carousel class="m-carousel" autoplay>
+                <el-carousel-item v-for="(item, index) in slideList" :key="index">
+                    <a class="u-link" :href="item.link">
+                        <el-image class="u-cover" :src="item.img" :alt="item.title" fit="contain" />
+                    </a>
+                </el-carousel-item>
+            </el-carousel>
         </div>
 
         <el-drawer
