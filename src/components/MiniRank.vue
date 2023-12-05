@@ -1,13 +1,4 @@
 <template>
-    <div class="m-ladder-carousel" v-if="slideList.length">
-        <el-carousel class="m-carousel" autoplay>
-            <el-carousel-item v-for="(item, index) in slideList" :key="index">
-                <a class="u-link" :href="item.link">
-                    <el-image class="u-cover" :src="item.img" :alt="item.title" fit="contain" />
-                </a>
-            </el-carousel-item>
-        </el-carousel>
-    </div>
     <div class="m-rank-ladder-mini" v-loading="loading">
         <div class="m-ladder-header">
             <h3 class="m-ladder-title">
@@ -173,6 +164,15 @@
                 </div>
             </template>
         </el-drawer>
+    </div>
+    <div class="m-ladder-carousel" v-if="slideList.length">
+        <el-carousel class="m-carousel" autoplay>
+            <el-carousel-item v-for="(item, index) in slideList" :key="index">
+                <a class="u-link" :href="item.link">
+                    <el-image class="u-cover" :src="item.img" :alt="item.title" fit="contain" />
+                </a>
+            </el-carousel-item>
+        </el-carousel>
     </div>
 </template>
 
