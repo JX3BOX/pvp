@@ -23,7 +23,6 @@
                     <div class="m-item__right">
                         <el-button
                             @click="showDetail(item)"
-                            v-if="item.post_id"
                             size="large"
                             :icon="item.showSub ? 'ArrowDownBold' : 'ArrowRightBold'"
                             type="primary"
