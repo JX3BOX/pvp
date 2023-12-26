@@ -11,14 +11,21 @@
     }
 }
 .m-ladder-carousel {
-    margin: 15px;
+    .r(5px);
+    padding: 0 15px 15px 15px;
+    overflow: hidden;
     .m-carousel .el-carousel__container {
         box-sizing: border-box;
-        .size(245px,138px);
+        .size(245px, 150px);
     }
     .u-cover {
         // height: 160px;
-        border-radius: 6px;
+        border-radius: 5px;
+        overflow: hidden;
+        img {
+            .r(5px);
+            height: 150px;
+        }
     }
 }
 @media screen and (max-width: @phone) {
@@ -80,8 +87,6 @@
 }
 
 .m-ladder-rank {
-    .mt(10px);
-
     .u-null {
         .x;
         .fz(12px);

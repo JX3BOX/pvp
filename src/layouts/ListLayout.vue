@@ -19,7 +19,7 @@
                 <tabs />
                 <slot></slot>
             </div>
-            <RightSidebar>
+            <RightSidebar :showToggle="true">
                 <Side class="m-extend">
                     <em>PVP交流群</em> :
                     <strong>
