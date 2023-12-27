@@ -19,7 +19,7 @@
                 <tabs />
                 <slot></slot>
             </div>
-            <RightSidebar :showToggle="true">
+            <RightSidebar :showToggle="true" class="m-pvp-right-side">
                 <Side class="m-extend">
                     <em>PVP交流群</em> :
                     <strong>
@@ -83,6 +83,11 @@ export default {
 
 <style lang="less">
 @import "@/assets/css/list.less";
+.m-pvp-right-side {
+    .c-sidebar-right-inner {
+        background: #fff;
+    }
+}
 </style>
 
 <style lang="less" scoped>
