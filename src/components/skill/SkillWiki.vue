@@ -155,7 +155,6 @@ export default {
                 source_id: this.activeSkill,
                 client: this.client,
                 type: "skill",
-                supply: 1,
             });
 
             this.wikiData = data.data;
@@ -173,11 +172,10 @@ export default {
         loadWikiVersion() {
             getVersions({ type: "skill", id: this.activeSkill }, { client: this.client }).then(
                 (res) => {
-                    res = res.data;
-                    this.versions = res.code === 200 ? res.data.versions : false;
+                    this.versions = res.data.data || [];
                 },
                 () => {
-                    this.versions = false;
+                    this.versions = [];
                 }
             );
         },
@@ -192,7 +190,7 @@ export default {
             this.showDrawer = true;
         },
         loadWikiById({ id }) {
-            getWikiById(id, { type: "skill" }).then((res) => {
+            getWikiById(id).then((res) => {
                 this.wikiData = res.data.data || {};
                 this.userData = this.wikiData?.users;
             });

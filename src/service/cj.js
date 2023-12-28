@@ -1,4 +1,4 @@
-import { $cms, $node, $helper } from "@jx3box/jx3box-common/js/https_v2";
+import { $cms, $node } from "@jx3box/jx3box-common/js/https_v2";
 import JX3BOX from "@jx3box/jx3box-common/data/jx3box.json";
 const { __imgPath } = JX3BOX;
 import axios from "axios";
@@ -37,12 +37,12 @@ function getBuff(id, level, client) {
 function getItem(item_id, client) {
     if (!item_id) return;
     let options = {
-        url: `/api/item/${item_id}`,
+        url: `/item_merged/id/${item_id}`,
         params: {
             client,
         },
     };
-    return $helper({ mute: true })(options);
+    return $node({ mute: true })(options);
 }
 // 正则匹配物品列表
 function getItemsByReg(regexp) {

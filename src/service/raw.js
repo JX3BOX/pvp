@@ -1,4 +1,4 @@
-import { $node, axios, $cms, $helper, $next } from "@jx3box/jx3box-common/js/https_v2";
+import { $node, axios, $cms, $next } from "@jx3box/jx3box-common/js/https_v2";
 import JX3BOX from "@jx3box/jx3box-common/data/jx3box.json";
 import xfmap from "@jx3box/jx3box-data/data/xf/xf.json";
 
@@ -43,9 +43,12 @@ export function getSkillAudios(school) {
 
 // 获取指定技能百科
 export function getWikiToSkill(params) {
-    return $helper()
-        .get("/api/wiki/post", {
-            params: params,
+    const { type, client, source_id } = params;
+    return $cms()
+        .get(`/api/cms/wiki/post/type/${type}/source/${source_id}`, {
+            params: {
+                client,
+            },
         })
         .then((res) => {
             return res.data;
@@ -79,19 +82,15 @@ export function getSpecialSkillList(params) {
 
 // 获取历史版本
 export function getVersions({ type, id }, params) {
-    return $helper().get(`/api/wiki/post/versions`, {
+    return $cms().get(`/api/cms/wiki/post/type/${type}/source/${id}/versions`, {
         params: {
-            ...params,
-            type,
-            source_id: id,
+            client: params.client,
         },
     });
 }
 
-export function getWikiById(post_id, params) {
-    return $helper().get(`/api/wiki/post/${post_id}`, {
-        params,
-    });
+export function getWikiById(post_id) {
+    return $cms().get(`/api/cms/wiki/post/id/${post_id}`);
 }
 
 export function getBread(params) {
