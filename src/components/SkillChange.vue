@@ -4,7 +4,7 @@
             <template v-for="item in data" :key="item.id">
                 <div class="m-changelog-item">
                     <div class="m-item__left">
-                        <a :href="item.link ? item.link : getLink('bps', item.post_id)" target="_blank"
+                        <a class="u-logo" :href="item.link ? item.link : getLink('bps', item.post_id)" target="_blank"
                             ><img class="u-zlp-logo" :src="imgLink(item)" alt=""
                         /></a>
                         <div class="m-item-content">

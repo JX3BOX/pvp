@@ -79,3 +79,13 @@
     .x;
     justify-content: center;
 }
+
+@media screen and (max-width: @phone) {
+    .m-changelog-item {
+        flex-direction: column;
+        height: auto !important;
+        .u-logo {
+            .none;
+        }
+    }
+}
