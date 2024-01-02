@@ -16,7 +16,7 @@
     overflow: hidden;
     .m-carousel .el-carousel__container {
         box-sizing: border-box;
-        .size(245px, 150px);
+        .size(100%, 150px);
     }
     .u-cover {
         // height: 160px;
@@ -24,8 +24,10 @@
         overflow: hidden;
         img {
             .r(5px);
-            height: 150px;
         }
+    }
+    .el-image__inner {
+        width: auto;
     }
 }
 @media screen and (max-width: @phone) {
