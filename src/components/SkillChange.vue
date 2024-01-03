@@ -32,7 +32,7 @@
                 </div>
                 <ul class="m-changelog-sublist m-news-list m-sideblock-list" v-show="item.showSub">
                     <template v-if="item.subList && item.subList.length">
-                        <li class="m-sublist-item u-item" v-for="subitem in item.subList" :key="subitem.id">
+                        <li class="m-changelog-sublist__item u-item" v-for="subitem in item.subList" :key="subitem.id">
                             <span class="u-item-content">
                                 <el-icon><Notification /></el-icon>
                                 <a

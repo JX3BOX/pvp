@@ -1,22 +1,50 @@
+@zlpWidth: 180px;
 .m-changelog-list {
-    @zlpWidth: 180px;
+}
 
-    .m-changelog-item {
-        .flex;
-        height: 80px;
-        border-bottom: 1px dashed #eee;
-        padding: 10px 5px;
-        justify-content: space-between;
+.m-changelog-sublist {
+    margin-left: @zlpWidth;
+    padding-left: 10px;
+}
 
-        font-size: 14px;
+.m-changelog-sublist__item {
+    border-bottom: 1px dashed #eee;
+    padding: 10px !important;
+    .flex;
+    justify-content: space-between;
+    font-size: 14px;
+    overflow: hidden;
 
-        .u-title {
-            &:hover {
-                color: @pink;
-                box-shadow: 0 1px 0 @pink;
-            }
+    .u-subtitle {
+        margin-left: 5px;
+        .nobreak;
+        &:hover {
+            color: @pink;
         }
     }
+
+    .u-item-content {
+        .flex;
+        align-items: center;
+    }
+}
+
+.m-changelog-item {
+    .flex;
+    height: 80px;
+    border-bottom: 1px dashed #eee;
+    padding: 10px 5px;
+    justify-content: space-between;
+
+    font-size: 14px;
+
+    .u-title {
+        &:hover {
+            color: @pink;
+            box-shadow: 0 1px 0 @pink;
+        }
+    }
+
     .u-zlp-logo {
         width: @zlpWidth;
         height: 86px;
@@ -25,6 +53,7 @@
         padding: 10px;
         box-sizing: border-box;
     }
+
     .m-item__left {
         .flex;
         gap: 15px;
@@ -49,29 +78,6 @@
         .flex;
         align-items: center;
     }
-
-    .m-changelog-sublist {
-        margin-left: @zlpWidth;
-        padding-left: 10px;
-    }
-    .m-sublist-item {
-        border-bottom: 1px dashed #eee;
-        padding: 10px !important;
-        .flex;
-        justify-content: space-between;
-        font-size: 14px;
-
-        .u-subtitle {
-            margin-left: 5px;
-            &:hover {
-                color: @pink;
-            }
-        }
-    }
-    .u-item-content {
-        .flex;
-        align-items: center;
-    }
 }
 
 .m-changelog-pages {
@@ -81,11 +87,18 @@
 }
 
 @media screen and (max-width: @phone) {
+    .m-changelog-list {
+    }
     .m-changelog-item {
         flex-direction: column;
         height: auto !important;
         .u-logo {
             .none;
         }
+    }
+    .m-changelog-sublist {
+        margin-left: 0;
+        padding-left: 0;
+        margin-top: 5px;
     }
 }
