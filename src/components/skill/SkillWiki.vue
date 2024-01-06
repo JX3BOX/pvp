@@ -1,19 +1,19 @@
 <template>
     <div class="m-wiki">
-        <div class="m-skill-wiki" v-if="wikiData && wikiData.post">
+        <div class="m-skill-wiki">
             <div class="m-wiki-post-panel">
                 <div class="head-title">
                     <span class="u-txt"
                         ><el-icon><Reading /></el-icon>
                         技能百科
-                        <em class="u-skill-ID">(技能ID: {{ activeSkill }})</em>
+                        <em class="u-skill-ID" v-if="wikiData && wikiData.post">(技能ID: {{ activeSkill }})</em>
                     </span>
                     <a class="u-button el-button el-button--primary" :href="publish_url(`skill/${activeSkill}`)">
                         <el-icon><Edit /></el-icon>
                         <span>完善技能百科</span>
                     </a>
                 </div>
-                <div class="m-panel-body">
+                <div v-if="wikiData && wikiData.post" class="m-panel-body">
                     <div class="m-wiki-meta">
                         <div class="u-meta">
                             <em class="u-label">参与贡献</em>
@@ -33,7 +33,17 @@
                     </div>
                     <div v-html="wikiData.post.content"></div>
                 </div>
-                <div class="m-wiki-signature">
+                <div class="m-wiki-post-empty m-panel-body" v-if="is_empty">
+                    <div class="no_skill_post" v-if="pasv_skills_data.indexOf(activeSkill) == -1">
+                        <el-icon><Warning /></el-icon>
+                        <span>暂无百科内容</span>
+                    </div>
+
+                    <div class="no_active_skill" v-else>
+                        <span>请先选择技能后查看技能百科</span>
+                    </div>
+                </div>
+                <div class="m-wiki-signature" v-if="wikiData && wikiData.post">
                     <SimpleThx
                         postType="skill"
                         :postTitle="wikiData?.post?.title"
@@ -48,12 +58,8 @@
                 </div>
             </div>
         </div>
-        <div class="m-wiki-post-empty" v-if="is_empty">
-            <!-- 非默认心法技能说明此处已选技能但无百科 -->
-
-            <!-- <div class="no_active_skill" v-if="pasv_skills_data.length<1||pasv_skills_data.indexOf(activeSkill) !== -1">
-                <span>请先选择技能后查看技能百科</span>
-            </div> -->
+        <!-- 非默认心法技能说明此处已选技能但无百科 -->
+        <!-- <div class="m-wiki-post-empty" v-if="is_empty">
             <div class="no_skill_post" v-if="pasv_skills_data.indexOf(activeSkill) == -1">
                 <el-icon><Warning /></el-icon>
                 <span>当前技能暂无百科，我要</span
@@ -67,7 +73,7 @@
             <div class="no_active_skill" v-else>
                 <span>请先选择技能后查看技能百科</span>
             </div>
-        </div>
+        </div> -->
 
         <el-drawer v-model="showDrawer" title="历史版本" class="c-wiki-revisions">
             <div class="m-revisions-panel">
