@@ -25,7 +25,7 @@
         <div class="m-archive-filter" v-if="canFilter">
             <div class="m-filter--left">
                 <!-- 版本过滤 -->
-                <clientBy @filter="filterImperceptibly" :type="client"></clientBy>
+                <clientBy @filter="filterImperceptibly" :type="client" :showWujie="true"></clientBy>
                 <!-- 角标过滤 -->
                 <markBy @filter="filterMeta"></markBy>
                 <!-- 资料片过滤 -->
