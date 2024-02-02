@@ -57,7 +57,6 @@ export default {
         },
         query: function () {
             return {
-                type: "pvp",
                 sticky: 1,
                 subtype: this.subtype,
                 order: this.order,
