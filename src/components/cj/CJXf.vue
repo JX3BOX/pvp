@@ -29,7 +29,7 @@
                     />
                     <div class="u-name-desc">
                         <div class="u-name">{{ data.Name }}</div>
-                        <div class="u-desc">{{ data.Desc }}</div>
+                        <div class="u-desc" v-html="showDesc(data.Desc)"></div>
                     </div>
                 </div>
                 <div v-else class="u-no-data">当前心法没有加成。</div>
@@ -118,6 +118,9 @@ export default {
         },
     },
     methods: {
+        showDesc(desc = "") {
+            return desc.replace(/\\n/g, "");
+        },
         iconLink,
         showMountIcon,
         toRoute(subtype) {
