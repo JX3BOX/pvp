@@ -322,7 +322,8 @@ export default {
         },
         pasv_info: function () {
             return (
-                this.data.filter((d) => d.SkillID === this.pasv_skills[0])?.sort((a, b) => b.Level - a.Level)?.[0] || {}
+                this.data.filter((d) => d.SkillID === this.pasv_skills[0])?.[0] || {}
+                // ?.sort((a, b) => b.Level - a.Level)?.[0] || {}
             );
         },
         // 阵法id
