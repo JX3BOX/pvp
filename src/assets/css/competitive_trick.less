@@ -15,6 +15,29 @@
                 }
             }
         }
+
+        .u-push {
+            // .pa;
+            // .rt(0);
+            .flex;
+            align-items: center;
+            gap: 2px;
+        }
+        .u-push__time {
+            .fz(12px);
+            color: #999;
+            border: 1px solid #eee;
+            background-color: @bg-light;
+            margin-right: 5px;
+            .r(3px);
+            padding: 5px;
+
+            &.is-recent {
+                color: #48c10f;
+                border-color: #48c10f;
+                background-color: #f8fff5;
+            }
+        }
     }
 }
 .u-competitive-trick-null {
@@ -289,6 +312,12 @@
     .m-competitive-trick {
         max-width: 1560px;
         overflow-x: auto;
+
+        .m-trick-item {
+            .u-push {
+                .none;
+            }
+        }
     }
     .m-trick-item__content {
         flex-direction: column;

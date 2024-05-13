@@ -12,6 +12,8 @@
             <CompetitiveTrickItemVue v-for="item in data" :key="item.id" :data="item" :preset="presetConfig" />
         </div>
         <el-alert v-else class="m-strategy-null" title="没有找到相关条目" type="info" center show-icon></el-alert>
+
+        <design-task v-model="showDesignTask" :post="currentPost"></design-task>
     </div>
 </template>
 
@@ -24,6 +26,10 @@ import TrickHeader from "./trick/TrickHeader.vue";
 import { publishLink } from "@jx3box/jx3box-common/js/utils";
 import { cloneDeep } from "lodash";
 import { removeEmpty } from "@/utils";
+import User from "@jx3box/jx3box-common/js/user";
+import { getDesignLog } from "@/service/design";
+import DesignTask from "@jx3box/jx3box-vue3-ui/src/bread/DesignTask.vue";
+import bus from "@jx3box/jx3box-vue3-ui/utils/bus";
 
 export default {
     name: "CompetitiveTrick",
@@ -31,6 +37,7 @@ export default {
         CompetitiveTrickItemVue,
         TrickNotice,
         TrickHeader,
+        DesignTask,
     },
     data() {
         return {
@@ -40,6 +47,9 @@ export default {
 
             presetConfig: {},
             loading: false,
+
+            currentPost: null,
+            showDesignTask: false,
         };
     },
     computed: {
@@ -76,14 +86,36 @@ export default {
             },
         },
     },
+    mounted() {
+        bus.on("design-task", (post) => {
+            this.currentPost = post;
+            this.showDesignTask = true;
+        });
+    },
+    beforeUnmount() {
+        bus.off("design-task");
+    },
     methods: {
         publishLink,
         loadData() {
             this.loading = true;
             const params = removeEmpty(cloneDeep(this.query));
             getPosts(params)
-                .then((res) => {
+                .then(async (res) => {
                     this.data = res.data.data.list || [];
+
+                    if (User.hasPermission("push_banner") && !this.isPhone) {
+                        const ids = this.data.map((item) => item.ID);
+                        const logs = await getDesignLog({ source_type: "pvp", ids: ids.join(",") }).then(
+                            (res) => res.data.data
+                        );
+
+                        this.data = this.data.map((item) => {
+                            const log = logs.find((log) => log.source_id == item.ID) || null;
+                            item.log = log;
+                            return item;
+                        });
+                    }
                 })
                 .finally(() => {
                     this.loading = false;

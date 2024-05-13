@@ -1,5 +1,5 @@
 <template>
-    <div>
+    <div class="c-pvp-list">
         <Header></Header>
         <Breadcrumb
             name="竞技专栏"
@@ -86,6 +86,11 @@ export default {
 .m-pvp-right-side {
     .c-sidebar-right-inner {
         background: #fff;
+    }
+}
+.c-pvp-list {
+    .u-feedback {
+        margin-right: 0 !important;
     }
 }
 </style>

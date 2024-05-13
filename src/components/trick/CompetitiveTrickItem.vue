@@ -13,6 +13,14 @@
                 </span>
             </div>
             <div class="m-trick-item__thx">
+                <span class="u-push" v-if="hasPermission">
+                    <time v-if="showPushDate" class="u-push__time" :class="{ 'is-recent': isRecent() }"
+                        >{{ pushDate }} 已推送</time
+                    >
+                    <el-button class="u-push__btn" size="small" type="warning" @click="onPush" icon="Promotion"
+                        >推送</el-button
+                    >
+                </span>
                 <SimpleThx
                     postType="pvp"
                     :postTitle="data?.post_title"
@@ -102,6 +110,10 @@ import SimpleThx from "@jx3box/jx3box-vue3-ui/src/single/SimpleThx.vue";
 import Comment from "@jx3box/jx3box-vue3-ui/src/single/Comment.vue";
 import Avatar from "@jx3box/jx3box-vue3-ui/src/author/Avatar.vue";
 import mark_map from "@jx3box/jx3box-common/data/mark.json";
+import { showDate } from "@jx3box/jx3box-common/js/moment.js";
+import User from "@jx3box/jx3box-common/js/user";
+import bus from "@jx3box/jx3box-vue3-ui/utils/bus";
+import dayjs from "dayjs";
 export default {
     name: "CompetitiveTrickItem",
     components: {
@@ -138,6 +150,16 @@ export default {
         },
         skills() {
             return this.data?.post_meta.data;
+        },
+        hasPermission() {
+            return User.hasPermission("push_banner");
+        },
+        pushDate({ data }) {
+            const date = data?.log?.push_at;
+            return showDate(new Date(date));
+        },
+        showPushDate() {
+            return Boolean(this.data?.log);
         },
     },
     watch: {
@@ -192,6 +214,15 @@ export default {
         },
         showMark: function (val) {
             return mark_map.cms[val] || val;
+        },
+        showDate,
+        // 是否为30天内
+        isRecent: function () {
+            const date = this.data?.log?.push_at;
+            return dayjs().diff(dayjs(date), "day") < 30;
+        },
+        onPush() {
+            bus.emit("design-task", this.data);
         },
     },
 };
