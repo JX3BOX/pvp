@@ -199,6 +199,9 @@ export default {
         allow_comment: function () {
             return !this.post?.comment;
         },
+        community_id: function () {
+            return this.post?.community_id || 0;
+        },
     },
     mounted() {
         this.loadData();
@@ -254,6 +257,20 @@ export default {
         },
         updateDirectory: function (val) {
             this.directory = val;
+        },
+    },
+    watch: {
+        community_id: {
+            immediate: true,
+            handler(val) {
+                if (val && val != 0) {
+                    // 防止死循环
+                    if (location.href.includes(`/community/${val}`)) {
+                        return;
+                    }
+                    location.href = `/community/${val}`;
+                }
+            },
         },
     },
 };
