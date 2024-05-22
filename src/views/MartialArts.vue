@@ -214,7 +214,7 @@ import kungfus from "@jx3box/jx3box-data/data/martial/kungfuid.json";
 import pasvmap from "@/assets/data/martial/pasv.json";
 import zhenfamap from "@/assets/data/martial/zhenfa.json";
 
-import { cloneDeep, flattenDeep } from "lodash";
+import { cloneDeep, flattenDeep, uniqBy } from "lodash";
 // 奇穴
 import JX3_QIXUE from "@jx3box/jx3box-talent";
 import "@jx3box/jx3box-talent/talent.css";
@@ -331,7 +331,10 @@ export default {
             return (this.mountid && zhenfamap[this.mountid]) || [];
         },
         zhenfa_info: function () {
-            return this.data.filter((d) => d.SkillID === this.zhenfa_skills[0]);
+            return uniqBy(
+                this.data.filter((d) => d.SkillID === this.zhenfa_skills[0]),
+                (item) => `${item.SkillID}_${item.Level}`
+            );
         },
         zhenfaBg() {
             const school = xfmap[this.subtype]?.school;
