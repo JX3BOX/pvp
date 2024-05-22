@@ -16,7 +16,7 @@
                 </span>
             </template>
             <template #op-prepend>
-                <AdminDrop v-if="isTeammate" :post="post" :user-id="user_id" />
+                <AdminDrop v-if="isTeammate" :post="post" :user-id="user_id" :showMove="true" />
             </template>
         </Breadcrumb>
         <LeftSidebar :uid="user_id">
