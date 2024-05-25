@@ -342,7 +342,7 @@ export default {
             this.showDialog = true;
         },
         loadMenu() {
-            getConfigBanner({ client: this.client, status: 1, per: 5, type: "pvp", subtype: "slider" }).then((res) => {
+            getConfigBanner({ client: this.client, status: 1, per: 5, type: "banner", subtype: "pvp" }).then((res) => {
                 this.slideList = cloneDeep(res.data.data.list);
             });
         },
