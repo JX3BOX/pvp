@@ -321,10 +321,14 @@ export default {
             return pasvmap[this.subtype][this.client];
         },
         pasv_info: function () {
-            return (
-                this.data.filter((d) => d.SkillID === this.pasv_skills[0])?.[0] || {}
-                // ?.sort((a, b) => b.Level - a.Level)?.[0] || {}
-            );
+            const lv0 = this.data.filter((d) => d.SkillID === this.pasv_skills[0])?.[0];
+            const lv_last = this.data
+                .filter((d) => d.SkillID === this.pasv_skills[0])
+                ?.sort((a, b) => b.Level - a.Level)?.[0];
+            return {
+                ...lv_last,
+                BelongKungfu: lv0?.BelongKungfu,
+            };
         },
         // 阵法id
         zhenfa_skills: function () {
