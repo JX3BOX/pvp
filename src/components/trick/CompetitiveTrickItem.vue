@@ -90,6 +90,7 @@
                             <div class="u-desc" v-if="item.desc">连招说明：{{ item.desc }}</div>
                         </div>
                     </div>
+                    <div class="u-updated">{{ formatTime(data.post_modified) }}</div>
                 </div>
             </div>
         </div>
@@ -114,6 +115,8 @@ import { showDate } from "@jx3box/jx3box-common/js/moment.js";
 import User from "@jx3box/jx3box-common/js/user";
 import bus from "@jx3box/jx3box-vue3-ui/utils/bus";
 import dayjs from "dayjs";
+import { formatTime } from "@/utils";
+
 export default {
     name: "CompetitiveTrickItem",
     components: {
@@ -182,6 +185,7 @@ export default {
         },
     },
     methods: {
+        formatTime,
         authorLink,
         iconLink,
         getAppIcon,

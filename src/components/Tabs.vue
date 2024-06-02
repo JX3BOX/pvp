@@ -1,11 +1,5 @@
 <template>
     <el-tabs class="m-tabs" v-model="view">
-        <el-tab-pane label="武学研习" name="index">
-            <template #label>
-                <el-icon><Collection /></el-icon>
-                <b>武学研习</b>
-            </template>
-        </el-tab-pane>
         <el-tab-pane label="连招技巧" name="post">
             <template #label
                 ><el-icon>
@@ -13,6 +7,12 @@
                 </el-icon>
                 <b>连招技巧</b>
                 <em class="u-secret">竞技指南</em>
+            </template>
+        </el-tab-pane>
+        <el-tab-pane label="武学研习" name="index">
+            <template #label>
+                <el-icon><Collection /></el-icon>
+                <b>武学研习</b>
             </template>
         </el-tab-pane>
         <el-tab-pane label="技改历史" name="changelog">
@@ -67,7 +67,7 @@ export default {
     name: "PvpTabs",
     data() {
         return {
-            view: "index",
+            view: "post",
         };
     },
     watch: {

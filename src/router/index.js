@@ -10,11 +10,11 @@ const Post = () => import("@/views/Post.vue");
 
 // 3.Routes
 const routes = [
-    { path: "/", name: "index", component: Index },
+    { path: "/", name: "post", component: Post },
+    { path: "/index", name: "index", component: Index },
     { path: "/sandbox", name: "sandbox", component: Sandbox },
     { path: "/desert", name: "desert", component: CJ },
     { path: "/changelog", name: "changelog", component: ChangeLog },
-    { path: "/post", name: "post", component: Post },
     { path: "/:id(\\d+)", name: "single", component: () => import("@/views/Single.vue") },
 ];
 

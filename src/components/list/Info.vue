@@ -1,10 +1,10 @@
 <template>
     <div class="m-info">
         <div class="m-info-router">
-            <router-link to="/"
+            <router-link to="/index"
                 ><el-icon><Collection /></el-icon
             ></router-link>
-            <router-link to="/post"
+            <router-link to="/"
                 ><el-icon><notebook /></el-icon
             ></router-link>
             <router-link to="/changelog"
