@@ -31,7 +31,12 @@
                 <!-- 资料片过滤 -->
                 <zlpBy @filter="filterMeta" type="zlp" :client="client"></zlpBy>
                 <!-- 无界过滤 -->
-                <el-checkbox :true-label="1" :false-label="0" v-model="is_wujie" @change="filterWujie"
+                <el-checkbox
+                    class="u-wujie-filter"
+                    :true-label="1"
+                    :false-label="0"
+                    v-model="is_wujie"
+                    @change="filterWujie"
                     >只看无界</el-checkbox
                 >
             </div>
