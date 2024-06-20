@@ -25,11 +25,15 @@
         <div class="m-archive-filter" v-if="canFilter">
             <div class="m-filter--left">
                 <!-- 版本过滤 -->
-                <clientBy @filter="filterImperceptibly" :type="client" :showWujie="true"></clientBy>
+                <clientBy @filter="filterImperceptibly" :type="client" :showWujie="false"></clientBy>
                 <!-- 角标过滤 -->
                 <markBy @filter="filterMeta"></markBy>
                 <!-- 资料片过滤 -->
                 <zlpBy @filter="filterMeta" type="zlp" :client="client"></zlpBy>
+                <!-- 无界过滤 -->
+                <el-checkbox :true-label="1" :false-label="0" v-model="is_wujie" @change="filterWujie"
+                    >只看无界</el-checkbox
+                >
             </div>
             <div class="m-filter--right">
                 <!-- 排序过滤 -->
@@ -55,6 +59,8 @@ export default {
         return {
             search: "",
             client: useStore().client,
+
+            is_wujie: 0,
         };
     },
     computed: {
@@ -72,6 +78,9 @@ export default {
         },
         onSearch() {
             this.$emit("search", this.search);
+        },
+        filterWujie(val) {
+            this.$emit("filterWujie", val);
         },
     },
 };

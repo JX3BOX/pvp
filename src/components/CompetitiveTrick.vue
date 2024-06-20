@@ -6,6 +6,7 @@
             @filterImperceptibly="filterImperceptibly"
             @filterMeta="filterMeta"
             @search="onSearch"
+            @filterWujie="filterWujie"
         ></TrickHeader>
 
         <div v-if="data.length" class="m-competitive-trick" v-loading="loading">
@@ -65,6 +66,9 @@ export default {
         zlp() {
             return this.$route.query?.zlp || "";
         },
+        is_wujie() {
+            return this.$route.query?.is_wujie || 0;
+        },
         query: function () {
             return {
                 sticky: 1,
@@ -74,6 +78,7 @@ export default {
                 client: this.client,
                 search: this.search,
                 zlp: this.zlp,
+                is_wujie: this.is_wujie,
             };
         },
     },
@@ -131,6 +136,9 @@ export default {
         // 条件过滤
         filterMeta: function (o) {
             this.replaceRoute({ [o["type"]]: o["val"] });
+        },
+        filterWujie: function (val) {
+            this.replaceRoute({ is_wujie: val });
         },
         // 路由绑定
         replaceRoute: function (extend) {

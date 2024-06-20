@@ -3,6 +3,7 @@
         <div class="m-trick-item__header">
             <div class="m-trick-item__title">
                 <span class="u-label u-zlp" v-if="data.zlp">{{ data.zlp }}</span>
+                <span class="u-label u-wujie" v-if="data.is_wujie">无界</span>
                 <a class="u-link" :href="`/pvp/${data?.ID}`" target="_blank">{{ data.post_title || "未知流派" }}</a>
                 <span class="u-marks" v-if="data.mark && data.mark.length">
                     <i v-for="mark in data.mark" class="u-mark" :key="mark">{{ showMark(mark) }}</i>
