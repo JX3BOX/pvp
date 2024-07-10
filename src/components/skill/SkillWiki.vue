@@ -34,7 +34,7 @@
                     <div v-html="wikiData.post.content"></div>
                 </div>
                 <div class="m-wiki-post-empty m-panel-body" v-if="is_empty">
-                    <div class="no_skill_post" v-if="pasv_skills_data.indexOf(activeSkill) == -1">
+                    <div class="no_skill_post" v-if="!isPasvSkill">
                         <el-icon><Warning /></el-icon>
                         <span>暂无百科内容</span>
                     </div>
@@ -58,22 +58,6 @@
                 </div>
             </div>
         </div>
-        <!-- 非默认心法技能说明此处已选技能但无百科 -->
-        <!-- <div class="m-wiki-post-empty" v-if="is_empty">
-            <div class="no_skill_post" v-if="pasv_skills_data.indexOf(activeSkill) == -1">
-                <el-icon><Warning /></el-icon>
-                <span>当前技能暂无百科，我要</span
-                ><a
-                    class="s-link el-button el-button--small is-round el-button--primary"
-                    :href="publish_url(`skill/${activeSkill}`)"
-                    >完善百科</a
-                >
-            </div>
-
-            <div class="no_active_skill" v-else>
-                <span>请先选择技能后查看技能百科</span>
-            </div>
-        </div> -->
 
         <el-drawer v-model="showDrawer" title="历史版本" class="c-wiki-revisions">
             <div class="m-revisions-panel">
@@ -127,17 +111,21 @@ export default {
     components: {
         SimpleThx,
     },
+    props: {
+        isPasvSkill: {
+            type: Boolean,
+            default: false,
+        },
+    },
     data() {
         return {
             wikiData: {},
-            pasv_skills_data: [],
             userData: [],
             showDrawer: false,
 
             versions: [],
         };
     },
-    props: ["pasv_skills_props"],
     computed: {
         activeSkill() {
             return $store.activeSkill || 0;
@@ -168,9 +156,6 @@ export default {
         },
         publish_url: publishLink,
         showAvatar,
-        martialAltsToPasv_skills(data) {
-            this.pasv_skills_data = data;
-        },
         ToDate(timeStr) {
             let time = new Date(Number(timeStr + "000"));
             return dayjs(time).format("YYYY-MM-DD");

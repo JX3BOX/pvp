@@ -21,3 +21,9 @@ function getSkill(query, params) {
 }
 
 export { getRecipe, getSkill };
+
+export function getKungfuPanel(params) {
+    return $node().get("/v2/kungfu/panel", {
+        params,
+    });
+}

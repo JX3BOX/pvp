@@ -51,10 +51,11 @@
         }
     }
     .m-skills {
-        display: flex;
         gap: 20px;
-        flex-wrap: wrap;
-        align-items: center;
+        max-width: 800px;
+        width: 100%;
+        display: grid;
+        grid-template-columns: repeat(11, 56px);
     }
 
     .m-skill {
@@ -62,6 +63,10 @@
         display: flex;
         justify-content: center;
         cursor: pointer;
+
+        &.is-right {
+            grid-column-start: 6;
+        }
 
         .u-icon {
             position: absolute;
@@ -264,6 +269,19 @@
         .flex;
         gap: 10px;
         align-items: center;
+
+        .u-desc {
+            padding-left: 5.5em;
+            text-indent: -5em;
+            .fz(14px, 1.2);
+            display: flex;
+            gap: 4px;
+            flex-direction: column;
+        }
+
+        .u-desc div:last-of-type {
+            color: #bbb !important;
+        }
     }
     .u-zhenfa-bg {
         min-width: 148px;

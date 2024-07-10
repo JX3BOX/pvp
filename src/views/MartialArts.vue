@@ -1,71 +1,68 @@
 <template>
     <div class="p-martial-content">
         <div class="p-martial-arts" v-show="!isSpecialSkill">
+            <!-- 面板 -->
             <div class="m-martial-skills" v-loading="loading">
-                <div
-                    v-for="kungfu in kungfus"
-                    :key="kungfu"
-                    class="m-martial-skill"
-                    v-show="kungfusSkills?.[kungfu]?.length"
-                >
+                <!-- 套路（武学面板的一行） -->
+                <div class="m-martial-skill" v-for="(kungfu_row, kungfu_id) in kungfu_skills" :key="kungfu_id">
+                    <!-- 套路标题 -->
                     <div class="u-title">
-                        <span class="u-title-name">{{ showKungfuName(kungfu) }}</span>
+                        <span class="u-title-name">{{ kungfu_row[0]?.kungfu_name }}</span>
                         <img src="../assets/img/skillset.png" class="u-title-img" alt="" />
                     </div>
-                    <div class="m-skills" v-if="kungfusSkills[kungfu]">
-                        <template v-for="skill in kungfusSkills[kungfu]" :key="skill?.SkillID">
-                            <div class="m-skill" v-if="skill?.IconID">
-                                <template v-if="skill?.IconID">
-                                    <el-popover
-                                        v-if="hasSkill(skill) || subtype === '通用' || !subtype"
-                                        width="400px"
-                                        :show-after="100"
-                                        :hide-after="0"
-                                        popper-class="m-skill-pop"
-                                        :show-arrow="false"
-                                        placement="bottom-start"
-                                        :offset="0"
-                                    >
-                                        <div v-if="selectedSkill">
-                                            <skill-item :item="selectedSkill"></skill-item>
-                                        </div>
-                                        <template #reference>
-                                            <div
-                                                class="u-skill"
-                                                @click="setSkill(skill)"
-                                                :class="{ active: activeSkill == skill.SkillID }"
-                                            >
-                                                <img
-                                                    class="u-skill-icon"
-                                                    :src="iconLink(skill.IconID)"
-                                                    :alt="skill.IconID"
-                                                    @mousemove="showSkill(skill)"
-                                                />
-                                                <span class="u-name" :title="skill.Name">{{ skill.Name }}</span>
-                                            </div>
-                                        </template>
-                                    </el-popover>
-                                    <div v-else class="u-skill">
-                                        <img
-                                            :src="iconLink(skill?.IconID)"
-                                            :alt="skill.IconID"
-                                            class="u-not-mount u-skill-icon"
-                                        />
-                                        <span class="u-name" :title="skill.Name">{{ skill.Name }}</span>
+                    <!-- 套路技能 -->
+                    <div class="m-skills">
+                        <template v-for="(kungfu_item, index) in kungfu_row" :key="index">
+                            <div
+                                class="m-skill"
+                                v-if="!kungfu_item.belong"
+                                :class="{
+                                    'u-not-mount': !isCurrentMountSkill(kungfu_item.skill),
+                                    'is-right': kungfu_item.firstRight,
+                                }"
+                                @click="isCurrentMountSkill(kungfu_item.skill) && setSkill(kungfu_item.skill)"
+                            >
+                                <el-popover
+                                    width="400px"
+                                    :show-after="100"
+                                    :hide-after="0"
+                                    :show-arrow="false"
+                                    :offset="0"
+                                    popper-class="m-skill-pop"
+                                    placement="bottom-start"
+                                >
+                                    <div v-if="popover_skill">
+                                        <skill-item-v2 :item="popover_skill"></skill-item-v2>
                                     </div>
-                                </template>
+                                    <template #reference>
+                                        <div
+                                            class="u-skill"
+                                            :class="{ active: activeSkill == kungfu_item.skill.SkillID }"
+                                        >
+                                            <img
+                                                class="u-skill-icon"
+                                                :src="iconLink(kungfu_item.skill.IconID)"
+                                                :alt="kungfu_item.skill.IconID"
+                                                @mousemove="showSkill(kungfu_item.skill)"
+                                            />
+                                            <span class="u-name" :title="kungfu_item.skill.Name">{{
+                                                kungfu_item.skill.Name
+                                            }}</span>
+                                        </div>
+                                    </template>
+                                </el-popover>
                                 <img
-                                    v-if="getSkillRecipe(skill?.SkillID).length"
+                                    v-if="getSkillRecipe(kungfu_item.skill?.SkillID).length"
                                     class="u-icon"
                                     src="@/assets/img/challenge.png"
-                                    :ref="(el) => setRefs(el, skill)"
-                                    @click.stop="showRecipe(skill?.SkillID)"
+                                    :ref="(el) => setRefs(el, kungfu_item.skill)"
+                                    @click.stop="showRecipe(kungfu_item.skill?.SkillID)"
                                 />
                                 <img
-                                    v-if="audios[skill?.SkillID]"
+                                    v-if="audios[kungfu_item.skill?.SkillID]"
                                     class="u-icon-audio"
                                     src="@/assets/img/audio_icon.png"
-                                    @click.stop="showAudio(skill?.SkillID, $event.target)"
+                                    @click.stop="showAudio(kungfu_item.skill?.SkillID, $event.target)"
                                 />
                             </div>
                         </template>
@@ -74,25 +71,21 @@
 
                 <div class="m-talent-box qx-container" v-show="subtype && subtype !== '通用'"></div>
             </div>
+            <!-- 右侧心法被动 & 阵法 & 奇穴推荐 -->
             <div class="m-martial-extend" v-if="subtype && subtype !== '通用'">
                 <div class="m-mount-info">
                     <div class="m-pasv">
-                        <!-- <div class="u-title">门派内功</div> -->
+                        <!-- 门派内功-->
                         <el-popover width="450px" popper-class="m-pasv-pop" effect="dark" :show-arrow="false">
-                            <div class="m-pasv">
-                                <div class="u-title">{{ subtype }}</div>
-                                <div class="u-name">{{ pasv_info?.Name }}</div>
-                                <div class="u-subtitle">被动招式</div>
-                                <div class="u-desc" v-html="formatPasv(pasv_info)"></div>
-                            </div>
+                            <skill-item-v2 :item="pasvSkill"></skill-item-v2>
                             <template #reference>
-                                <div class="m-pasv" :class="{ active: activeSkill == pasv_info.SkillID }">
+                                <div class="m-pasv" :class="{ active: activeSkill == pasvSkill.SkillID }">
                                     <img
-                                        :src="showMountIcon(pasv_info?.BelongKungfu)"
-                                        :alt="pasv_info?.BelongKungfu"
-                                        :title="pasv_info?.Name"
+                                        :src="showMountIcon(mountid)"
+                                        :alt="mountid"
+                                        :title="pasvSkill.Name"
                                         class="u-pasv-pic"
-                                        @click="setSkill(pasv_info)"
+                                        @click="setSkill(pasvSkill)"
                                     />
                                     <span class="u-name" :title="subtype">{{ subtype }}</span>
                                 </div>
@@ -100,29 +93,29 @@
                         </el-popover>
                     </div>
                     <div class="m-zhenfa">
-                        <!-- <div class="u-title">阵法</div> -->
+                        <!-- 阵法技能 -->
                         <el-popover width="500px" popper-class="m-pasv-pop" effect="dark" :show-arrow="false">
                             <div class="m-zhenfa-info">
                                 <div class="u-zhenfa-bg" :style="zhenfaBg">
                                     <img
-                                        :src="iconLink(zhenfa_info[0]?.IconID)"
-                                        :alt="zhenfa_info[0]?.IconID"
-                                        :title="zhenfa_info[0]?.Name"
+                                        :src="iconLink(formationSkill.IconID)"
+                                        :alt="formationSkill.IconID"
+                                        :title="formationSkill.Name"
                                         class="u-pic"
                                     />
                                 </div>
-                                <div class="u-desc" v-html="formatZhenfa(zhenfa_info)"></div>
+                                <div class="u-desc" v-html="formationSkillDesc"></div>
                             </div>
                             <template #reference>
-                                <div class="m-pasv" :class="{ active: activeSkill == zhenfa_info[0]?.SkillID }">
+                                <div class="m-pasv" :class="{ active: activeSkill == formationSkill.SkillID }">
                                     <img
-                                        :src="iconLink(zhenfa_info[0]?.IconID)"
-                                        :alt="zhenfa_info[0]?.IconID"
-                                        :title="zhenfa_info[0]?.Name"
+                                        :src="iconLink(formationSkill.IconID)"
+                                        :alt="formationSkill.IconID"
+                                        :title="formationSkill.Name"
                                         class="u-pasv-pic"
-                                        @click="setSkill(zhenfa_info[0])"
+                                        @click="setSkill(formation_skill.skill[0])"
                                     />
-                                    <span class="u-name" :title="zhenfa_info[0]?.Name">{{ zhenfa_info[0]?.Name }}</span>
+                                    <span class="u-name" :title="formationSkill.Name">{{ formationSkill.Name }}</span>
                                 </div>
                             </template>
                         </el-popover>
@@ -191,35 +184,30 @@
             </el-popover>
         </div>
 
-        <skillWiki ref="skillWiki" v-model:pasv_skills_props="pasv_skills"></skillWiki>
+        <skillWiki ref="skillWiki" :is-pasv-skill="activeSkill == pasvSkill.SkillID"></skillWiki>
 
         <SpecialSkill :mount="mountid"></SpecialSkill>
     </div>
 </template>
 
 <script>
-import { markRaw, ref } from "vue";
+import { getKungfuPanel } from "@/service/node";
+import { ref } from "vue";
+import { groupBy } from "lodash";
+import SkillItemV2 from "@/components/SkillItemV2.vue";
+
 import { useStore } from "@/store";
+
 import xfmap from "@jx3box/jx3box-data/data/xf/xf.json";
-import { getSkills, getTalents, getSkill, getBreadcrumb, getSkillAudios } from "../service/raw";
+import { getTalents, getBreadcrumb, getSkillAudios } from "../service/raw";
 import { iconLink, showMountIcon } from "@jx3box/jx3box-common/js/utils";
 import { getRecipe } from "@/service/node";
 import relation from "@jx3box/jx3box-data/data/xf/relation.json";
 import schools from "@jx3box/jx3box-data/data/xf/school.json";
 import JX3BOX from "@jx3box/jx3box-common/data/jx3box.json";
-
-import kungfumap_std from "@jx3box/jx3box-data/data/martial/kungfu_std.json";
-import kungfumap_origin from "@jx3box/jx3box-data/data/martial/kungfu_origin.json";
-import kungfus from "@jx3box/jx3box-data/data/martial/kungfuid.json";
-import pasvmap from "@/assets/data/martial/pasv.json";
-import zhenfamap from "@/assets/data/martial/zhenfa.json";
-
-import { cloneDeep, flattenDeep, uniqBy } from "lodash";
 // 奇穴
 import JX3_QIXUE from "@jx3box/jx3box-talent";
 import "@jx3box/jx3box-talent/talent.css";
-
-import SkillItem from "@/components/SkillItem.vue";
 
 import SkillWiki from "@/components/skill/SkillWiki.vue";
 import TalentRecommend from "@/components/skill/TalentRecommend.vue";
@@ -232,10 +220,10 @@ export default {
     name: "MartialArts",
     components: {
         SkillAudio,
-        SkillItem,
         SkillWiki,
         TalentRecommend,
         SpecialSkill,
+        SkillItemV2,
     },
     data() {
         return {
@@ -260,10 +248,19 @@ export default {
 
             skills: [],
             subSkills: [],
-            selectedSkill: null,
             ExtraPointKey: "",
 
             isSpecialSkill: false,
+
+            // 当前悬浮窗展示的技能
+            popover_skill: null,
+
+            // 心法被动增加属性技能
+            pasv_skill: "",
+            // 心法阵法描述
+            formation_skill: "",
+            // 套路技能
+            kungfu_skills: {},
         };
     },
     computed: {
@@ -290,55 +287,26 @@ export default {
         activeSkill() {
             return $store.activeSkill;
         },
-        // 门派技能套路id
-        kungfus: function () {
-            return markRaw(this.kungfumap[this.mountid]["kungfus"]);
+        pasvSkill() {
+            return this.pasv_skill?.skill || {};
         },
-        // 门派技能数据
-        kungfusSkills: function () {
-            const obj = {};
-            Object.entries(this.kungfumap[this.mountid]["skills"]).forEach(([key, value]) => {
-                obj[key] = value
-                    .map((SkillID) => {
-                        const currentSkill = this.data.find((d) => {
-                            if (this.subtype !== "通用") {
-                                return d.SkillID == SkillID;
-                            }
-                            return d.SkillID == SkillID;
-                        });
-                        return currentSkill;
-                    })
-                    .filter(Boolean);
+        formationSkill() {
+            let result = { Name: "阵法", IconID: 13 };
+            const skills = this.formation_skill?.skill;
+            if (!skills) return result;
+            result = skills[0];
+            return result;
+        },
+        formationSkillDesc() {
+            let result = "";
+            const skills = this.formation_skill?.skill;
+            if (!skills) return result;
+            const nums = ["一重粗识", "二重略懂", "三重巧熟", "四重精妙", "五重游刃", "六重忘我", "七重归一"];
+            skills.forEach((item, index) => {
+                result += `<div>${nums[index]}：${item.Desc}</div>`;
             });
-            return obj;
-        },
-        // 门派技能id数组
-        skill_ids: function () {
-            return flattenDeep(Object.values(this.kungfumap[this.mountid]["skills"]));
-        },
-        // 心法被动id
-        pasv_skills: function () {
-            return pasvmap[this.subtype][this.client];
-        },
-        pasv_info: function () {
-            const lv0 = this.data.filter((d) => d.SkillID === this.pasv_skills[0])?.[0];
-            const lv_last = this.data
-                .filter((d) => d.SkillID === this.pasv_skills[0])
-                ?.sort((a, b) => b.Level - a.Level)?.[0];
-            return {
-                ...lv_last,
-                BelongKungfu: lv0?.BelongKungfu,
-            };
-        },
-        // 阵法id
-        zhenfa_skills: function () {
-            return (this.mountid && zhenfamap[this.mountid]) || [];
-        },
-        zhenfa_info: function () {
-            return uniqBy(
-                this.data.filter((d) => d.SkillID === this.zhenfa_skills[0]),
-                (item) => `${item.SkillID}_${item.Level}`
-            );
+
+            return result;
         },
         zhenfaBg() {
             const school = xfmap[this.subtype]?.school;
@@ -354,19 +322,11 @@ export default {
         talent2_skills: function () {
             return (this.mountid && this.talents2?.[this.mountid]) || [];
         },
-        // 所有技能id, 用于请求
-        ids: function () {
-            return [...this.skill_ids, ...this.pasv_skills, ...this.zhenfa_skills].join(",");
-        },
         params: function () {
             return {
                 ids: this.ids,
                 client: this.client,
             };
-        },
-        kungfumap: function () {
-            const data = this.client == "origin" ? kungfumap_origin : kungfumap_std;
-            return markRaw(data);
         },
         // tl skillIds
         tlSkillIds: function () {
@@ -378,19 +338,13 @@ export default {
             async handler() {
                 this.refMap = [];
                 this.loading = true;
-                await this.loadSkills();
+                await this.loadMountKungfuPanel();
                 await this.getRecipe();
-                await this.getSkill();
                 this.loading = false;
                 this.reloadTalent();
                 this.getAudioIndex();
             },
             immediate: true,
-        },
-        kungfuid: {
-            handler: function () {
-                this.loadSkills();
-            },
         },
     },
     mounted: async function () {
@@ -405,6 +359,9 @@ export default {
     methods: {
         iconLink,
         showMountIcon,
+        isCurrentMountSkill(skill) {
+            return !skill.MountRequestDetail || skill.MountRequestDetail == this.mountid;
+        },
         clickEvent: function (event) {
             const whiteList = ["m-recipe-pop", "m-audio-pop"];
             const target = event.target;
@@ -444,92 +401,41 @@ export default {
             this.audioIconRef = ref;
             this.visibleAudioPopover = true;
         },
-        async loadSkills() {
-            this.loading = true;
-            getSkills(this.params)
-                .then((res) => {
-                    this.data = res.data;
-
-                    this.setSkill(this.pasv_info);
-                })
-                .finally(() => {
-                    this.loading = false;
-                });
-        },
-        removeLowLevelSkills: function (data) {
-            let arr = [];
-            let _data = [];
-            // 只保留最高等级
-            data.forEach((item) => {
-                if (!arr.includes(item.SkillID)) {
-                    arr.push(item.SkillID);
-                    _data.push(item);
-                } else {
-                    let i = arr.indexOf(item.SkillID);
-                    if (~~item.Level > ~~_data[i].Level) {
-                        _data[i] = item;
-                    }
+        // 加载技能位置等信息
+        async loadMountKungfuPanel() {
+            const mount_id = this.mountid;
+            getKungfuPanel({ client: this.client, mount_id }).then((res) => {
+                const list = res.data.data;
+                // 心法被动描述取第二个
+                const pasv_skill = list.find((item) => item.column == -1);
+                pasv_skill.skill[0].Desc = pasv_skill.skill[1].Desc;
+                pasv_skill.skill[0].parse.desc = pasv_skill.skill[1].parse.desc;
+                pasv_skill.skill = pasv_skill.skill[0];
+                this.pasv_skill = pasv_skill;
+                const formation_skill = list.find((item) => item.column == -2);
+                formation_skill.skill = formation_skill.skill.sort((a, b) => a.Level - b.Level);
+                this.formation_skill = formation_skill;
+                const kungfu_skills = groupBy(
+                    list.filter((item) => item.column >= 0).sort((a, b) => a.column - b.column),
+                    "kungfu_id"
+                );
+                for (const key in kungfu_skills) {
+                    let firstRight = kungfu_skills[key].find((item) => item.column == 1);
+                    if (firstRight) firstRight.firstRight = true;
                 }
-            });
-            return _data;
-        },
-        handleTalentData: function (data) {
-            const skills = {
-                talent: this.talent_skills,
-            };
-            const talentSkills = cloneDeep(skills[this.kungfuid]);
-            return talentSkills.map((item) => {
-                return item.map((SkillID) => {
-                    const currentTalent = data.find((d) => d.SkillID == SkillID);
-
-                    return currentTalent;
-                });
+                this.kungfu_skills = kungfu_skills;
+                this.setSkill(this.pasv_skill.skill);
             });
         },
-        async getSkill() {
-            if (!this.subtype || this.subtype == "通用") {
-                return;
-            }
-            getSkill(this.subtype, this.client).then((res) => {
-                const skills = res?.find((item) => item?.kungfuId == this.kungfuId);
-                this.skills = flattenDeep(
-                    skills?.remarks?.map((item) => {
-                        return item?.forceSkills;
-                    })
-                );
-                const subSkills = res?.find((item) => item?.kungfuId != this.kungfuId);
-                this.subSkills = flattenDeep(
-                    subSkills?.remarks?.map((item) => {
-                        return item?.forceSkills;
-                    })
-                );
-            });
-        },
-
         // 技能popup
-        showSkill: function (skill) {
-            if (!this.subtype || this.subtype == "通用") {
-                this.selectedSkill = {
-                    skillName: skill.Name,
-                    desc: skill.Desc,
-                };
-            } else {
-                const { SkillID, Name } = skill;
-                this.selectedSkill = this.skills?.find((item) => item._id == SkillID || item.skillName == Name) || {};
-            }
-        },
-        hasSkill: function ({ SkillID, Name }) {
-            return this.skills?.find((item) => item._id == SkillID || Name == item.skillName);
+        showSkill(skill) {
+            this.popover_skill = skill;
         },
         // 设置activeSkill
         setSkill(skill) {
             $store.setActiveSkill(skill?.SkillID);
         },
 
-        // 技能套路名称
-        showKungfuName: function (val) {
-            return kungfus[val];
-        },
         // 初始化奇穴模拟器（此时渲染使用空奇穴模板）
         installTalent: async function () {
             await getBreadcrumb("pvp_talent_version").then((res) => {
@@ -537,9 +443,6 @@ export default {
                 this.talentDriver = new JX3_QIXUE({ version: this.version });
                 this.reloadTalent();
             });
-            // await getTalentVersions().then((res) => {
-            //     this.version = this.version || res.data?.[0]?.version;
-            // });
         },
         reloadTalent() {
             if (!this.subtype || this.subtype == "通用") return;
@@ -567,23 +470,6 @@ export default {
         },
         recipeLink(item) {
             return `/item/search/${item.Name}`;
-        },
-
-        // 阵法描述
-        formatZhenfa(arr) {
-            let desc = "";
-            const nums = ["一重粗识", "二重略懂", "三重巧熟", "四重精妙", "五重游刃", "六重忘我"];
-            const name = arr[0]?.Name;
-            // 去除最后一项
-            arr = arr.slice(0, -1);
-            arr.forEach((item, index) => {
-                desc += `${nums[index]}：${item.Desc}</br>`;
-            });
-            return `${name}<br>${desc}`;
-        },
-        formatPasv(info) {
-            if (!info.Desc) return;
-            return info.Desc.replace(/\\n/g, "</br>");
         },
         // 技能音频索引文件
         getAudioIndex() {
