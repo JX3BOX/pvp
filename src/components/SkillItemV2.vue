@@ -49,6 +49,16 @@ export default {
     padding: 10px;
     .pr;
     background-color: rgba(0, 0, 0, 0.8);
+    // TODO如果重新数据构建，则将该代码删除
+    .u-header {
+        .u-header-line {
+            .color(#ffffff);
+            &:first-child {
+                .color(#ff0);
+            }
+        }
+    }
+    // -------------------------------
 }
 .u-header-line {
     display: flex;

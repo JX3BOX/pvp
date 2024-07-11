@@ -13,6 +13,11 @@
                     <!-- 套路技能 -->
                     <div class="m-skills">
                         <template v-for="(kungfu_item, index) in kungfu_row" :key="index">
+                            <template v-if="index > 0">
+                                <div class="m-connect" v-if="kungfu_row[index - 1].skill_id == kungfu_item.prev">
+                                    <img class="u-img" src="@/assets/img/arrow.png" />
+                                </div>
+                            </template>
                             <div
                                 class="m-skill"
                                 v-if="!kungfu_item.belong"
@@ -41,7 +46,7 @@
                                         >
                                             <img
                                                 class="u-skill-icon"
-                                                :src="iconLink(kungfu_item.skill.IconID)"
+                                                :src="iconLink(kungfu_item.skill.IconID, this.client)"
                                                 :alt="kungfu_item.skill.IconID"
                                                 @mousemove="showSkill(kungfu_item.skill)"
                                             />
@@ -423,6 +428,7 @@ export default {
                     let firstRight = kungfu_skills[key].find((item) => item.column == 1);
                     if (firstRight) firstRight.firstRight = true;
                 }
+                console.log(kungfu_skills);
                 this.kungfu_skills = kungfu_skills;
                 this.setSkill(this.pasv_skill.skill);
             });
