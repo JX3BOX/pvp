@@ -69,6 +69,12 @@
                                     src="@/assets/img/audio_icon.png"
                                     @click.stop="showAudio(kungfu_item.skill?.SkillID, $event.target)"
                                 />
+                                <img
+                                    class="u-icon-switch"
+                                    v-if="skillSwitchList[kungfu_item.switchBelong || kungfu_item.skill_id]"
+                                    src="@/assets/img/challenge.png"
+                                    @click.stop="showSkillSwitch(kungfu_item, kungfu_id, index, $event.target)"
+                                />
                             </div>
                         </template>
                     </div>
@@ -187,6 +193,30 @@
                     :key="audio.file"
                 ></skill-audio>
             </el-popover>
+
+            <!-- 技能切换悬浮窗 -->
+            <el-popover
+                :visible="skillSwitchPopover"
+                :virtual-ref="skillSwitchRef"
+                virtual-triggering
+                trigger="manual"
+                transition="el-zoom-in-top"
+                placement="right"
+                popper-class="m-audio-pop"
+                effect="dark"
+                :width="320"
+                :show-arrow="false"
+                :offset="0"
+            >
+                <div
+                    v-for="(item, key) in skillSwitchData.list"
+                    :key="key"
+                    style="cursor: pointer"
+                    @click="skillSwitch(item)"
+                >
+                    {{ item.skill.Name }}
+                </div>
+            </el-popover>
         </div>
 
         <skillWiki ref="skillWiki" :is-pasv-skill="activeSkill == pasvSkill.SkillID"></skillWiki>
@@ -241,6 +271,11 @@ export default {
             currentAudios: [],
             audioIconRef: null,
             visibleAudioPopover: false,
+
+            skillSwitchPopover: false,
+            skillSwitchRef: null,
+            skillSwitchList: {},
+            skillSwitchData: {},
 
             talentDriver: null,
             recipe: [],
@@ -375,6 +410,7 @@ export default {
             }
             this.visibleAudioPopover = false;
             this.visiblePopover = false;
+            this.skillSwitchPopover = false;
         },
         audioUrl: function (path) {
             return `${JX3BOX.__dataPath}/audio/src/${path}`;
@@ -406,6 +442,24 @@ export default {
             this.audioIconRef = ref;
             this.visibleAudioPopover = true;
         },
+        showSkillSwitch(itemData, kungfu_id, listIndex, ref) {
+            if (this.skillSwitchRef == ref && this.skillSwitchPopover) {
+                this.skillSwitchPopover = false;
+                return;
+            }
+            this.skillSwitchRef = ref;
+            this.skillSwitchData = {};
+            this.skillSwitchData.kungfu_id = kungfu_id;
+            this.skillSwitchData.listIndex = listIndex;
+            this.skillSwitchData.list = this.skillSwitchList[itemData.switchBelong || itemData.skill_id];
+            this.skillSwitchPopover = true;
+        },
+        skillSwitch(itemData) {
+            let listObj = JSON.parse(JSON.stringify(this.skillSwitchList[itemData.switchBelong || itemData.skill_id]));
+            let fillVal = listObj[itemData.skill_id];
+            fillVal.belong = "";
+            this.kungfu_skills[this.skillSwitchData.kungfu_id][this.skillSwitchData.listIndex] = fillVal;
+        },
         // 加载技能位置等信息
         async loadMountKungfuPanel() {
             const mount_id = this.mountid;
@@ -427,8 +481,23 @@ export default {
                 for (const key in kungfu_skills) {
                     let firstRight = kungfu_skills[key].find((item) => item.column == 1);
                     if (firstRight) firstRight.firstRight = true;
+
+                    kungfu_skills[key].forEach((item) => {
+                        if (item.belong) {
+                            item.switchBelong = item.belong;
+                            if (!this.skillSwitchList[item.belong]) {
+                                this.skillSwitchList[item.belong] = {};
+                            }
+                            this.skillSwitchList[item.belong][item.skill_id] = item;
+
+                            kungfu_skills[key].forEach((parItem) => {
+                                if (parItem.skill_id == item.belong) {
+                                    this.skillSwitchList[item.belong][parItem.skill_id] = parItem;
+                                }
+                            });
+                        }
+                    });
                 }
-                console.log(kungfu_skills);
                 this.kungfu_skills = kungfu_skills;
                 this.setSkill(this.pasv_skill.skill);
             });
