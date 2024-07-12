@@ -72,7 +72,7 @@
                                 <img
                                     class="u-icon-switch"
                                     v-if="skillSwitchList[kungfu_item.switchBelong || kungfu_item.skill_id]"
-                                    src="@/assets/img/challenge.png"
+                                    src="@/assets/img/skill_switch.png"
                                     @click.stop="showSkillSwitch(kungfu_item, kungfu_id, index, $event.target)"
                                 />
                             </div>
