@@ -1,5 +1,21 @@
 <template>
     <div class="p-martial-content">
+        <div>
+            <el-form label-width="82px">
+                <el-form-item label="客服端切换">
+                    <el-select v-model="clientOptionVal" placeholder="客服端切换">
+                        <el-option
+                            v-for="item in clientOptions"
+                            :key="item.value"
+                            :label="item.label"
+                            :value="item.value"
+                        >
+                        </el-option>
+                    </el-select>
+                </el-form-item>
+            </el-form>
+        </div>
+
         <div class="p-martial-arts" v-show="!isSpecialSkill">
             <!-- 面板 -->
             <div class="m-martial-skills" v-loading="loading">
@@ -46,6 +62,9 @@
                                         >
                                             <img
                                                 class="u-skill-icon"
+                                                :class="{
+                                                    isWuJie: clientOptionVal == 'wujie',
+                                                }"
                                                 :src="iconLink(kungfu_item.skill.IconID, this.client)"
                                                 :alt="kungfu_item.skill.IconID"
                                                 @mousemove="showSkill(kungfu_item.skill)"
@@ -80,7 +99,10 @@
                     </div>
                 </div>
 
-                <div class="m-talent-box qx-container" v-show="subtype && subtype !== '通用'"></div>
+                <div
+                    class="m-talent-box qx-container"
+                    v-show="subtype && subtype !== '通用' && clientOptionVal != 'wujie'"
+                ></div>
             </div>
             <!-- 右侧心法被动 & 阵法 & 奇穴推荐 -->
             <div class="m-martial-extend" v-if="subtype && subtype !== '通用'">
@@ -133,7 +155,7 @@
                     </div>
                 </div>
 
-                <TalentRecommend />
+                <TalentRecommend v-if="clientOptionVal != 'wujie'" />
             </div>
 
             <!-- 技能秘籍悬浮窗 -->
@@ -301,6 +323,18 @@ export default {
             formation_skill: "",
             // 套路技能
             kungfu_skills: {},
+
+            clientOptions: [
+                {
+                    value: "std",
+                    label: "旗舰端",
+                },
+                {
+                    value: "wujie",
+                    label: "无界端",
+                },
+            ],
+            clientOptionVal: "std",
         };
     },
     computed: {
@@ -386,6 +420,12 @@ export default {
             },
             immediate: true,
         },
+        async clientOptionVal() {
+            this.loading = true;
+            await this.loadMountKungfuPanel();
+            await this.getRecipe();
+            this.loading = false;
+        },
     },
     mounted: async function () {
         this.talents = await getTalents();
@@ -400,6 +440,8 @@ export default {
         iconLink,
         showMountIcon,
         isCurrentMountSkill(skill) {
+            // 无界端不做判断，技能都亮起
+            if (this.clientOptionVal == "wujie") return true;
             return !skill.MountRequestDetail || skill.MountRequestDetail == this.mountid;
         },
         clickEvent: function (event) {
@@ -463,17 +505,29 @@ export default {
         // 加载技能位置等信息
         async loadMountKungfuPanel() {
             const mount_id = this.mountid;
-            getKungfuPanel({ client: this.client, mount_id }).then((res) => {
+            let parClient = this.client;
+            if (this.clientOptionVal == "wujie") parClient = this.clientOptionVal;
+            getKungfuPanel({ client: parClient, mount_id }).then((res) => {
+                this.kungfu_skills = {};
                 const list = res.data.data;
                 // 心法被动描述取第二个
-                const pasv_skill = list.find((item) => item.column == -1);
-                pasv_skill.skill[0].Desc = pasv_skill.skill[1].Desc;
-                pasv_skill.skill[0].parse.desc = pasv_skill.skill[1].parse.desc;
-                pasv_skill.skill = pasv_skill.skill[0];
+                const pasv_skill = list.find((item) =>
+                    this.clientOptionVal == "wujie" ? item.kungfu_id == -1 : item.column == -1
+                );
+                if (this.clientOptionVal != "wujie") {
+                    pasv_skill.skill[0].Desc = pasv_skill.skill[1].Desc;
+                    pasv_skill.skill[0].parse.desc = pasv_skill.skill[1].parse.desc;
+                    pasv_skill.skill = pasv_skill.skill[0];
+                }
                 this.pasv_skill = pasv_skill;
-                const formation_skill = list.find((item) => item.column == -2);
-                formation_skill.skill = formation_skill.skill.sort((a, b) => a.Level - b.Level);
-                this.formation_skill = formation_skill;
+                //
+                if (this.clientOptionVal != "wujie") {
+                    const formation_skill = list.find((item) => item.column == -2);
+                    formation_skill.skill = formation_skill.skill.sort((a, b) => a.Level - b.Level);
+                    this.formation_skill = formation_skill;
+                } else {
+                    this.formation_skill = "";
+                }
                 const kungfu_skills = groupBy(
                     list.filter((item) => item.column >= 0).sort((a, b) => a.column - b.column),
                     "kungfu_id"
@@ -536,7 +590,9 @@ export default {
 
         // 秘籍
         async getRecipe() {
-            getRecipe({ school: this.school, client: this.client }).then((res) => {
+            let school = this.school;
+            if (this.clientOptionVal == "wujie") school = this.subtype;
+            getRecipe({ school, client: this.client }).then((res) => {
                 this.recipe = res.data;
             });
         },
