@@ -45,9 +45,9 @@
             color: #fff;
             font-size: 12px;
             text-align: center;
-            overflow: hidden;
+            // overflow: hidden;
             white-space: nowrap;
-            width: 48px;
+            // width: 48px;
         }
     }
     .m-skills {
@@ -79,42 +79,47 @@
             grid-column-start: 6;
         }
 
-        .u-icon {
-            position: absolute;
-            left: -8px;
-            bottom: 14px;
-            transform: rotate(-90deg);
-            width: 20px;
-            height: 20px;
-            cursor: pointer;
-        }
+        .m-skill-icon {
+            .pr();
+            .w(fit-content);
+            margin: 0 auto;
+            .u-skill-icon {
+                .size(48px);
+                box-sizing: border-box;
+                border: 2px solid #1a2b22;
+                &.isWuJie {
+                    border: 2px solid #2a9998;
+                    background-color: #045756;
+                    border-radius: 50%;
+                }
+            }
 
-        .u-icon-audio {
-            background-color: #70c4b0;
-            border-radius: 100%;
-            position: absolute;
-            right: -5px;
-            bottom: 16px;
-            .size(15px);
-            cursor: pointer;
-        }
+            .u-icon {
+                position: absolute;
+                left: -8px;
+                bottom: 0;
+                transform: rotate(-90deg);
+                width: 20px;
+                height: 20px;
+                cursor: pointer;
+            }
 
-        .u-icon-switch {
-            position: absolute;
-            right: -7px;
-            top: -6px;
-            .size(19px);
-            cursor: pointer;
-        }
+            .u-icon-audio {
+                background-color: #70c4b0;
+                border-radius: 100%;
+                position: absolute;
+                right: -5px;
+                bottom: 2px;
+                .size(15px);
+                cursor: pointer;
+            }
 
-        .u-skill-icon {
-            .size(48px);
-            box-sizing: border-box;
-            border: 2px solid #1a2b22;
-            &.isWuJie {
-                border: 2px solid #2a9998;
-                background-color: #045756;
-                border-radius: 50%;
+            .u-icon-switch {
+                position: absolute;
+                right: -7px;
+                top: -6px;
+                .size(19px);
+                cursor: pointer;
             }
         }
 

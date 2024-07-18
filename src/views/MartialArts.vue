@@ -29,7 +29,7 @@
                     <!-- 套路技能 -->
                     <div class="m-skills">
                         <template v-for="(kungfu_item, index) in kungfu_row" :key="index">
-                            <template v-if="index > 0">
+                            <template v-if="index > 0 && clientOptionVal != 'wujie'">
                                 <div class="m-connect" v-if="kungfu_row[index - 1].skill_id == kungfu_item.prev">
                                     <img class="u-img" src="@/assets/img/arrow.png" />
                                 </div>
@@ -60,40 +60,49 @@
                                             class="u-skill"
                                             :class="{ active: activeSkill == kungfu_item.skill.SkillID }"
                                         >
-                                            <img
-                                                class="u-skill-icon"
-                                                :class="{
-                                                    isWuJie: clientOptionVal == 'wujie',
-                                                }"
-                                                :src="iconLink(kungfu_item.skill.IconID, this.client)"
-                                                :alt="kungfu_item.skill.IconID"
-                                                @mousemove="showSkill(kungfu_item.skill)"
-                                            />
+                                            <div class="m-skill-icon">
+                                                <img
+                                                    class="u-skill-icon"
+                                                    :class="{
+                                                        isWuJie: clientOptionVal == 'wujie',
+                                                    }"
+                                                    :src="iconLink(kungfu_item.skill.IconID, this.client)"
+                                                    :alt="kungfu_item.skill.IconID"
+                                                    @mousemove="showSkill(kungfu_item.skill)"
+                                                />
+
+                                                <img
+                                                    v-if="getSkillRecipe(kungfu_item.skill?.SkillID).length"
+                                                    class="u-icon"
+                                                    src="@/assets/img/challenge.png"
+                                                    :ref="(el) => setRefs(el, kungfu_item.skill)"
+                                                    @click.stop="showRecipe(kungfu_item.skill?.SkillID)"
+                                                />
+                                                <img
+                                                    v-if="audios[kungfu_item.skill?.SkillID]"
+                                                    class="u-icon-audio"
+                                                    src="@/assets/img/audio_icon.png"
+                                                    @click.stop="showAudio(kungfu_item.skill?.SkillID, $event.target)"
+                                                />
+                                                <img
+                                                    class="u-icon-switch"
+                                                    v-if="
+                                                        skillSwitchList[
+                                                            kungfu_item.switchBelong || kungfu_item.skill_id
+                                                        ]
+                                                    "
+                                                    src="@/assets/img/skill_switch.png"
+                                                    @click.stop="
+                                                        showSkillSwitch(kungfu_item, kungfu_id, index, $event.target)
+                                                    "
+                                                />
+                                            </div>
                                             <span class="u-name" :title="kungfu_item.skill.Name">{{
                                                 kungfu_item.skill.Name
                                             }}</span>
                                         </div>
                                     </template>
                                 </el-popover>
-                                <img
-                                    v-if="getSkillRecipe(kungfu_item.skill?.SkillID).length"
-                                    class="u-icon"
-                                    src="@/assets/img/challenge.png"
-                                    :ref="(el) => setRefs(el, kungfu_item.skill)"
-                                    @click.stop="showRecipe(kungfu_item.skill?.SkillID)"
-                                />
-                                <img
-                                    v-if="audios[kungfu_item.skill?.SkillID]"
-                                    class="u-icon-audio"
-                                    src="@/assets/img/audio_icon.png"
-                                    @click.stop="showAudio(kungfu_item.skill?.SkillID, $event.target)"
-                                />
-                                <img
-                                    class="u-icon-switch"
-                                    v-if="skillSwitchList[kungfu_item.switchBelong || kungfu_item.skill_id]"
-                                    src="@/assets/img/skill_switch.png"
-                                    @click.stop="showSkillSwitch(kungfu_item, kungfu_id, index, $event.target)"
-                                />
                             </div>
                         </template>
                     </div>
@@ -504,9 +513,13 @@ export default {
         },
         // 加载技能位置等信息
         async loadMountKungfuPanel() {
-            const mount_id = this.mountid;
+            let mount_id = this.mountid;
             let parClient = this.client;
-            if (this.clientOptionVal == "wujie") parClient = this.clientOptionVal;
+            if (this.clientOptionVal == "wujie") {
+                parClient = this.clientOptionVal;
+                // 无界端-》藏剑id修改
+                if (mount_id == 10144) mount_id = 100725;
+            }
             getKungfuPanel({ client: parClient, mount_id }).then((res) => {
                 this.kungfu_skills = {};
                 const list = res.data.data;
@@ -551,6 +564,26 @@ export default {
                             });
                         }
                     });
+                }
+                // 无界端删除多余技能
+                if (this.clientOptionVal == "wujie") {
+                    delete kungfu_skills["-1"];
+                    delete kungfu_skills["0"];
+                    delete kungfu_skills["5"];
+
+                    let seenNames = [];
+                    for (const key in kungfu_skills) {
+                        kungfu_skills[key] = kungfu_skills[key].filter((item) => {
+                            if (seenNames.indexOf(item.skill.Name) == -1 && item.skill.IconID !== null) {
+                                seenNames.push(item.skill.Name);
+                                return true;
+                            }
+                            return false;
+                        });
+                        if (kungfu_skills[key].length == 0) {
+                            delete kungfu_skills[key];
+                        }
+                    }
                 }
                 this.kungfu_skills = kungfu_skills;
                 this.setSkill(this.pasv_skill.skill);
