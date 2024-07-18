@@ -1,22 +1,32 @@
 <template>
     <div class="p-martial-content">
-        <div>
-            <el-form label-width="82px">
-                <el-form-item label="客户端切换">
-                    <el-select v-model="clientOptionVal" placeholder="客户端切换">
-                        <el-option
-                            v-for="item in clientOptions"
-                            :key="item.value"
-                            :label="item.label"
-                            :value="item.value"
-                        >
-                        </el-option>
-                    </el-select>
-                </el-form-item>
-            </el-form>
-        </div>
-
         <div class="p-martial-arts" v-show="!isSpecialSkill">
+            <!-- 客户端切换 -->
+            <div class="m-client">
+                <div
+                    class="u-fixed"
+                    :class="{
+                        'u-fixed__r': clientHoverStatus,
+                    }"
+                ></div>
+                <div
+                    class="u-client"
+                    @click="setClientOption('std')"
+                    @mouseenter="hoverClient('left')"
+                    @mouseleave="leaveClient"
+                >
+                    旗舰端
+                </div>
+                <div
+                    class="u-client"
+                    @click="setClientOption('wujie')"
+                    @mouseenter="hoverClient('right')"
+                    @mouseleave="leaveClient"
+                >
+                    无界端
+                </div>
+            </div>
+
             <!-- 面板 -->
             <div class="m-martial-skills" v-loading="loading">
                 <!-- 套路（武学面板的一行） -->
@@ -333,17 +343,8 @@ export default {
             // 套路技能
             kungfu_skills: {},
 
-            clientOptions: [
-                {
-                    value: "std",
-                    label: "旗舰端",
-                },
-                {
-                    value: "wujie",
-                    label: "无界端",
-                },
-            ],
             clientOptionVal: "std",
+            clientHoverStatus: false,
         };
     },
     computed: {
@@ -640,6 +641,23 @@ export default {
             getSkillAudios(this.schoolid).then((data) => {
                 this.audios = data;
             });
+        },
+        setClientOption(option) {
+            this.clientOptionVal = option;
+        },
+        hoverClient(side) {
+            if (side == "left") {
+                this.clientHoverStatus = false;
+            } else {
+                this.clientHoverStatus = true;
+            }
+        },
+        leaveClient() {
+            if (this.clientOptionVal == "wujie") {
+                this.clientHoverStatus = true;
+            } else {
+                this.clientHoverStatus = false;
+            }
         },
     },
 };
