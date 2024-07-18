@@ -2,8 +2,8 @@
     <div class="p-martial-content">
         <div>
             <el-form label-width="82px">
-                <el-form-item label="客服端切换">
-                    <el-select v-model="clientOptionVal" placeholder="客服端切换">
+                <el-form-item label="客户端切换">
+                    <el-select v-model="clientOptionVal" placeholder="客户端切换">
                         <el-option
                             v-for="item in clientOptions"
                             :key="item.value"
