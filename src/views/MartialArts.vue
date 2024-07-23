@@ -525,6 +525,7 @@ export default {
                 parClient = this.clientOptionVal;
                 // 无界端-》藏剑id修改
                 if (mount_id == 10144) mount_id = 100725;
+                this.leaveClient();
             }
             getKungfuPanel({ client: parClient, mount_id }).then((res) => {
                 this.kungfu_skills = {};
@@ -646,9 +647,6 @@ export default {
             getSkillAudios(this.schoolid).then((data) => {
                 this.audios = data;
             });
-        },
-        setClientOption(option) {
-            this.clientOptionVal = option;
         },
         hoverClient(side) {
             if (side == "left") {

@@ -85,6 +85,7 @@ export default {
                         ? {}
                         : {
                               subtype: this.$route.query.subtype,
+                              is_wujie: this.$route.query.is_wujie,
                           };
                 this.$router.push({
                     name: this.view,
