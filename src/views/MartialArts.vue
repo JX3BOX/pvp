@@ -9,22 +9,22 @@
                         'u-fixed__r': clientHoverStatus,
                     }"
                 ></div>
-                <div
+                <router-link
                     class="u-client"
-                    @click="setClientOption('std')"
                     @mouseenter="hoverClient('left')"
                     @mouseleave="leaveClient"
+                    :to="{ query: { subtype, tab, is_wujie: 0 } }"
                 >
                     旗舰端
-                </div>
-                <div
+                </router-link>
+                <router-link
                     class="u-client"
-                    @click="setClientOption('wujie')"
                     @mouseenter="hoverClient('right')"
                     @mouseleave="leaveClient"
+                    :to="{ query: { subtype, tab, is_wujie: 1 } }"
                 >
                     无界端
-                </div>
+                </router-link>
             </div>
 
             <!-- 面板 -->
@@ -343,7 +343,6 @@ export default {
             // 套路技能
             kungfu_skills: {},
 
-            clientOptionVal: "std",
             clientHoverStatus: false,
         };
     },
@@ -415,6 +414,12 @@ export default {
         // tl skillIds
         tlSkillIds: function () {
             return this.skills.map((item) => ~~item._id);
+        },
+        tab: function () {
+            return this.$route.query.tab;
+        },
+        clientOptionVal: function () {
+            return this.$route.query.is_wujie * 1 ? "wujie" : "std";
         },
     },
     watch: {

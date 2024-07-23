@@ -10,7 +10,7 @@
             <li class="u-item" v-for="(item, i) in xfmaps" :key="i" v-show="item.client.includes(client)">
                 <router-link
                     class="u-link"
-                    :to="{ query: { subtype: item.name, tab: tab } }"
+                    :to="{ query: { subtype: item.name, tab: tab, is_wujie } }"
                     :class="{ on: isActive(item) }"
                 >
                     <i class="u-pic">
@@ -60,6 +60,9 @@ export default {
         },
         tab: function () {
             return this.$route.query.tab;
+        },
+        is_wujie: function () {
+            return this.$route.query.is_wujie || 0;
         },
         xfmaps() {
             delete xfmap["山居剑意"];
