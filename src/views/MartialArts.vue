@@ -118,10 +118,7 @@
                     </div>
                 </div>
 
-                <div
-                    class="m-talent-box qx-container"
-                    v-show="subtype && subtype !== '通用' && clientOptionVal != 'wujie'"
-                ></div>
+                <div class="m-talent-box qx-container" v-show="subtype && subtype !== '通用'"></div>
             </div>
             <!-- 右侧心法被动 & 阵法 & 奇穴推荐 -->
             <div class="m-martial-extend" v-if="subtype && subtype !== '通用'">
@@ -320,7 +317,10 @@ export default {
 
             talentDriver: null,
             recipe: [],
-            version: "",
+            version: {
+                std: "",
+                wujie: "",
+            },
 
             iconRef: ref(null),
             visiblePopover: false,
@@ -439,6 +439,7 @@ export default {
             this.loading = true;
             await this.loadMountKungfuPanel();
             await this.getRecipe();
+            this.reloadTalent();
             this.loading = false;
         },
     },
@@ -608,10 +609,16 @@ export default {
         // 初始化奇穴模拟器（此时渲染使用空奇穴模板）
         installTalent: async function () {
             await getBreadcrumb("pvp_talent_version").then((res) => {
-                this.version = res.data?.data?.html;
-                this.talentDriver = new JX3_QIXUE({ version: this.version });
-                this.reloadTalent();
+                this.version.std = res.data?.data?.html;
             });
+            await getBreadcrumb("pvp_talent_version_mobile").then((res) => {
+                this.version.wujie = res.data?.data?.html;
+            });
+            this.talentDriver = new JX3_QIXUE({
+                version: this.version[this.clientOptionVal],
+                client: this.clientOptionVal,
+            });
+            this.reloadTalent();
         },
         reloadTalent() {
             if (!this.subtype || this.subtype == "通用") return;
@@ -620,9 +627,10 @@ export default {
                 this.talentDriver?.then((talent) => {
                     $store.qixueData = talent?._data;
                     talent.load({
-                        // version: this.version,
+                        version: this.version[this.clientOptionVal],
                         xf: this.subtype,
                         editable: true,
+                        client: this.clientOptionVal,
                     });
                 });
             });
