@@ -74,6 +74,15 @@ export default {
             return publishLink(setting.appKey);
         },
     },
+    watch: {
+        "$route.query": {
+            handler: function (query) {
+                this.is_wujie = ~~query.is_wujie || 0;
+            },
+            immediate: true,
+            deep: true,
+        },
+    },
     methods: {
         filterImperceptibly(val) {
             this.$emit("filterImperceptibly", val);

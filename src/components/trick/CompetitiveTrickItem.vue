@@ -190,6 +190,12 @@ export default {
         authorLink,
         iconLink,
         getAppIcon,
+        handleSq(sq, client) {
+            if (client == "wujie") {
+                return sq?.split(",")?.length > 4 ? "1,1,1,1" : sq;
+            }
+            return sq;
+        },
         // 初始化奇穴模拟器（此时渲染使用空奇穴模板）
         installTalent() {
             this.talentDriver = new JX3_QIXUE({
@@ -197,7 +203,8 @@ export default {
                 version: this.talent.version,
                 xf: this.talent.xf,
                 editable: false,
-                sq: this.talent.sq,
+                sq: this.handleSq(this.talent.sq, this.data?.is_wujie ? "wujie" : "std"),
+                client: this.data?.is_wujie ? "wujie" : "std",
             });
             // this.reloadTalent();
         },
