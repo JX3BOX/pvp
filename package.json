@@ -15,7 +15,7 @@
         "@element-plus/icons-vue": "^2.1.0",
         "@jx3box/jx3box-common": "^8.2.25",
         "@jx3box/jx3box-data": "^3.6.0",
-        "@jx3box/jx3box-talent": "^1.1.9",
+        "@jx3box/jx3box-talent": "^1.2.9",
         "@jx3box/jx3box-vue3-ui": "^0.8.11",
         "@vueuse/core": "^9.13.0",
         "@vueuse/head": "^0.7.6",
