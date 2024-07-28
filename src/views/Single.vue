@@ -253,6 +253,7 @@ export default {
                 xf: this.talent.xf,
                 editable: false,
                 sq: this.talent.sq,
+                client: this.talent.client || "std",
             });
         },
         updateDirectory: function (val) {
