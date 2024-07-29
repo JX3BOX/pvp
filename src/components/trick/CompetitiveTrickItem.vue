@@ -206,17 +206,18 @@ export default {
                 sq: this.handleSq(this.talent.sq, this.data?.is_wujie ? "wujie" : "std"),
                 client: this.data?.is_wujie ? "wujie" : "std",
             });
-            // this.reloadTalent();
         },
         reloadTalent() {
             this.$nextTick(() => {
                 if (!this.talentDriver) return;
                 this.talentDriver?.then((talent) => {
                     talent.load({
+                        container: `.m-qx-container-${this.data?.ID}`,
                         version: this.talent.version,
                         xf: this.talent.xf,
                         editable: false,
                         sq: this.talent.sq,
+                        client: this.data?.is_wujie ? "wujie" : "std",
                     });
                 });
             });
