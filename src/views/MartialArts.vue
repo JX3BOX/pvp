@@ -82,11 +82,18 @@
                                                 />
 
                                                 <img
-                                                    v-if="getSkillRecipe(kungfu_item.skill?.SkillID).length"
+                                                    v-if="
+                                                        getSkillRecipe(
+                                                            kungfu_item.skill?.SkillID,
+                                                            kungfu_item.skill.Name
+                                                        ).length
+                                                    "
                                                     class="u-icon"
                                                     src="@/assets/img/challenge.png"
                                                     :ref="(el) => setRefs(el, kungfu_item.skill)"
-                                                    @click.stop="showRecipe(kungfu_item.skill?.SkillID)"
+                                                    @click.stop="
+                                                        showRecipe(kungfu_item.skill?.SkillID, kungfu_item.skill.Name)
+                                                    "
                                                 />
                                                 <img
                                                     v-if="audios[kungfu_item.skill?.SkillID]"
@@ -481,14 +488,14 @@ export default {
                 });
             }
         },
-        showRecipe: function (id) {
+        showRecipe: function (id, name) {
             const index = this.refMap.findIndex((item) => item.item.SkillID == id);
             if (this.iconRef == this.refMap[index].ref && this.visiblePopover) {
                 this.visiblePopover = false;
                 return;
             }
             this.iconRef = this.refMap[index].ref;
-            this.selectedRecipe = this.getSkillRecipe(id);
+            this.selectedRecipe = this.getSkillRecipe(id, name);
             this.visiblePopover = true;
         },
         showAudio: function (id, ref) {
@@ -644,8 +651,12 @@ export default {
                 this.recipe = res.data;
             });
         },
-        getSkillRecipe(id) {
-            return this.recipe.filter((r) => r.SkillID == id);
+        getSkillRecipe(id, name) {
+            if (this.clientOptionVal == "wujie") {
+                return this.recipe.filter((r) => r.KungfuName == name);
+            } else {
+                return this.recipe.filter((r) => r.SkillID == id);
+            }
         },
         recipeLink(item) {
             return `/item/search/${item.Name}`;
