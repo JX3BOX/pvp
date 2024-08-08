@@ -460,9 +460,10 @@ export default {
         },
         // Points to show, contains points pending reviewed and rejected
         showPoints() {
-            const points = $store.myPoints
+            const points = this.points.filter((item) => item.map === this.map); // current map points
+            const showPoints = $store.myPoints
                 .filter((item) => item.status !== 1) // points includes  status 0 2 of myPoints
-                .concat(this.points, this.markPoints)
+                .concat(points, this.markPoints)
                 .filter((item) => this.selectedLegends.includes(item.meta.type)) // filter legend
                 .map((item) => {
                     return {
@@ -475,7 +476,7 @@ export default {
                         post_author: item.user_id,
                     };
                 });
-            return points;
+            return showPoints;
         },
         editPoint() {
             return $store.editPoint;
