@@ -260,6 +260,7 @@
                     @click="skillSwitch(item)"
                 >
                     {{ item.skill.Name }}
+                    <span style="font-size: 10px; color: gray">{{ item.skill.Remark }}</span>
                 </div>
             </el-popover>
         </div>
