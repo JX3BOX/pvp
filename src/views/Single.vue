@@ -106,7 +106,7 @@
 import { showAvatar, authorLink, iconLink, getAppIcon } from "@jx3box/jx3box-common/js/utils";
 import { useStore } from "@/store";
 import { getPost } from "@/service/post";
-import { getStat, postStat } from "@jx3box/jx3box-common/js/stat";
+import { getStat, postStat, postHistory } from "@jx3box/jx3box-common/js/stat_v2";
 import JX3BOX from "@jx3box/jx3box-common/data/jx3box.json";
 import xfmap from "@jx3box/jx3box-data/data/xf/xf.json";
 import SETTING from "@/../setting.json";
@@ -121,6 +121,7 @@ import PostHeader from "@jx3box/jx3box-vue3-ui/src/single/PostHeader.vue";
 import Thx from "@jx3box/jx3box-vue3-ui/src/single/Thx.vue";
 import Comment from "@jx3box/jx3box-vue3-ui/src/single/Comment.vue";
 import Article from "@jx3box/jx3box-vue3-ui/src/editor/Article.vue";
+import User from "@jx3box/jx3box-common/js/user";
 export default {
     name: "PvpSingle",
     components: {
@@ -229,6 +230,14 @@ export default {
                     useStore().post = this.post;
 
                     document.title = this.post?.post_title;
+
+                    User.isLogin() &&
+                        postHistory({
+                            source_type: appKey,
+                            source_id: ~~this.id,
+                            link: location.href,
+                            title: this.post.post_title,
+                        });
 
                     this.$nextTick(() => {
                         this.installTalent();
