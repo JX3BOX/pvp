@@ -89,6 +89,7 @@
                     :authors="authors"
                     :client="post_client"
                     :allowGift="allow_gift"
+                    showRss
                 />
 
                 <!-- 评论 -->
