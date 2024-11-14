@@ -31,14 +31,7 @@
                 <!-- 资料片过滤 -->
                 <zlpBy @filter="filterMeta" type="zlp" :client="client"></zlpBy>
                 <!-- 无界过滤 -->
-                <el-checkbox
-                    class="u-wujie-filter"
-                    :true-label="1"
-                    :false-label="0"
-                    v-model="is_wujie"
-                    @change="filterWujie"
-                    >只看无界</el-checkbox
-                >
+                <versionBy v-if="client == 'std'" :value="is_wujie" @filter="filterWujie"></versionBy>
             </div>
             <div class="m-filter--right">
                 <!-- 排序过滤 -->
@@ -52,8 +45,12 @@
 import setting from "@/../setting.json";
 import { publishLink } from "@jx3box/jx3box-common/js/utils";
 import { useStore } from "@/store";
+import versionBy from "@jx3box/jx3box-vue3-ui/src/filters/versionBy.vue";
 export default {
     name: "TrickHeader",
+    components: {
+        versionBy,
+    },
     props: {
         canFilter: {
             type: Boolean,
@@ -65,7 +62,7 @@ export default {
             search: "",
             client: useStore().client,
 
-            is_wujie: 0,
+            is_wujie: "",
         };
     },
     computed: {
@@ -77,7 +74,7 @@ export default {
     watch: {
         "$route.query": {
             handler: function (query) {
-                this.is_wujie = ~~query.is_wujie || 0;
+                this.is_wujie = query.is_wujie;
             },
             immediate: true,
             deep: true,
@@ -94,7 +91,7 @@ export default {
             this.$emit("search", this.search);
         },
         filterWujie(val) {
-            this.$emit("filterWujie", val);
+            this.$emit("filterWujie", val.val);
         },
     },
 };
