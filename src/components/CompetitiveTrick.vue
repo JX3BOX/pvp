@@ -7,6 +7,7 @@
             @filterMeta="filterMeta"
             @search="onSearch"
             @filterWujie="filterWujie"
+            :client="client"
         ></TrickHeader>
 
         <div v-if="data.length" class="m-competitive-trick" v-loading="loading">
@@ -31,7 +32,7 @@ import User from "@jx3box/jx3box-common/js/user";
 import { getDesignLog } from "@/service/design";
 import DesignTask from "@jx3box/jx3box-vue3-ui/src/bread/DesignTask.vue";
 import bus from "@jx3box/jx3box-vue3-ui/utils/bus";
-
+import { useStore } from "@/store";
 export default {
     name: "CompetitiveTrick",
     components: {
@@ -67,7 +68,7 @@ export default {
             return this.$route.query?.zlp || "";
         },
         is_wujie() {
-            return this.$route.query?.is_wujie || 0;
+            return this.$route.query?.is_wujie;
         },
         query: function () {
             return {
@@ -96,6 +97,8 @@ export default {
             this.currentPost = post;
             this.showDesignTask = true;
         });
+
+        this.client = useStore().client;
     },
     beforeUnmount() {
         bus.off("design-task");

@@ -44,7 +44,6 @@
 <script>
 import setting from "@/../setting.json";
 import { publishLink } from "@jx3box/jx3box-common/js/utils";
-import { useStore } from "@/store";
 import versionBy from "@jx3box/jx3box-vue3-ui/src/filters/versionBy.vue";
 export default {
     name: "TrickHeader",
@@ -56,11 +55,14 @@ export default {
             type: Boolean,
             default: true,
         },
+        client: {
+            type: String,
+            default: "std",
+        },
     },
     data() {
         return {
             search: "",
-            client: useStore().client,
 
             is_wujie: "",
         };

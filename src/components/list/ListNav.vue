@@ -62,7 +62,7 @@ export default {
             return this.$route.query.tab;
         },
         is_wujie: function () {
-            return this.$route.query.is_wujie || 0;
+            return this.$route.query.is_wujie;
         },
         xfmaps() {
             delete xfmap["山居剑意"];
