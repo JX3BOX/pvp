@@ -11,6 +11,9 @@
             :crumbEnable="false"
             class="m-dark-breadcrumb"
         >
+            <template #logo>
+                <img svg-inline :src="logo" />
+            </template>
             <span class="u-breadcrumb-title"
                 ><el-icon><ArrowRight /></el-icon> 绝境战场</span
             >
@@ -35,6 +38,7 @@ import CJNav from "@/components/cj/CJNav.vue";
 import { useStore } from "@/store";
 const $store = useStore();
 import User from "@jx3box/jx3box-common/js/user.js";
+import JX3BOX from "@jx3box/jx3box-common/data/jx3box.json";
 export default {
     name: "App",
     data: function () {
@@ -54,6 +58,9 @@ export default {
         },
         pageName() {
             return this.$route.name;
+        },
+        logo() {
+            return JX3BOX.__cdn + "logo/logo-light/" + "pvp.svg";
         },
     },
     methods: {

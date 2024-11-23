@@ -10,6 +10,9 @@
             :feedbackEnable="true"
             :crumbEnable="true"
         >
+            <template #logo>
+                <img svg-inline :src="logo" />
+            </template>
             <Info />
         </Breadcrumb>
         <LeftSidebar>
@@ -26,10 +29,8 @@
 </template>
 
 <script>
-// import Info from "@/components/list/Info.vue";
-// import Nav from "@/components/list/list_nav.vue";
-// import Header from '@jx3box/jx3box-vue3-ui/src/Header.vue';
 import Tabs from "@/components/Tabs.vue";
+const JX3BOX = require("@jx3box/jx3box-common/data/jx3box.json");
 export default {
     name: "App",
     components: {
@@ -39,7 +40,9 @@ export default {
     },
     props: [],
     data: function () {
-        return {};
+        return {
+            logo: JX3BOX.__cdn + "logo/logo-light/bps.svg",
+        };
     },
     methods: {},
 };

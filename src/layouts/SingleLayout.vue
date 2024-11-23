@@ -10,6 +10,9 @@
             :feedbackEnable="true"
             :crumbEnable="true"
         >
+            <template #logo>
+                <img svg-inline :src="logo" />
+            </template>
             <template #title>
                 <span>
                     {{ title }}
@@ -38,6 +41,7 @@
 import { useStore } from "@/store";
 // import Side from "@/components/single/single_side.vue";
 import { getAppID } from "@jx3box/jx3box-common/js/utils";
+const JX3BOX = require("@jx3box/jx3box-common/data/jx3box.json");
 
 import Nav from "@/components/single/SingleNav.vue";
 import PostTopic from "@jx3box/jx3box-vue3-ui/src/single/PostTopic.vue";
@@ -54,6 +58,7 @@ export default {
     data: function () {
         return {
             id: getAppID(),
+            logo: JX3BOX.__cdn + "logo/logo-light/pvp.svg",
         };
     },
     computed: {
