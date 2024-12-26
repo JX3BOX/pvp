@@ -43,7 +43,7 @@ export default {
         },
         logo() {
             const key = this.icon || this.slug;
-            return JX3BOX.__imgPath + "image/box/" + key + ".svg";
+            return JX3BOX.__cdn + "logo/logo-light/" + key + ".svg";
         },
         title() {
             return app[this.slug]?.title || "";

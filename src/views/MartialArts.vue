@@ -447,7 +447,7 @@ export default {
             this.loading = true;
             await this.loadMountKungfuPanel();
             await this.getRecipe();
-            this.reloadTalent();
+            await this.installTalent();
             this.loading = false;
         },
     },

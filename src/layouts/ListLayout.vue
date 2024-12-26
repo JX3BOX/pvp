@@ -9,6 +9,9 @@
             :feedbackEnable="true"
             :crumbEnable="true"
         >
+            <template #logo>
+                <img svg-inline :src="logo" />
+            </template>
             <Info />
         </Breadcrumb>
         <LeftSidebar>
@@ -40,7 +43,7 @@ import Nav from "@/components/list/ListNav.vue";
 import Side from "@/components/list/RightSide.vue";
 import Tabs from "@/components/Tabs.vue";
 import MiniRank from "@/components/MiniRank.vue";
-// import SkillChange from "@/components/SkillChange.vue";
+const JX3BOX = require("@jx3box/jx3box-common/data/jx3box.json");
 import { useStore } from "@/store";
 export default {
     name: "App",
@@ -51,7 +54,9 @@ export default {
         },
     },
     data: function () {
-        return {};
+        return {
+            logo: JX3BOX.__cdn + "logo/logo-light/pvp.svg",
+        };
     },
     computed: {
         client() {
