@@ -11,10 +11,10 @@
 <script>
 import { onClickOutside } from "@vueuse/core";
 import sandboxSearch from "@/components/sandbox/SandboxSearch.vue";
+import { getCamplist, getCampLog } from "@/service/sandbox";
 import sandboxMaps from "@/components/sandbox/SandboxMaps.vue";
 import sandboxLog from "@/components/sandbox/SandboxLog.vue";
 import servers_std from "@jx3box/jx3box-data/data/server/server_std.json";
-import { getCamplist, getCampLog } from "@/service/sandbox";
 export default {
     name: "SandBox",
     components: {
@@ -27,6 +27,8 @@ export default {
             sandMaps: {},
             servers: servers_std,
             itemLog: "",
+            route: false,
+            camp: "haoqi",
             showLog: false,
             server: servers_std[0] || "",
         };
@@ -35,7 +37,6 @@ export default {
         parms: function () {
             return {
                 server: this.server,
-                camp: this.camp,
             };
         },
     },
@@ -53,14 +54,14 @@ export default {
             this.server = server;
             this.camp = camp;
             this.route = route;
-            this.getSandbox();
-            this.$emit("sandboxChangeKey", server);
         },
         //获取沙盘数据 含沙盘攻防路线
         getSandbox() {
             getCamplist(this.parms).then((res) => {
+                console.log(res);
                 this.sandMaps = { list: res.data.castles };
             });
+            this.$emit("sandboxChangeKey", this.server);
         },
         // 点击展示日志
         mapClick(item) {
@@ -74,9 +75,14 @@ export default {
             this.showLog = false;
         },
     },
-
-    created: function () {
-        this.getSandbox();
+    watch: {
+        parms: {
+            immediate: true,
+            deep: true,
+            handler: function () {
+                this.getSandbox();
+            },
+        },
     },
 };
 </script>

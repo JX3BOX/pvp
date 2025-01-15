@@ -228,89 +228,291 @@
         }
     },
     "placeCamp": {
-        "LuoDao": { "left": "724px", "top": "326px" },
-        "JinShuiZhen": { "left": "730px", "top": "150px" },
-        "BaLingXian": { "left": "644px", "top": "486px" },
-        "NanPingShan": { "left": "670px", "top": "560px" },
-        "LongMenHuangMo": { "left": "428px", "top": "124px" },
-        "KunLun": { "left": "252px", "top": "142px" },
-        "QuTangXia": { "left": "522px", "top": "438px" },
-        "BaiLongKou": { "left": "380px", "top": "476px" },
-        "WuLiangShan": { "left": "216px", "top": "636px" },
-        "RongTianLing": { "left": "170px", "top": "290px" },
-        "HeiLongZhao": { "left": "80px", "top": "444px" },
-        "CangShanErHai": { "left": "466px", "top": "654px" },
-        "FengHuaGuZhanLuan": { "left": "526px", "top": "204px" },
-        "MaWeiYi": { "left": "278px", "top": "238px" }
+        "LuoDao": {
+            "left": "724px",
+            "top": "326px"
+        },
+        "JinShuiZhen": {
+            "left": "730px",
+            "top": "150px"
+        },
+        "BaLingXian": {
+            "left": "644px",
+            "top": "486px"
+        },
+        "NanPingShan": {
+            "left": "670px",
+            "top": "560px"
+        },
+        "LongMenHuangMo": {
+            "left": "428px",
+            "top": "124px"
+        },
+        "KunLun": {
+            "left": "252px",
+            "top": "142px"
+        },
+        "QuTangXia": {
+            "left": "522px",
+            "top": "438px"
+        },
+        "BaiLongKou": {
+            "left": "380px",
+            "top": "476px"
+        },
+        "WuLiangShan": {
+            "left": "216px",
+            "top": "636px"
+        },
+        "RongTianLing": {
+            "left": "170px",
+            "top": "290px"
+        },
+        "HeiLongZhao": {
+            "left": "80px",
+            "top": "444px"
+        },
+        "CangShanErHai": {
+            "left": "466px",
+            "top": "654px"
+        },
+        "FengHuaGuZhanLuan": {
+            "left": "526px",
+            "top": "204px"
+        },
+        "MaWeiYi": {
+            "left": "278px",
+            "top": "238px"
+        }
     },
     "placeAttacks": {
         "KunLun": {
-            "RongTianLing": { "left": "192px", "top": "212px", "transform": "rotate(200deg)" },
-            "MaWeiYi": { "left": "298px", "top": "204px", "transform": "rotate(170deg)" },
-            "LongMenHuangMo": { "left": "178px", "top": "110px", "transform": "rotate(110deg)" }
+            "RongTianLing": {
+                "left": "192px",
+                "top": "212px",
+                "transform": "rotate(200deg)"
+            },
+            "MaWeiYi": {
+                "left": "298px",
+                "top": "204px",
+                "transform": "rotate(170deg)"
+            },
+            "LongMenHuangMo": {
+                "left": "178px",
+                "top": "110px",
+                "transform": "rotate(110deg)"
+            }
         },
         "MaWeiYi": {
-            "KunLun": { "left": "300px", "top": "184px", "transform": "rotate(320deg)" },
-            "RongTianLing": { "left": "218px", "top": "280px", "transform": "rotate(250deg)" },
-            "LongMenHuangMo": { "left": "380px", "top": "182px", "transform": "rotate(50deg)" },
-            "BaiLongKou": { "left": "312px", "top": "346px", "transform": "rotate(180deg)" }
+            "KunLun": {
+                "left": "300px",
+                "top": "184px",
+                "transform": "rotate(320deg)"
+            },
+            "RongTianLing": {
+                "left": "218px",
+                "top": "280px",
+                "transform": "rotate(250deg)"
+            },
+            "LongMenHuangMo": {
+                "left": "380px",
+                "top": "182px",
+                "transform": "rotate(50deg)"
+            },
+            "BaiLongKou": {
+                "left": "312px",
+                "top": "346px",
+                "transform": "rotate(180deg)"
+            }
         },
         "LongMenHuangMo": {
-            "KunLun": { "left": "378px", "top": "108px", "transform": "rotate(280deg)" },
-            "MaWeiYi": { "left": "356px", "top": "183px", "transform": "rotate(220deg)" },
-            "FengHuaGuZhanLuan": { "left": "504px", "top": "144px", "transform": "rotate(120deg)" }
+            "KunLun": {
+                "left": "378px",
+                "top": "108px",
+                "transform": "rotate(280deg)"
+            },
+            "MaWeiYi": {
+                "left": "356px",
+                "top": "183px",
+                "transform": "rotate(220deg)"
+            },
+            "FengHuaGuZhanLuan": {
+                "left": "504px",
+                "top": "144px",
+                "transform": "rotate(120deg)"
+            }
         },
         "FengHuaGuZhanLuan": {
-            "LongMenHuangMo": { "left": "488px", "top": "132px", "transform": "rotate(300deg)" },
-            "JinShuiZhen": { "left": "638px", "top": "140px", "transform": "rotate(90deg)" }
+            "LongMenHuangMo": {
+                "left": "488px",
+                "top": "132px",
+                "transform": "rotate(300deg)"
+            },
+            "JinShuiZhen": {
+                "left": "638px",
+                "top": "140px",
+                "transform": "rotate(90deg)"
+            }
         },
         "JinShuiZhen": {
-            "LuoDao": { "left": "704px", "top": "246px", "transform": "rotate(200deg)" },
-            "FengHuaGuZhanLuan": { "left": "618px", "top": "142px", "transform": "rotate(270deg)" }
+            "LuoDao": {
+                "left": "704px",
+                "top": "246px",
+                "transform": "rotate(200deg)"
+            },
+            "FengHuaGuZhanLuan": {
+                "left": "618px",
+                "top": "142px",
+                "transform": "rotate(270deg)"
+            }
         },
         "LuoDao": {
-            "JinShuiZhen": { "left": "666px", "top": "228px", "transform": "rotate(7deg)" },
-            "BaLingXian": { "left": "644px", "top": "382px", "transform": "rotate(210deg)" },
-            "NanPingShan": { "left": "726px", "top": "414px", "transform": "rotate(180deg)" }
+            "JinShuiZhen": {
+                "left": "666px",
+                "top": "228px",
+                "transform": "rotate(7deg)"
+            },
+            "BaLingXian": {
+                "left": "644px",
+                "top": "382px",
+                "transform": "rotate(210deg)"
+            },
+            "NanPingShan": {
+                "left": "726px",
+                "top": "414px",
+                "transform": "rotate(180deg)"
+            }
         },
         "BaLingXian": {
-            "LuoDao": { "left": "642px", "top": "368px", "transform": "rotate(30deg)" },
-            "NanPingShan": { "left": "674px", "top": "512px", "transform": "rotate(120deg)" },
-            "CangShanErHai": { "left": "520px", "top": "564px", "transform": "rotate(200deg)" },
-            "QuTangXia": { "left": "556px", "top": "454px", "transform": "rotate(290deg)" }
+            "LuoDao": {
+                "left": "642px",
+                "top": "368px",
+                "transform": "rotate(30deg)"
+            },
+            "NanPingShan": {
+                "left": "674px",
+                "top": "512px",
+                "transform": "rotate(120deg)"
+            },
+            "CangShanErHai": {
+                "left": "520px",
+                "top": "564px",
+                "transform": "rotate(200deg)"
+            },
+            "QuTangXia": {
+                "left": "556px",
+                "top": "454px",
+                "transform": "rotate(290deg)"
+            }
         },
         "QuTangXia": {
-            "BaLingXian": { "left": "568px", "top": "466px", "transform": "rotate(120deg)" },
-            "BaiLongKou": { "left": "400px", "top": "434px", "transform": "rotate(270deg)" }
+            "BaLingXian": {
+                "left": "568px",
+                "top": "466px",
+                "transform": "rotate(120deg)"
+            },
+            "BaiLongKou": {
+                "left": "400px",
+                "top": "434px",
+                "transform": "rotate(270deg)"
+            }
         },
         "CangShanErHai": {
-            "BaLingXian": { "left": "536px", "top": "550px", "transform": "rotate(40deg)" },
-            "NanPingShan": { "left": "596px", "top": "616px", "transform": "rotate(70deg)" },
-            "WuLiangShan": { "left": "282px", "top": "652px", "transform": "rotate(270deg)" }
+            "BaLingXian": {
+                "left": "536px",
+                "top": "550px",
+                "transform": "rotate(40deg)"
+            },
+            "NanPingShan": {
+                "left": "596px",
+                "top": "616px",
+                "transform": "rotate(70deg)"
+            },
+            "WuLiangShan": {
+                "left": "282px",
+                "top": "652px",
+                "transform": "rotate(270deg)"
+            }
         },
         "WuLiangShan": {
-            "HeiLongZhao": { "left": "114px", "top": "598px", "transform": "rotate(0deg)" },
-            "BaiLongKou": { "left": "230px", "top": "588px", "transform": "rotate(40deg)" },
-            "CangShanErHai": { "left": "300px", "top": "652px", "transform": "rotate(100deg)" }
+            "HeiLongZhao": {
+                "left": "114px",
+                "top": "598px",
+                "transform": "rotate(0deg)"
+            },
+            "BaiLongKou": {
+                "left": "230px",
+                "top": "588px",
+                "transform": "rotate(40deg)"
+            },
+            "CangShanErHai": {
+                "left": "300px",
+                "top": "652px",
+                "transform": "rotate(100deg)"
+            }
         },
         "BaiLongKou": {
-            "WuLiangShan": { "left": "240px", "top": "610px", "transform": "rotate(200deg)" },
-            "QuTangXia": { "left": "416px", "top": "438px", "transform": "rotate(70deg)" },
-            "MaWeiYi": { "left": "316px", "top": "336px", "transform": "rotate(340deg)" }
+            "WuLiangShan": {
+                "left": "240px",
+                "top": "610px",
+                "transform": "rotate(200deg)"
+            },
+            "QuTangXia": {
+                "left": "416px",
+                "top": "438px",
+                "transform": "rotate(70deg)"
+            },
+            "MaWeiYi": {
+                "left": "316px",
+                "top": "336px",
+                "transform": "rotate(340deg)"
+            }
         },
         "HeiLongZhao": {
-            "WuLiangShan": { "left": "114px", "top": "600px", "transform": "rotate(180deg)" },
-            "RongTianLing": { "left": "162px", "top": "390px", "transform": "rotate(10deg)" }
+            "WuLiangShan": {
+                "left": "114px",
+                "top": "600px",
+                "transform": "rotate(180deg)"
+            },
+            "RongTianLing": {
+                "left": "162px",
+                "top": "390px",
+                "transform": "rotate(10deg)"
+            }
         },
         "RongTianLing": {
-            "KunLun": { "left": "200px", "top": "208px", "transform": "rotate(30deg)" },
-            "MaWeiYi": { "left": "244px", "top": "236px", "transform": "rotate(90deg)" },
-            "HeiLongZhao": { "left": "98px", "top": "384px", "transform": "rotate(190deg)" }
+            "KunLun": {
+                "left": "200px",
+                "top": "208px",
+                "transform": "rotate(30deg)"
+            },
+            "MaWeiYi": {
+                "left": "244px",
+                "top": "236px",
+                "transform": "rotate(90deg)"
+            },
+            "HeiLongZhao": {
+                "left": "98px",
+                "top": "384px",
+                "transform": "rotate(190deg)"
+            }
         },
         "NanPingShan": {
-            "BaLingXian": { "left": "644px", "top": "536px", "transform": "rotate(300deg)" },
-            "LuoDao": { "left": "730px", "top": "402px", "transform": "rotate(0deg)" },
-            "CangShanErHai": { "left": "576px", "top": "616px", "transform": "rotate(240deg)" }
+            "BaLingXian": {
+                "left": "644px",
+                "top": "536px",
+                "transform": "rotate(300deg)"
+            },
+            "LuoDao": {
+                "left": "730px",
+                "top": "402px",
+                "transform": "rotate(0deg)"
+            },
+            "CangShanErHai": {
+                "left": "576px",
+                "top": "616px",
+                "transform": "rotate(240deg)"
+            }
         }
     },
     "placeArr": {
@@ -482,5 +684,235 @@
                 "transform": "rotate(210deg)"
             }
         }
-    }
+    },
+    "castles": [
+        {
+            "name": "不空关",
+            "key": "BuKongGuan",
+            "map": "QuTangXia",
+            "neighbors": ["JiLiuWu"]
+        },
+        {
+            "name": "大理山城",
+            "key": "DaLiShanCheng",
+            "map": "CangShanErHai",
+            "neighbors": ["QianYanGuan"]
+        },
+        {
+            "name": "啖杏林",
+            "key": "DanXingLin",
+            "map": "FengHuaGuZhanLuan",
+            "neighbors": ["FengHuZhai"]
+        },
+        {
+            "name": "飞沙关",
+            "key": "FeiShaGuan",
+            "map": "LongMenHuangMo",
+            "neighbors": ["LongMenZhen"]
+        },
+        {
+            "name": "枫湖寨",
+            "key": "FengHuZhai",
+            "map": "FengHuaGuZhanLuan",
+            "neighbors": ["DanXingLin"]
+        },
+        {
+            "name": "凤鸣堡",
+            "key": "FengMingBao",
+            "map": "HeiLongZhao",
+            "neighbors": ["JingQiuGu"]
+        },
+        {
+            "name": "扶风郡",
+            "key": "FuFengJun",
+            "map": "MaWeiYi",
+            "neighbors": ["ShiWaiPo"]
+        },
+        {
+            "name": "红莲岗",
+            "key": "HongLianGang",
+            "map": "LuoDao",
+            "neighbors": ["QiuYuBao"]
+        },
+        {
+            "name": "激流坞",
+            "key": "JiLiuWu",
+            "map": "QuTangXia",
+            "neighbors": ["BuKongGuan"]
+        },
+        {
+            "name": "惊虬谷",
+            "key": "JingQiuGu",
+            "map": "HeiLongZhao",
+            "neighbors": ["FengMingBao"]
+        },
+        {
+            "name": "金门关",
+            "key": "JinMenGuan",
+            "map": "JinShuiZhen",
+            "neighbors": ["QingYunWu"]
+        },
+        {
+            "name": "澜沧城",
+            "key": "LanCangCheng",
+            "map": "WuLiangShan",
+            "neighbors": ["ShuangGeBao"]
+        },
+        {
+            "name": "烈日岗",
+            "key": "LieRiGang",
+            "map": "RongTianLing",
+            "neighbors": ["ShenChiLing"]
+        },
+        {
+            "name": "凛风堡",
+            "key": "LinFengBao",
+            "map": "KunLun",
+            "neighbors": []
+        },
+        {
+            "name": "龙门镇",
+            "key": "LongMenZhen",
+            "map": "LongMenHuangMo",
+            "neighbors": ["FeiShaGuan"]
+        },
+        {
+            "name": "盘龙坞",
+            "key": "PanLongWu",
+            "map": "BaLingXian",
+            "neighbors": ["ZhuLuPing"]
+        },
+        {
+            "name": "千岩关",
+            "key": "QianYanGuan",
+            "map": "CangShanErHai",
+            "neighbors": ["DaLiShanCheng"]
+        },
+        {
+            "name": "青云坞",
+            "key": "QingYunWu",
+            "map": "JinShuiZhen",
+            "neighbors": ["JinMenGuan"]
+        },
+        {
+            "name": "秋雨堡",
+            "key": "QiuYuBao",
+            "map": "LuoDao",
+            "neighbors": ["HongLianGang"]
+        },
+        {
+            "name": "日月崖",
+            "key": "RiYueYa",
+            "map": "BaiLongKou",
+            "neighbors": ["WoLongPo"]
+        },
+        {
+            "name": "神池岭",
+            "key": "ShenChiLing",
+            "map": "RongTianLing",
+            "neighbors": ["LieRiGang"]
+        },
+        {
+            "name": "世外坡",
+            "key": "ShiWaiPo",
+            "map": "MaWeiYi",
+            "neighbors": ["FuFengJun"]
+        },
+        {
+            "name": "霜戈堡",
+            "key": "ShuangGeBao",
+            "map": "WuLiangShan",
+            "neighbors": ["LanCangCheng"]
+        },
+        {
+            "name": "卧龙坡",
+            "key": "WoLongPo",
+            "map": "BaiLongKou",
+            "neighbors": ["RiYueYa"]
+        },
+        {
+            "name": "武王城",
+            "key": "WuWangCheng",
+            "map": "NanPingShan",
+            "neighbors": []
+        },
+        {
+            "name": "逐鹿坪",
+            "key": "ZhuLuPing",
+            "map": "BaLingXian",
+            "neighbors": ["PanLongWu"]
+        }
+    ],
+    "maps": [
+        {
+            "name": "白龙口",
+            "key": "BaiLongKou",
+            "neighbors": ["WuLiangShan", "MaWeiYi", "QuTangXia"]
+        },
+        {
+            "name": "巴陵县",
+            "key": "BaLingXian",
+            "neighbors": ["LuoDao", "NanPingShan", "CangShanErHai", "QuTangXia"]
+        },
+        {
+            "name": "苍山洱海",
+            "key": "CangShanErHai",
+            "neighbors": ["BaLingXian", "NanPingShan", "WuLiangShan"]
+        },
+        {
+            "name": "枫华谷·战乱",
+            "key": "FengHuaGuZhanLuan",
+            "neighbors": ["LongMenHuangMo", "JinShuiZhen"]
+        },
+        {
+            "name": "黑龙沼",
+            "key": "HeiLongZhao",
+            "neighbors": ["RongTianLing", "WuLiangShan"]
+        },
+        {
+            "name": "金水镇",
+            "key": "JinShuiZhen",
+            "neighbors": ["LuoDao", "FengHuaGuZhanLuan"]
+        },
+        {
+            "name": "昆仑",
+            "key": "KunLun",
+            "neighbors": ["RongTianLing", "LongMenHuangMo", "MaWeiYi"]
+        },
+        {
+            "name": "龙门荒漠",
+            "key": "LongMenHuangMo",
+            "neighbors": ["FengHuaGuZhanLuan", "MaWeiYi", "KunLun"]
+        },
+        {
+            "name": "洛道",
+            "key": "LuoDao",
+            "neighbors": ["JinShuiZhen", "NanPingShan", "BaLingXian"]
+        },
+        {
+            "name": "马嵬驿",
+            "key": "MaWeiYi",
+            "neighbors": ["KunLun", "LongMenHuangMo", "RongTianLing", "BaiLongKou"]
+        },
+        {
+            "name": "南屏山",
+            "key": "NanPingShan",
+            "neighbors": ["LuoDao", "CangShanErHai", "BaLingXian"]
+        },
+        {
+            "name": "瞿塘峡",
+            "key": "QuTangXia",
+            "neighbors": ["BaLingXian", "BaiLongKou"]
+        },
+        {
+            "name": "融天岭",
+            "key": "RongTianLing",
+            "neighbors": ["KunLun", "MaWeiYi", "HeiLongZhao"]
+        },
+        {
+            "name": "无量山",
+            "key": "WuLiangShan",
+            "neighbors": ["BaiLongKou", "CangShanErHai", "HeiLongZhao"]
+        }
+    ]
 }

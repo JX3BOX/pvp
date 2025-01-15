@@ -48,28 +48,24 @@
                     :src="imgPath(item.name_pinyin, camp, 'camp')"
                     :style="positionStyle(item.name_pinyin, 'camp')"
                 />
-                <!-- 攻防箭头 -->
-                <template v-if="route">
-                    <div v-for="attacks in item.castles" :key="attacks.id">
-                        <img
-                            v-for="arr in attacks.attacks"
-                            :key="arr.id"
-                            class="u-attacks"
-                            :src="imgPath(arr, camp, 'arr')"
-                            :style="positionStyle(attacks.name_pinyin, 'arr', arr.name_pinyin)"
-                        />
-                    </div>
-                    <template v-if="item.attacks && item.attacks.length !== 0">
-                        <div v-for="arr in item.attacks" :key="arr.id">
-                            <img
-                                class="u-attacks"
-                                :src="imgPath(arr, camp, 'attacks')"
-                                :style="positionStyle(item.name_pinyin, 'attacks', arr.name_pinyin)"
-                            />
-                        </div>
-                    </template>
-                </template>
             </div>
+        </template>
+        <!-- 攻防箭头 -->
+        <template v-if="route">
+            <template v-if="attackPath.castle?.length">
+                <div v-for="([from, to], index) in attackPath.castle" :key="index">
+                    <img class="u-attacks" :src="imgPath(null, camp, 'arr')" :style="positionStyle(from, 'arr', to)" />
+                </div>
+            </template>
+            <template v-if="attackPath.map?.length">
+                <div v-for="([from, to], index) in attackPath.map" :key="index">
+                    <img
+                        class="u-attacks"
+                        :src="imgPath(null, camp, 'attacks')"
+                        :style="positionStyle(from, 'attacks', to)"
+                    />
+                </div>
+            </template>
         </template>
 
         <el-popover
@@ -104,10 +100,12 @@
     </div>
 </template>
 <script>
+import { calcAttackPath } from "@/utils/sandbox";
 import { ref } from "vue";
 import JX3BOX from "@jx3box/jx3box-common/data/jx3box.json";
 const __imgPath = JX3BOX.__imgPath;
 const { placeArr, placeAttacks, placeCamp, placeImg, placeName } = require("@/assets/data/sandboxMap.json");
+
 export default {
     name: "SandBoxMaps",
     props: ["maps", "camp", "route"],
@@ -123,6 +121,16 @@ export default {
             visiblePopover: false,
             refMap: [],
         };
+    },
+    computed: {
+        // 攻防路线
+        attackPath() {
+            const { map, castle } = calcAttackPath(this.maps.list, this.camp);
+            return {
+                map,
+                castle,
+            };
+        },
     },
     methods: {
         setRefs: function (ref, item) {
