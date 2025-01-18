@@ -107,7 +107,7 @@
 import { showAvatar, authorLink, iconLink, getAppIcon } from "@jx3box/jx3box-common/js/utils";
 import { useStore } from "@/store";
 import { getPost } from "@/service/post";
-import { getStat, postStat, postHistory } from "@jx3box/jx3box-common/js/stat_v2";
+import { getStat, postStat, postHistory, postReadHistory } from "@jx3box/jx3box-common/js/stat_v2";
 import JX3BOX from "@jx3box/jx3box-common/data/jx3box.json";
 import xfmap from "@jx3box/jx3box-data/data/xf/xf.json";
 import SETTING from "@/../setting.json";
@@ -232,13 +232,22 @@ export default {
 
                     document.title = this.post?.post_title;
 
-                    User.isLogin() &&
+                    if (User.isLogin()) {
                         postHistory({
                             source_type: appKey,
                             source_id: ~~this.id,
                             link: location.href,
                             title: this.post.post_title,
                         });
+
+                        this.post.visible > 1 &&
+                            postReadHistory({
+                                id: this.id,
+                                category: "posts",
+                                subcategory: "default",
+                                visible_type: this.post.visible,
+                            });
+                    }
 
                     this.$nextTick(() => {
                         this.installTalent();
