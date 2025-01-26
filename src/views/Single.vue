@@ -90,6 +90,8 @@
                     :client="post_client"
                     :allowGift="allow_gift"
                     showRss
+                    :author-id="author_id"
+                    :banner="banner"
                 />
 
                 <!-- 评论 -->
@@ -203,6 +205,9 @@ export default {
         },
         community_id: function () {
             return this.post?.community_id || 0;
+        },
+        banner: function () {
+            return this.post?.post_banner || "";
         },
     },
     mounted() {

@@ -61,6 +61,9 @@ export default {
         },
         getBanner: function (item) {
             if (item.post_banner) {
+                if (item.post_banner.endsWith(".webp") || item.post_banner.endsWith(".gif")) {
+                    return item.post_banner;
+                }
                 return showBanner(item.post_banner);
             } else {
                 return jx3boxData.__imgPath + "image/fb_map_thumbnail/null.png";
