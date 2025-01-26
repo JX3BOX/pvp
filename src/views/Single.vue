@@ -243,6 +243,8 @@ export default {
                             source_id: ~~this.id,
                             link: location.href,
                             title: this.post.post_title,
+                            author_id: this.post.post_author,
+                            banner: this.post.post_banner,
                         });
 
                         this.post.visible > 1 &&
@@ -251,6 +253,8 @@ export default {
                                 category: "posts",
                                 subcategory: "default",
                                 visible_type: this.post.visible,
+                                author_id: this.post.post_author,
+                                banner: this.post.post_banner,
                             });
                     }
 
