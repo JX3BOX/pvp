@@ -3,12 +3,13 @@
     "version": "0.0.1",
     "private": true,
     "scripts": {
-        "serve": "vue-cli-service serve",
-        "dev": "cross-env DEV_SERVER=true vue-cli-service serve",
+        "dev": "cross-env DEV_SERVER=true vue-cli-service serve --mode development",
+        "serve": "vue-cli-service serve --mode production",
+        "debug": "cross-env DEV_SERVER=true vue-cli-service serve --mode staging",
         "build": "vue-cli-service build",
+        "preview": "cross-env BUILD_MODE=preview vue-cli-service build",
         "lint": "vue-cli-service lint",
         "prepare": "husky install",
-        "preview": "cross-env BUILD_MODE=preview vue-cli-service build",
         "update": "npm --registry https://registry.npmjs.org install @jx3box/jx3box-common@latest @jx3box/jx3box-vue3-ui@latest @jx3box/jx3box-data@latest"
     },
     "dependencies": {
