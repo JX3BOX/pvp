@@ -1,23 +1,17 @@
 const path = require("path");
-const setting = require("./setting.json");
+// const setting = require("./setting.json");
 const pkg = require("./package.json");
 const { JX3BOX } = require("@jx3box/jx3box-common");
 module.exports = {
     //❤️ Multiple pages ~
-    // pages: {
-    //     index: {
-    //         title: "Home",
-    //         entry: "src/main.js",
-    //         template: "public/index.html",
-    //         filename: "index.html",
-    //     },
-    //     $project: {
-    //         title: "Project",
-    //         entry: "src/core/$project/index.js",
-    //         template: "public/$project/index.html",
-    //         filename: "$project/index.html",
-    //     },
-    // },
+    pages: {
+        index: {
+            title: "竞技专栏 - JX3BOX",
+            entry: "src/pages/pvp/index.js",
+            template: "public/index.html",
+            filename: "pvp/index.html",
+        },
+    },
 
     //⚛️ Proxy ~
     devServer: {
@@ -104,15 +98,15 @@ module.exports = {
     chainWebpack: (config) => {
         //💘 html-webpack-plugin ~
         // Multiple pages disable the block below
-        config.plugin("html").tap((args) => {
-            args[0].meta = {
-                //------设置SEO信息
-                Keywords: setting.keys,
-                Description: setting.desc,
-            };
-            args[0].title = setting.title; //------自动添加标题后缀
-            return args;
-        });
+        // config.plugin("html").tap((args) => {
+        //     args[0].meta = {
+        //         //------设置SEO信息
+        //         Keywords: setting.keys,
+        //         Description: setting.desc,
+        //     };
+        //     args[0].title = setting.title; //------自动添加标题后缀
+        //     return args;
+        // });
 
         //💝 in-line small imgs ~
         config.module.rule("images").set("parser", {
@@ -146,7 +140,8 @@ function addStyleResource(rule) {
     preload_styles.push(
         path.resolve(__dirname, "./node_modules/@jx3box/jx3box-common/css/common.less"),
         path.resolve(__dirname, "./node_modules/csslab/base.less"),
-        path.resolve(__dirname, "./src/assets/css/var.less")
+        path.resolve(__dirname, "./src/assets/css/var.less"),
+        path.resolve(__dirname, "./src/assets/css/pvp/var.less")
     );
     rule.use("style-resource").loader("style-resources-loader").options({
         patterns: preload_styles,

@@ -1,5 +1,5 @@
 import { chain, groupBy, uniq } from "lodash";
-import sandboxData from "@/assets/data/sandboxMap.json";
+import sandboxData from "@/assets/data/pvp/sandboxMap.json";
 const { castles, maps } = sandboxData;
 const castleMap = groupBy(castles, "map");
 
