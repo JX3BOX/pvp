@@ -11,6 +11,12 @@ module.exports = {
             template: "public/index.html",
             filename: "pvp/index.html",
         },
+        // jcl: {
+        //     title: "JCL战斗日志 - JX3BOX",
+        //     entry: "src/pages/jcl/index.js",
+        //     template: "public/index.html",
+        //     filename: "jcl/index.html",
+        // },
     },
 
     //⚛️ Proxy ~
