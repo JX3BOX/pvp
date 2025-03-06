@@ -119,4 +119,15 @@ export default {
         margin-left: 5px;
     }
 }
+
+@media screen and (max-width: @phone) {
+    .m-notice-top__item {
+        .u-title {
+            // 不截断
+            white-space: normal;
+            overflow: visible;
+            text-overflow: unset;
+        }
+    }
+}
 </style>

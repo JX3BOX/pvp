@@ -11,9 +11,7 @@
                 size="large"
             >
                 <template v-slot:prepend>
-                    <span class="u-search">
-                        <el-icon> <Search /></el-icon> <span class="u-search">关键词</span></span
-                    >
+                    <el-icon> <Search /></el-icon><span class="u-search">&nbsp;关键词</span>
                 </template>
                 <template v-slot:append>
                     <el-button icon="Position" class="u-btn" @click="onSearch"></el-button>

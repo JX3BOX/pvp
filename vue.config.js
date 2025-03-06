@@ -5,7 +5,7 @@ const { JX3BOX } = require("@jx3box/jx3box-common");
 module.exports = {
     //❤️ Multiple pages ~
     pages: {
-        index: {
+        pvp: {
             title: "竞技专栏 - JX3BOX",
             entry: "src/pages/pvp/index.js",
             template: "public/index.html",
