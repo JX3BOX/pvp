@@ -90,6 +90,7 @@ export default {
                 this.$router.push({
                     name: this.view,
                     query,
+                    replace: true,
                 });
             },
             immediate: true,

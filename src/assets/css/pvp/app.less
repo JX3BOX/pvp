@@ -14,31 +14,35 @@
     .el-drawer {
         width: 90% !important;
     }
-
-    .wechat-miniprogram {
-        .c-breadcrumb {
-            position: sticky;
-            top: 0;
-        }
-
-        .c-main {
-            margin-top: 0 !important;
-            overflow-x: hidden;
-        }
-
-        .c-sidebar-left,
-        .c-sidebar-right {
-            top: 48px !important;
-        }
-
-        body {
-            padding-top: 0;
-        }
-    }
 }
 .el-drawer__header {
     .mb(0) !important;
 }
 .el-drawer__body {
     padding-top: 10px !important;
+}
+.v-miniprogram {
+    .c-breadcrumb {
+        position: sticky;
+        top: 0;
+    }
+
+    .c-main {
+        margin-top: 0 !important;
+    }
+
+    .c-sidebar-left,
+    .c-sidebar-right {
+        top: 48px !important;
+    }
+
+    body {
+        padding-top: 0;
+    }
+
+    .c-pvp-single {
+        .c-main {
+            overflow-x: hidden;
+        }
+    }
 }
