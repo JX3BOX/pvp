@@ -1,0 +1,85 @@
+// 重写element-plus的一些变量
+// 使用m-jcl-main包裹 防止污染到公共头部样式
+#m-jcl-main {
+    --el-mask-color: #303133;
+    --el-color-primary: #d3efff;
+    --el-bg-color-overlay: #303133;
+    --el-border-color-light: #303133;
+    --el-text-color-regular: #fff;
+
+    .el-checkbox {
+        --el-checkbox-checked-bg-color: #3b3652cc;
+        --el-checkbox-checked-input-border-color: #3b3652cc;
+    }
+
+    .el-select__placeholder {
+        --el-text-color-regular: #fff;
+    }
+    .el-dialog {
+        --el-dialog-bg-color: #3b3652;
+    }
+    .el-button {
+        background: #535353;
+        border-color: #535353;
+        color: #fff;
+    }
+    .el-button:hover {
+        background: #d3efff;
+        border-color: #d3efff;
+        color: #000;
+    }
+    .el-button--primary {
+        --el-button-bg-color: #b29fff;
+        --el-button-border-color: #b29fff;
+        --el-button-outline-color: #b5a2ff;
+    }
+
+    .el-button.is-text,
+    .el-button.is-link {
+        --el-button-text-color: #b29fff;
+        --el-button-disabled-text-color: #8874d6;
+        --el-button-hover-bg-color: #8874d6;
+        --el-button-hover-link-text-color: #9380df;
+    }
+
+    .el-input,
+    .el-textarea {
+        --el-input-text-color: #fff;
+        --el-input-bg-color: #535353;
+        --el-input-border-color: #535353;
+        --el-input-placeholder-color: #9a9a9a;
+        --el-input-hover-border-color: #535353;
+        --el-input-focus-border-color: #535353;
+    }
+
+    .el-radio-button {
+        --el-radio-button-checked-bg-color: #0c759e;
+        --el-radio-button-checked-text-color: var(--el-color-white);
+        --el-radio-button-checked-border-color: transparent;
+    }
+
+    .el-table {
+        --el-table-border: none;
+        --el-table-bg-color: transparent;
+        --el-table-tr-bg-color: transparent;
+        --el-table-header-bg-color: transparent;
+        --el-table-row-hover-bg-color: transparent;
+    }
+
+    .el-select__wrapper {
+        --el-fill-color-blank: #535353;
+        --el-border-color: rgba(182, 196, 204, 0.2);
+    }
+    .el-select-dropdown__item.is-hovering {
+        --el-fill-color-light: rgba(182, 196, 204, 0.2);
+    }
+
+    .el-tag {
+        background: #d3efff;
+        color: #000;
+    }
+
+    .el-progress-bar__outer {
+        background: #1c1c1c;
+    }
+}

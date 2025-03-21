@@ -1,7 +1,12 @@
+require("events").EventEmitter.defaultMaxListeners = 50;
+
 const path = require("path");
 // const setting = require("./setting.json");
 const pkg = require("./package.json");
 const { JX3BOX } = require("@jx3box/jx3box-common");
+const webpack = require("webpack");
+const NodePolyfillPlugin = require("node-polyfill-webpack-plugin");
+
 module.exports = {
     //❤️ Multiple pages ~
     pages: {
@@ -11,12 +16,12 @@ module.exports = {
             template: "public/index.html",
             filename: "pvp/index.html",
         },
-        // jcl: {
-        //     title: "JCL战斗日志 - JX3BOX",
-        //     entry: "src/pages/jcl/index.js",
-        //     template: "public/index.html",
-        //     filename: "jcl/index.html",
-        // },
+        jcl: {
+            title: "JCL战斗日志 - JX3BOX",
+            entry: "src/pages/jcl/index.js",
+            template: "public/index.html",
+            filename: "jcl/index.html",
+        },
     },
 
     //⚛️ Proxy ~
@@ -74,6 +79,12 @@ module.exports = {
                     request.setHeader("origin", "");
                 },
             },
+            "/battle/jcl/": {
+                target: "https://cdn.jx3box.com/",
+                onProxyReq: function (request) {
+                    request.setHeader("origin", "");
+                },
+            },
         },
     },
 
@@ -127,6 +138,17 @@ module.exports = {
         //💖 import common less var * mixin ~
         const types = ["vue-modules", "vue", "normal-modules", "normal"];
         types.forEach((type) => addStyleResource(config.module.rule("less").oneOf(type)));
+        // webworker
+        config.module
+            .rule("worker")
+            .test(/\.worker\.js$/)
+            .use("worker-loader")
+            .loader("worker-loader")
+            .options({ inline: "fallback" })
+            .end();
+        config.module.rule("js").exclude.add(/\.worker\.js$/);
+
+        config.plugin("polyfills").use(NodePolyfillPlugin);
 
         // 注册 sass-resources-loader
         config.module
@@ -139,6 +161,20 @@ module.exports = {
                 resources: path.resolve(__dirname, "./src/assets/css/element-plus-override.scss"),
             });
     },
+    configureWebpack: {
+        plugins: [
+            new webpack.DefinePlugin({ __VUE_PROD_HYDRATION_MISMATCH_DETAILS__: "false" }),
+            require("unplugin-auto-import/webpack").default({
+                include: [
+                    /\.[tj]sx?$/, // .ts, .tsx, .js, .jsx
+                    /\.vue$/,
+                    /\.vue\?vue/, // .vue
+                ],
+                imports: ["vue", "vue-router"],
+                dts: "types/auto-imports.d.ts", // 自定义生成.d.ts位置
+            }),
+        ],
+    },
 };
 
 function addStyleResource(rule) {
@@ -147,7 +183,8 @@ function addStyleResource(rule) {
         path.resolve(__dirname, "./node_modules/@jx3box/jx3box-common/css/common.less"),
         path.resolve(__dirname, "./node_modules/csslab/base.less"),
         path.resolve(__dirname, "./src/assets/css/var.less"),
-        path.resolve(__dirname, "./src/assets/css/pvp/var.less")
+        path.resolve(__dirname, "./src/assets/css/pvp/var.less"),
+        path.resolve(__dirname, "./src/assets/css/jcl/var.less")
     );
     rule.use("style-resource").loader("style-resources-loader").options({
         patterns: preload_styles,

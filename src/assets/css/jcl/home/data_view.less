@@ -1,0 +1,33 @@
+.m-data-view {
+    display: flex;
+    padding: 0 80px 90px;
+    p {
+        margin: 0;
+    }
+
+    .u-left {
+        display: flex;
+        flex-grow: 1;
+        width: 890px;
+        .mr(20px);
+    }
+
+    .u-right {
+        display: flex;
+        flex-direction: column;
+        gap: 40px;
+        width: 350px;
+        .u-title {
+            .fz(36px, 44px);
+            .x(right);
+            .mb(20px);
+
+            p.u-colorful {
+                .bold;
+                .colorful-text(linear-gradient(88.56deg, #1d95f8 0.51%, #fa5fa6 101.59%));
+                display: inline-block;
+                .mb(8px);
+            }
+        }
+    }
+}

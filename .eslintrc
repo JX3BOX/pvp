@@ -5,5 +5,10 @@
     },
     "parser": "vue-eslint-parser",
     "extends": ["plugin:vue/vue3-essential", "eslint:recommended"],
-    "rules": {}
+    "rules": {
+        // 组件名必须多个单词太烦了
+        "vue/multi-word-component-names": "off",
+        // 使用自动导入的情况下，no-undef会导致报错
+        "no-undef": "off"
+    }
 }

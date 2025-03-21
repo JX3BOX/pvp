@@ -1,0 +1,115 @@
+.m-subject-list {
+    p {
+        margin: 0;
+    }
+    .m-cards {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 0 80px 90px;
+        gap: 30px;
+
+        .u-card {
+            .pr;
+            .flex-center;
+            cursor: pointer;
+            box-sizing: border-box;
+            height: 300px;
+            width: 640px;
+            border: 3px dashed #554d77;
+            border-radius: 10px;
+            color: #8472d2;
+            background: rgba(85, 77, 119, 0.2);
+            overflow: hidden;
+            transition: all 0.1s ease-in-out;
+
+            &.is-disabled {
+                opacity: 0.5;
+                cursor: inherit;
+            }
+
+            &:not(.is-disabled):hover {
+                transform: scale(1.02);
+            }
+
+            .u-icon {
+                height: 83px;
+            }
+            .u-title {
+                font-size: 24px;
+                margin: 20px 0;
+            }
+            .u-tips {
+                .fz(12px, 26px);
+            }
+
+            .u-card__inner {
+                .flex-center;
+                .size(100%, 100%);
+                flex-direction: column;
+            }
+
+            .u-card__bg {
+                .pa;
+                .db;
+                .size(240px, 240px);
+                left: -14%;
+                top: -20%;
+                filter: contrast(0) opacity(0.12);
+            }
+        }
+        .m-card:hover {
+            background: rgba(85, 77, 119, 0.2);
+        }
+    }
+
+    .m-tips {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 0 80px 46px;
+        .m-left {
+            font-size: 36px;
+            font-weight: 700;
+            .u-title {
+                width: 216px;
+                .colorful-text;
+            }
+            .u-subTitle {
+                display: flex;
+                align-items: center;
+                margin-top: 6px;
+                .u-arrow {
+                    position: relative;
+                    display: flex;
+                    align-items: center;
+                    width: 200px;
+                    height: 3px;
+                    background: linear-gradient(88.56deg, #1d95f8 0.51%, #fa5fa6 101.59%);
+                    margin-left: 29px;
+                }
+                .u-arrow::before {
+                    position: absolute;
+                    right: 3px;
+                    content: "";
+                    width: 33px;
+                    height: 33px;
+                    margin-left: 29px;
+                    border-left: 3px solid #fa5fa6;
+                    border-bottom: 3px solid #fa5fa6;
+                    transform: rotate(-135deg);
+                }
+            }
+        }
+        .m-right {
+            line-height: 30px;
+            font-size: 16px;
+            .u-link {
+                color: #31a6fa;
+            }
+            .u-link:hover {
+                text-decoration: underline;
+            }
+        }
+    }
+}

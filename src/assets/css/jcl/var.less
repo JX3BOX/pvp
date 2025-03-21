@@ -1,0 +1,89 @@
+// GLOBAL DEFINITION 项目全局定义
+
+@main-width: 1440px;
+@light-purple: #d3efff;
+@dark-purple: #6b46f7;
+@card-background: #131517;
+@hr-color: #373c41;
+
+@common-header-height: 64px;
+
+.to-left {
+    transform: rotate(270deg);
+}
+.to-right {
+    transform: rotate(90deg);
+}
+.to-bottom {
+    transform: rotate(180deg);
+}
+
+.flex-center {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.flex-column {
+    display: flex;
+    flex-direction: column;
+}
+
+.ellipsis {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.colorful-text(@gradient: linear-gradient(90deg, #fa5fa6 0%, #1d95f8 100%)) {
+    background: @gradient;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+.delta(@color:#131517, @border-color: #373c41) {
+    &:before {
+        content: "";
+        display: inline-block;
+        position: absolute;
+        left: auto;
+        right: 14px;
+        top: -16px;
+        border: 8px solid transparent;
+        border-bottom-color: @border-color;
+    }
+
+    &:after {
+        content: "";
+        display: inline-block;
+        position: absolute;
+        left: auto;
+        right: 15px;
+        top: -14px;
+        border: 7px solid transparent;
+        border-bottom-color: @color;
+    }
+}
+
+.scrollbar(@color:#eee, @width:3px) {
+    &::-webkit-scrollbar {
+        width: @width;
+    }
+
+    &::-webkit-scrollbar-track,
+    &::-webkit-scrollbar-track-piece {
+        background-color: lighten(@color, 50%);
+        border-radius: @width;
+    }
+
+    &::-webkit-scrollbar-thumb {
+        background-color: @color;
+        border-radius: @width;
+    }
+
+    &::-webkit-scrollbar-button,
+    &::-webkit-scrollbar-corner,
+    &::-webkit-resizer {
+        display: none;
+    }
+}

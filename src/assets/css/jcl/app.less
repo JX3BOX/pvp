@@ -1,0 +1,98 @@
+// project less root
+
+html {
+    .scrollbar(#222,10px);
+}
+
+html body {
+    padding-top: @common-header-height;
+    background: #1c1c1c;
+    background-repeat: no-repeat;
+    // background-size: cover;
+    // background-size: 3840px 5010px;
+    background-position: left top;
+    color: #eee;
+    min-width: 1440px;
+}
+.p-home {
+    // background: url("../img/home/bg.jpg") #3c3c3c;
+    background-size: cover;
+}
+
+* {
+    user-select: none;
+    margin: 0;
+}
+ul {
+    padding-left: 0;
+}
+li {
+    list-style: none;
+}
+
+#app {
+    width: 100%;
+}
+
+body .c-footer {
+    .auto(x);
+    box-sizing: border-box;
+    padding: 40px 30px;
+}
+
+.el-radio-button.is-active {
+    .el-radio-button__inner {
+        background-color: @light-purple;
+        border-radius: 4px;
+    }
+}
+.el-radio-button .el-radio-button__inner {
+    border: none !important;
+    background-color: transparent;
+}
+.c-jx3box-emotion-item {
+    border: 1px solid transparent !important;
+}
+
+.u-comment-area {
+    width: @main-width;
+
+    .el-textarea__inner {
+        box-shadow: 0 0 0 1px @hr-color inset;
+    }
+    .w-thx-copyright,
+    .c-comment-order {
+        background-color: @card-background;
+        border-color: @hr-color;
+    }
+    .c-comment-box {
+        border-color: @hr-color;
+    }
+    .c-comment-list {
+        border-color: @hr-color;
+    }
+    .c-comment {
+        margin: 40px 0;
+    }
+    .u-uploader .el-upload--picture-card {
+        background-color: transparent;
+    }
+    .el-input__count {
+        background-color: transparent;
+    }
+}
+.c-jx3box-emotion-pop {
+    border: 1px solid @hr-color!important;
+    background: @card-background!important;
+    .c-jx3box-emotion-list {
+        .scrollbar(@card-background,4px) !important;
+    }
+    .el-tabs__header,
+    .el-tabs__nav-scroll,
+    .el-tabs__item {
+        border: none !important;
+        background-color: var(--el-bg-color-overlay) !important;
+    }
+}
+
+@import "./widget.less";

@@ -1,0 +1,105 @@
+.w-pagination {
+    justify-content: flex-end;
+
+    .el-pager li.number,
+    .el-pager li.more {
+        .fz(14px, 18px);
+        background: transparent;
+        color: #939393;
+        border-radius: 5px;
+        font-weight: bold;
+
+        &.is-active {
+            background: transparent;
+            color: #ffffff;
+        }
+    }
+}
+
+.w-card {
+    background: #282828;
+    padding: 20px;
+    border-radius: 16px;
+
+    .w-card-title {
+        .fz(20px,26px);
+        .bold;
+        .mb(10px);
+        display: flex;
+        color: #fff;
+        align-items: center;
+        gap: 4px;
+    }
+    .el-pagination {
+        padding-top: 10px;
+    }
+}
+.w-card-home {
+    color: #a798e6;
+    background: rgba(85, 77, 119, 0.3);
+    border-radius: 10px;
+    padding: 20px;
+    .fz(14px, 24px);
+}
+.w-tabs {
+    .u-tab {
+        .x;
+        .fz(14px, 40px);
+        cursor: pointer;
+        padding: 0 12.5px;
+        height: 40px;
+        display: inline-block;
+        border-radius: 20px;
+        color: #fff;
+        background-color: #24292e;
+        transition: all 0.3s ease-in-out;
+
+        &:not(:last-of-type) {
+            margin-right: 20px;
+        }
+        &.is-active {
+            color: #fff;
+            background-color: #7650f8;
+        }
+    }
+}
+
+.w-table.el-table {
+    width: 100%;
+    color: #fff;
+    .el-table__inner-wrapper::before {
+        height: 0;
+    }
+    .el-table__header-wrapper {
+        background: rgba(255, 255, 255, 0.2);
+    }
+    th.el-table__cell {
+        color: white;
+    }
+    .el-table__header {
+        height: 26px;
+    }
+    .el-table__cell {
+        padding: 0;
+    }
+    div.cell {
+        .ellipsis;
+        .fz(14px, 35px);
+        height: 35px;
+        transition: all 0.1s ease-in-out;
+        border-bottom: 1px dashed rgba(255, 255, 255, 0.2);
+        padding: 0 4px;
+    }
+
+    .el-table__row:not(.is-focus):hover {
+        background: rgba(182, 196, 204, 0.2);
+    }
+    .el-table__row.is-focus {
+        .el-table__cell {
+            div.cell {
+                background: rgba(182, 196, 204, 1);
+                color: #000;
+            }
+        }
+    }
+}
