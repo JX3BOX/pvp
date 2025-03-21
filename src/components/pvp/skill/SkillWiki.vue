@@ -4,12 +4,16 @@
             <div class="m-wiki-post-panel">
                 <div class="head-title">
                     <span class="u-txt"
-                        ><el-icon><Reading /></el-icon>
+                        ><el-icon>
+                            <Reading />
+                        </el-icon>
                         技能百科
                         <em class="u-skill-ID" v-if="wikiData && wikiData.post">(技能ID: {{ activeSkill }})</em>
                     </span>
                     <a class="u-button el-button el-button--primary" :href="publish_url(`skill/${activeSkill}`)">
-                        <el-icon><Edit /></el-icon>
+                        <el-icon>
+                            <Edit />
+                        </el-icon>
                         <span>完善技能百科</span>
                     </a>
                 </div>
@@ -35,7 +39,9 @@
                 </div>
                 <div class="m-wiki-post-empty m-panel-body" v-if="is_empty">
                     <div class="no_skill_post" v-if="!isPasvSkill">
-                        <el-icon><Warning /></el-icon>
+                        <el-icon>
+                            <Warning />
+                        </el-icon>
                         <span>暂无百科内容</span>
                     </div>
 
@@ -53,7 +59,9 @@
                         :postId="wikiData?.post?.id"
                     ></SimpleThx>
                     <el-button type="primary" class="u-btn" @click="onViewHistory"
-                        ><el-icon class="u-icon"><RefreshLeft /></el-icon>查看历史版本</el-button
+                        ><el-icon class="u-icon">
+                            <RefreshLeft /> </el-icon
+                        >查看历史版本</el-button
                     >
                 </div>
             </div>
@@ -67,26 +75,30 @@
                     <span v-if="versions && !versions.length">💧 暂无数据</span>
                 </div>
                 <table v-if="versions && versions.length" class="m-histories">
-                    <tr>
-                        <th>版本</th>
-                        <th>更新时间</th>
-                        <th>贡献者</th>
-                        <th>修订说明</th>
-                    </tr>
-                    <tr class="history" v-for="(ver, key) in versions" :key="key">
-                        <td>
-                            <a
-                                class="u-version-link"
-                                v-text="'v' + (versions.length - key)"
-                                @click="onVersionClick(ver)"
-                            ></a>
-                        </td>
-                        <td v-text="ts2str(ver.updated)"></td>
-                        <td>
-                            <a :href="ver.user_id ? author_url(ver.user_id) : null" v-text="ver.user_nickname"></a>
-                        </td>
-                        <td v-text="ver.remark"></td>
-                    </tr>
+                    <thead>
+                        <tr>
+                            <th>版本</th>
+                            <th>更新时间</th>
+                            <th>贡献者</th>
+                            <th>修订说明</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr class="history" v-for="(ver, key) in versions" :key="key">
+                            <td>
+                                <a
+                                    class="u-version-link"
+                                    v-text="'v' + (versions.length - key)"
+                                    @click="onVersionClick(ver)"
+                                ></a>
+                            </td>
+                            <td v-text="ts2str(ver.updated)"></td>
+                            <td>
+                                <a :href="ver.user_id ? author_url(ver.user_id) : null" v-text="ver.user_nickname"></a>
+                            </td>
+                            <td v-text="ver.remark"></td>
+                        </tr>
+                    </tbody>
                 </table>
             </div>
         </el-drawer>
